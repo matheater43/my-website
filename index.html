@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | My Website</title>
+  <!-- Link to your central global style sheet -->
+  <link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+
+  <!-- JavaScript will inject navbar.html here -->
+  <div id="global-navbar"></div>
+
+  <!-- Main Unique Content Area -->
+  <main class="container">
+    <h1>Welcome to My Website</h1>
+    <p style="margin-bottom: 2rem;">This layout is clean, centered, and fully responsive across mobile and desktop views.</p>
+    
+    <!-- Example of using the .card and .btn classes from your CSS -->
+    <div class="card">
+      <h2>Getting Started</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+        Everything on this page automatically pulls styles from your central CSS file. 
+        Try clicking the button below to see the hover states.
+      </p>
+      <a href="about.html" class="btn">Learn More About Us</a>
+    </div>
+  </main>
+
+  <!-- JavaScript will inject footer.html here -->
+  <div id="global-footer"></div>
+
+  <!-- The Global Loader Script (Include this at the bottom of every page) -->
+  <script src="assets/js/global.js"></script>
+
+</body>
+</html>

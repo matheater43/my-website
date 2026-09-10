@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subpage Title</title>
+
+  <!-- Always use root-relative paths for global CSS and JS -->
+  <link rel="stylesheet" href="/assets/css/global.css">
+</head>
+<body>
+
+  <!-- JavaScript will inject navbar.html into this container -->
+  <div id="global-navbar"></div>
+
+  <main>
+    <div class="container">
+      <h1>Subpage Content</h1>
+      <p>Your nested page content goes here.</p>
+    </div>
+  </main>
+
+  <!-- JavaScript will inject footer.html into this container -->
+  <div id="global-footer"></div>
+
+  <!-- The Global Loader Script (Include this at the bottom of every page) -->
+  <script src="/assets/js/global.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+/* ==========================================================================
+   1. DESIGN SYSTEM (Variables)
+   Change these values to update your entire website globally!
+   ========================================================================== */
+:root {
+  /* Colors */
+  --primary-color: #2563eb;       /* Brand accent (e.g., Blue) */
+  --primary-hover: #1d4ed8;       /* Button hover state */
+  --bg-color: #f8fafc;            /* Light background for the site */
+  --card-bg: #ffffff;             /* Background for boxes/cards */
+  --text-main: #1e293b;           /* Dark gray for readable text */
+  --text-muted: #64748b;          /* Lighter gray for secondary text */
+  
+  /* Typography */
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --line-height-base: 1.6;
+
+  /* Layout & Spacing */
+  --max-width: 1200px;            /* Max width of your website content */
+  --radius: 8px;                  /* Rounded corners for buttons/cards */
+  --transition-fast: 0.2s ease;
+}
+
+/* ==========================================================================
+   2. BASE STYLES & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 1.15rem; /* Makes all body text larger site-wide */
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: var(--line-height-base);
+  padding: 0;
+  
+  /* --- ADD THESE 3 LINES TO FIX THE FOOTER --- */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Forces the page layout to take up 100% of the screen height */
+}
+
+
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   3. LAYOUT CONTAINERS
+   ========================================================================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+main {
+  padding: 3rem 0;
+  
+  /* --- UPDATE THIS LINE --- */
+  flex: 1; /* Tells the main content area to stretch and push the footer down */
+}
+
+/* ==========================================================================
+   4. GLOBAL COMPONENTS (Navbar, Footer, Buttons)
+   ========================================================================== */
+
+/* ==========================================================================
+   REVISED RESPONSIVE NAVBAR STYLES
+   ========================================================================== */
+.site-nav {
+  background-color: var(--card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--text-main); /* Changes color to dark gray */
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  font-weight: 500;
+  display: block;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Hide mobile toggle elements by default on desktop desktops */
+.nav-toggle-input, .nav-toggle-label {
+  display: none;
+}
+
+/* ==========================================================================
+   MOBILE STYLES (Screens 768px wide or smaller)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+  /* Show the hamburger icon */
+  .nav-toggle-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Draw 3 bars using CSS for the hamburger graphic */
+  .nav-toggle-label span,
+  .nav-toggle-label span::before,
+  .nav-toggle-label span::after {
+    display: block;
+    background: var(--text-main);
+    height: 2px;
+    width: 100%;
+    position: relative;
+    transition: var(--transition-fast);
+  }
+
+  .nav-toggle-label span::before { content: ""; top: -7px; left: 0; position: absolute; }
+  .nav-toggle-label span::after { content: ""; top: 7px; left: 0; position: absolute; }
+
+  /* Transform links into a hidden vertical dropdown drawer */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-top: 1px solid #e2e8f0;
+    gap: 1rem;
+  }
+
+  /* When the checkbox element is clicked/checked via JavaScript, show the menu drawer */
+  .nav-links.is-active {
+    display: flex;
+  }
+  
+  /* Animate hamburger to an 'X' when open */
+  .nav-toggle-input:checked + .nav-toggle-label span { background: transparent; }
+  .nav-toggle-input:checked + .nav-toggle-label span::before { transform: rotate(45deg); top: 0; }
+  .nav-toggle-input:checked + .nav-toggle-label span::after { transform: rotate(-45deg); top: 0; }
+}
+
+
+/* Footer Style */
+.site-footer {
+  background-color: var(--card-bg);
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Reusable Buttons */
+.btn {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white !important; /* Forces text to stay white */
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none !important;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Reusable Content Cards */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  padding: 0.1rem 1.5rem 1.5rem 1.5rem; /* Top Right Bottom Left */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   DROPDOWN & SUBPAGE MENU STYLES
+   ========================================================================== */
+
+/* Parent item positioning */
+.nav-item-dropdown {
+  position: relative;
+}
+
+/* Hidden dropdown container by default */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--card-bg);
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  list-style: none;
+  padding: 0.5rem 0;
+  z-index: 1001;
+}
+
+/* Dropdown list item links */
+.dropdown-menu li a {
+  padding: 0.5rem 1rem;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.dropdown-menu li a:hover {
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+}
+
+/* Desktop: Reveal ONLY the immediate child dropdown on hover */
+@media screen and (min-width: 769px) {
+  /* Show first-level menu when hovering over "DSE Paper 2 Solutions" */
+  .nav-links > .nav-item-dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+
+  /* Show sub-menu (Q1) ONLY when hovering directly over the "Sub" item */
+  .dropdown-menu .nav-item-dropdown:hover > .sub-dropdown {
+    display: block;
+  }
+}
+
+/* Non-clickable menu item styling */
+.unclickable-category {
+  cursor: default; /* Replaces pointer cursor with standard arrow */
+}
+
+/* Mobile adjustments for multi-level nested menus */
+@media screen and (max-width: 768px) {
+  .dropdown-menu .dropdown-menu {
+    position: static;
+    padding-left: 1rem; /* Indents subpages like Q1 further on mobile screens */
+  }
+}
+
+@media screen and (min-width: 769px) {
+  /* Hide nested sub-dropdowns by default */
+  .dropdown-menu .sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%; /* Displays to the right of "Sub" */
+    margin-top: -0.5rem;
+  }
+}
+
+/* Mobile adjustments (Screens 768px or smaller) */
+@media screen and (max-width: 768px) {
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    padding-left: 1rem;
+    background-color: transparent;
+  }
+
+  /* Keep dropdown items visible within mobile menu drawer */
+  .nav-links.is-active .dropdown-menu {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   NESTED SUB-DROPDOWN HOVER & POSITIONING
+   ========================================================================== */
+
+/* 1. Relative positioning on sub-item container */
+.dropdown-menu .nav-item-dropdown {
+  position: relative;
+}
+
+/* 2. Hide nested sub-dropdowns on desktop by default */
+@media screen and (min-width: 769px) {
+  /* Scope hover to ONLY top-level dropdown items */
+  .nav-links > .nav-item-dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+
+  /* Position nested sub-dropdown menu to the right */
+  .dropdown-menu .sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%; /* Align menu to the right side of the parent */
+    margin-top: -0.5rem;
+  }
+
+  /* Reveal sub-dropdown ONLY when hovering directly over the sub-item parent */
+  .dropdown-menu .nav-item-dropdown:hover > .sub-dropdown {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   SOLUTION PAGE STYLES
+   ========================================================================== */
+
+/* Metadata & Breadcrumbs */
+.solution-header {
+  margin-top: 0rem;
+  margin-bottom: 2rem;
+}
+
+.question-meta {
+  display: inline-block;
+  background-color: #e2e8f0;
+  color: var(--text-main);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.answer-badge {
+  /* Default percentage fallback if data-pct attribute is missing */
+  --pct: 1;
+  
+  /* Calculate hue from 0 (0deg = Red) to 1 (120deg = Green) */
+  --hue: calc(var(--pct) * 120);
+  
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  
+  /* Dynamic border, background, and text colors based on HSL */
+  background-color: hsl(var(--hue), 85%, 95%);
+  border: 1px solid hsl(var(--hue), 70%, 50%);
+  color: hsl(var(--hue), 80%, 25%);
+  
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Accuracy Percentage Tag */
+.pct-tag {
+  display: inline-block;
+  padding-left: 0.75rem;
+  border-left: 1.5px solid hsl(var(--hue), 50%, 75%);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+/* Solution Sections */
+.solution-section {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.15rem;
+  margin-top: 1rem;
+  padding-top: 0rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.solution-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.solution-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Optional Callout / Note Styling */
+.solution-note {
+  background-color: #f1f5f9;
+  border-left: 4px solid var(--primary-color);
+  padding: 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Enable auto scrolling across the entire page */
+html {
+  scroll-behavior: auto;
+}
+
+/* Add scroll margin so targeted elements aren't covered by sticky elements */
+.card[id^="q"] {
+  scroll-margin-top: 2rem;
+}
+
+/* Question Navigation Card */
+.question-nav-card {
+  background-color: var(--card-bg);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.question-nav-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+/* Responsive Grid for Buttons */
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  gap: 0.5rem;
+}
+
+/* Individual Question Button Styles */
+.q-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  transition: all var(--transition-fast);
+}
+
+.q-btn:hover {
+  background-color: var(--primary-color);
+  color: #ffffff !important;
+  border-color: var(--primary-color);
+}
+
+/* ==========================================================================
+   BACK TO TOP BUTTON
+   ========================================================================== */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  z-index: 999;
+}
+
+/* Hover & Active States */
+.back-to-top-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-3px);
+}
+
+/* Class toggled via JS when user scrolls down */
+.back-to-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+}

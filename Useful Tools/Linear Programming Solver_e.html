@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Programming Solver & Visualizer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Global Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <!-- Global Component Loader Script -->
+    <script src="../assets/js/global.js"></script>
+  <style>
+    /* Custom scrollbars and styling tweaks */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="global-navbar-e"></header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Controls / Input Column -->
+    <div class="lg:col-span-5 flex flex-col space-y-6">
+
+      <!-- Objective Function Card -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-bullseye text-indigo-600"></i> 
+          1. Objective Function
+        </h2>
+        <div class="flex items-center space-x-2 bg-slate-50 p-3 rounded-lg border border-slate-200 overflow-x-auto whitespace-nowrap">
+          <select id="objGoal" class="bg-white border border-slate-300 rounded px-2 py-1.5 font-medium text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none shrink-0">
+            <option value="max" selected>Maximize</option>
+            <option value="min">Minimize</option>
+          </select>
+          <span class="font-bold text-slate-700 text-sm">P =</span>
+          <input type="number" id="objA" value="8" step="any" class="w-14 border border-slate-300 rounded px-1.5 py-1 text-center font-semibold text-slate-700 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none shrink-0" placeholder="a">
+          <span class="font-bold text-slate-600 text-sm">x +</span>
+          <input type="number" id="objB" value="-6" step="any" class="w-14 border border-slate-300 rounded px-1.5 py-1 text-center font-semibold text-slate-700 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none shrink-0" placeholder="b">
+          <span class="font-bold text-slate-600 text-sm">y +</span>
+          <input type="number" id="objC" value="11" step="any" class="w-14 border border-slate-300 rounded px-1.5 py-1 text-center font-semibold text-slate-700 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none shrink-0" placeholder="c">
+        </div>
+      </div>
+
+      <!-- Constraints Card -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex-grow flex flex-col">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-indigo-600"></i> 
+            2. Linear Constraints
+          </h2>
+        </div>
+
+        <p class="text-xs text-slate-500 mb-4">Set equations in standard form: <span class="font-mono font-semibold">a·x + b·y ≤/≥ c</span></p>
+
+        <!-- Constraints Input Rows -->
+        <div id="constraintsContainer" class="space-y-3 mb-4">
+          <!-- Constraint 1 -->
+          <div class="constraint-row flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+            <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0" title="Color Indicator"></span>
+            <input type="number" value="1" step="any" class="c-a w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="a">
+            <span class="text-xs font-semibold text-slate-600">x +</span>
+            <input type="number" value="0" step="any" class="c-b w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="b">
+            <span class="text-xs font-semibold text-slate-600">y</span>
+            <select class="c-sign bg-white border border-slate-300 rounded px-1 py-1 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="<=" selected>&le;</option>
+              <option value=">=">&ge;</option>
+              <option value="=">=</option>
+            </select>
+            <input type="number" value="11" step="any" class="c-c w-16 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="c">
+            <input type="checkbox" checked class="c-active accent-indigo-600 h-4 w-4 rounded ml-auto cursor-pointer" title="Enable constraint">
+          </div>
+
+          <!-- Constraint 2 -->
+          <div class="constraint-row flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+            <span class="w-3 h-3 rounded-full bg-blue-500 shrink-0" title="Color Indicator"></span>
+            <input type="number" value="4" step="any" class="c-a w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="a">
+            <span class="text-xs font-semibold text-slate-600">x +</span>
+            <input type="number" value="5" step="any" class="c-b w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="b">
+            <span class="text-xs font-semibold text-slate-600">y</span>
+            <select class="c-sign bg-white border border-slate-300 rounded px-1 py-1 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="<=">&le;</option>
+              <option value=">=" selected>&ge;</option>
+              <option value="=">=</option>
+            </select>
+            <input type="number" value="19" step="any" class="c-c w-16 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="c">
+            <input type="checkbox" checked class="c-active accent-indigo-600 h-4 w-4 rounded ml-auto cursor-pointer" title="Enable constraint">
+          </div>
+
+          <!-- Constraint 3 -->
+          <div class="constraint-row flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 shrink-0" title="Color Indicator"></span>
+            <input type="number" value="7" step="any" class="c-a w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="a">
+            <span class="text-xs font-semibold text-slate-600">x +</span>
+            <input type="number" value="-6" step="any" class="c-b w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="b">
+            <span class="text-xs font-semibold text-slate-600">y</span>
+            <select class="c-sign bg-white border border-slate-300 rounded px-1 py-1 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="<=" selected>&le;</option>
+              <option value=">=">&ge;</option>
+              <option value="=">=</option>
+            </select>
+            <input type="number" value="-11" step="any" class="c-c w-16 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="c">
+            <input type="checkbox" checked class="c-active accent-indigo-600 h-4 w-4 rounded ml-auto cursor-pointer" title="Enable constraint">
+          </div>
+
+          <!-- Constraint 4 -->
+          <div class="constraint-row flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+            <span class="w-3 h-3 rounded-full bg-amber-500 shrink-0" title="Color Indicator"></span>
+            <input type="number" value="0" step="any" class="c-a w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="a">
+            <span class="text-xs font-semibold text-slate-600">x +</span>
+            <input type="number" value="0" step="any" class="c-b w-14 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="b">
+            <span class="text-xs font-semibold text-slate-600">y</span>
+            <select class="c-sign bg-white border border-slate-300 rounded px-1 py-1 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="<=">&le;</option>
+              <option value=">=" selected>&ge;</option>
+              <option value="=">=</option>
+            </select>
+            <input type="number" value="0" step="any" class="c-c w-16 border border-slate-300 rounded px-1.5 py-1 text-center text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="c">
+            <input type="checkbox" class="c-active accent-indigo-600 h-4 w-4 rounded ml-auto cursor-pointer" title="Enable constraint">
+          </div>
+        </div>
+
+        <!-- Default Non-Negativity Option -->
+        <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-lg mb-4 text-xs space-y-1.5 text-indigo-900">
+          <div class="font-semibold flex items-center justify-between">
+            <span>Non-negativity Constraints:</span>
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="nonNegativity" class="sr-only peer">
+              <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 relative"></div>
+            </label>
+          </div>
+          <p class="text-indigo-700">Enforces standard quadrant I region: <span class="font-mono font-bold">x ≥ 0, y ≥ 0</span></p>
+        </div>
+
+        <!-- Render Controls -->
+        <div class="space-y-2 mt-auto">
+          <div class="flex items-center justify-between text-xs text-slate-600 px-1">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="showShading" checked class="accent-indigo-600 rounded"> Show Feasible Area Fill
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="snapGrid" checked class="accent-indigo-600 rounded"> Auto Fit Bounds
+            </label>
+          </div>
+          <button id="calculateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-4 rounded-lg transition-colors duration-150 shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calculator"></i> Calculate & Render Region
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Output & Canvas Column -->
+    <div class="lg:col-span-7 flex flex-col space-y-6">
+
+      <!-- Visualization Canvas with White Background -->
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 relative flex flex-col">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-shapes text-indigo-600"></i> 
+            Feasible Region Graph
+          </h2>
+          <div class="flex items-center space-x-2">
+            <button id="zoomInBtn" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded border border-slate-200 text-xs" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+            <button id="zoomOutBtn" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded border border-slate-200 text-xs" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+            <button id="resetViewBtn" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded border border-slate-200 text-xs" title="Reset View"><i class="fa-solid fa-rotate-right"></i></button>
+          </div>
+        </div>
+
+        <div class="relative w-full aspect-square max-h-[500px] bg-white rounded-lg overflow-hidden border border-slate-200 shadow-inner">
+          <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
+
+          <!-- Floating Coordinates Display -->
+          <div id="cursorPos" class="absolute bottom-2 left-2 bg-slate-900/80 text-white px-2.5 py-1 rounded text-xs font-mono backdrop-blur-sm pointer-events-none shadow-sm">
+            X: 0.00, Y: 0.00
+          </div>
+        </div>
+
+        <!-- Legend / Key -->
+        <div class="flex flex-wrap items-center gap-4 mt-3 text-xs text-slate-600">
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 bg-indigo-500/30 border border-indigo-500 rounded-sm"></span> Feasible Region
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-emerald-200"></span> Optimal Point
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 bg-slate-600 rounded-full"></span> Feasible Vertices
+          </span>
+        </div>
+      </div>
+
+      <!-- Optimization Results Summary -->
+      <div id="resultsCard" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-square-poll-vertical text-indigo-600"></i>
+          Analysis & Solution
+        </h2>
+
+        <!-- Status Message Banner -->
+        <div id="statusBanner" class="p-3.5 rounded-lg mb-4 text-sm font-semibold flex items-center gap-2 bg-indigo-50 text-indigo-800 border border-indigo-200">
+          <i class="fa-solid fa-circle-info text-indigo-600"></i>
+          <span id="statusText">Click calculate to generate solution.</span>
+        </div>
+
+        <!-- Vertices & Optimum Table -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Vertices List -->
+          <div class="border border-slate-200 rounded-lg overflow-hidden">
+            <div class="bg-slate-100 px-3 py-2 text-xs font-bold text-slate-600 uppercase tracking-wider">
+              Feasible Corner Points (Vertices)
+            </div>
+            <div class="max-h-44 overflow-y-auto divide-y divide-slate-100">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                  <tr>
+                    <th class="p-2 font-medium">Vertex (x, y)</th>
+                    <th class="p-2 font-medium">P Value</th>
+                  </tr>
+                </thead>
+                <tbody id="verticesTableBody" class="font-mono text-slate-700">
+                  <tr><td colspan="2" class="p-2 text-slate-400 italic">No vertices calculated</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Optimal Solution Details -->
+          <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">Optimal Conclusion</div>
+              <div id="optimumSummary" class="text-sm text-slate-700 space-y-1">
+                <div>Maximum: <span class="font-bold text-slate-400">N/A</span></div>
+                <div>Minimum: <span class="font-bold text-slate-400">N/A</span></div>
+              </div>
+            </div>
+            <div id="boundednessNote" class="mt-3 text-[11px] text-slate-500 border-t border-slate-200 pt-2">
+              Evaluating $P(x,y)$ across vertices and extreme rays.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Solver Script Logic -->
+  <script>
+    // Palette for constraint lines
+    const CONSTRAINT_COLORS = [
+      '#f43f5e', // Rose
+      '#2563eb', // Blue
+      '#059669', // Emerald
+      '#d97706', // Amber
+      '#64748b', // Slate
+      '#64748b'  // Slate
+    ];
+
+    // Canvas & View State
+    let canvas, ctx;
+    let view = { xmin: -20, xmax: 30, ymin: -18, ymax: 35 };
+
+    let constraints = [];
+    let objective = { goal: 'max', a: 8, b: -6, c: 11 };
+    let vertices = [];
+    let Rays = [];
+    let solutionResult = {
+      isFeasible: false,
+      isBoundedRegion: true,
+      maxState: { bounded: true, val: null, point: null },
+      minState: { bounded: true, val: null, point: null }
+    };
+
+    // Initialize application on page load
+    window.onload = function() {
+      canvas = document.getElementById('graphCanvas');
+      ctx = canvas.getContext('2d');
+
+      resizeCanvas();
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        drawGraph();
+      });
+
+      canvas.addEventListener('mousemove', handleMouseMove);
+      setupCanvasInteractions();
+
+      document.getElementById('calculateBtn').addEventListener('click', runSolver);
+      document.getElementById('showShading').addEventListener('change', drawGraph);
+      document.getElementById('zoomInBtn').addEventListener('click', () => zoom(0.8));
+      document.getElementById('zoomOutBtn').addEventListener('click', () => zoom(1.25));
+      document.getElementById('resetViewBtn').addEventListener('click', autoScaleView);
+
+      document.querySelectorAll('input, select').forEach(elem => {
+        elem.addEventListener('change', runSolver);
+      });
+
+      runSolver();
+    };
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.floor((rect.width || 400) * dpr));
+      canvas.height = Math.max(1, Math.floor((rect.height || 400) * dpr));
+    }
+
+    function zoom(factor) {
+      const cx = (view.xmin + view.xmax) / 2;
+      const cy = (view.ymin + view.ymax) / 2;
+      const dx = (view.xmax - view.xmin) * factor / 2;
+      const dy = (view.ymax - view.ymin) * factor / 2;
+      view.xmin = cx - dx;
+      view.xmax = cx + dx;
+      view.ymin = cy - dy;
+      view.ymax = cy + dy;
+      drawGraph();
+    }
+
+    // Read constraints and objective function from DOM inputs
+    function gatherInputs() {
+      constraints = [];
+
+      objective.goal = document.getElementById('objGoal').value;
+      objective.a = parseFloat(document.getElementById('objA').value) || 0;
+      objective.b = parseFloat(document.getElementById('objB').value) || 0;
+      objective.c = parseFloat(document.getElementById('objC').value) || 0;
+
+      const rows = document.querySelectorAll('.constraint-row');
+      rows.forEach((row, index) => {
+        const active = row.querySelector('.c-active').checked;
+        if (active) {
+          const rawA = parseFloat(row.querySelector('.c-a').value) || 0;
+          const rawB = parseFloat(row.querySelector('.c-b').value) || 0;
+          const sign = row.querySelector('.c-sign').value;
+          const rawC = parseFloat(row.querySelector('.c-c').value) || 0;
+
+          if (rawA !== 0 || rawB !== 0) {
+            // Store half-plane normalized as A*x + B*y <= C
+            if (sign === '<=') {
+              constraints.push({ a: rawA, b: rawB, c: rawC, rawSign: '<=', color: CONSTRAINT_COLORS[index] });
+            } else if (sign === '>=') {
+              constraints.push({ a: -rawA, b: -rawB, c: -rawC, rawSign: '>=', color: CONSTRAINT_COLORS[index] });
+            } else if (sign === '=') {
+              constraints.push({ a: rawA, b: rawB, c: rawC, rawSign: '=', color: CONSTRAINT_COLORS[index] });
+              constraints.push({ a: -rawA, b: -rawB, c: -rawC, rawSign: '=', color: CONSTRAINT_COLORS[index] });
+            }
+          }
+        }
+      });
+
+      if (document.getElementById('nonNegativity').checked) {
+        constraints.push({ a: -1, b: 0, c: 0, rawSign: '>=', color: '#64748b' }); // x >= 0
+        constraints.push({ a: 0, b: -1, c: 0, rawSign: '>=', color: '#64748b' }); // y >= 0
+      }
+    }
+
+    // Main Linear Programming Solver with Ray & Vertex Analysis
+    function runSolver() {
+      gatherInputs();
+
+      const EPS = 1e-6;
+
+      // 1. Find all line-line intersection candidates
+      const rawIntersections = [];
+      for (let i = 0; i < constraints.length; i++) {
+        for (let j = i + 1; j < constraints.length; j++) {
+          const pt = getLineIntersection(constraints[i], constraints[j]);
+          if (pt) rawIntersections.push(pt);
+        }
+      }
+
+      // 2. Filter points satisfying ALL active constraints (Real Vertices)
+      vertices = [];
+      rawIntersections.forEach(pt => {
+        if (satisfiesAll(pt.x, pt.y, EPS)) {
+          if (!vertices.some(v => Math.hypot(v.x - pt.x, v.y - pt.y) < 1e-4)) {
+            const pVal = objective.a * pt.x + objective.b * pt.y + objective.c;
+            vertices.push({ x: pt.x, y: pt.y, p: pVal });
+          }
+        }
+      });
+
+      if (vertices.length === 0) {
+        // Test if feasible without vertices (e.g. single unconstrained half-plane or empty set)
+        const originFeasible = satisfiesAll(0, 0, EPS);
+        solutionResult = {
+          isFeasible: originFeasible,
+          isBoundedRegion: false,
+          maxState: { bounded: false },
+          minState: { bounded: false }
+        };
+        updateResultsUI();
+        drawGraph();
+        return;
+      }
+
+      // Sort real vertices by angle around center
+      const cx = vertices.reduce((sum, v) => sum + v.x, 0) / vertices.length;
+      const cy = vertices.reduce((sum, v) => sum + v.y, 0) / vertices.length;
+      vertices.sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
+
+      // 3. Find Extreme Ray Directions (Unbounded directions of the feasible set)
+      Rays = [];
+      const testDistance = 1000;
+
+      vertices.forEach(v => {
+        constraints.forEach(c => {
+          // Tangent vectors along line A*x + B*y = C
+          const u1 = { x: -c.b, y: c.a };
+          const u2 = { x: c.b, y: -c.a };
+
+          [u1, u2].forEach(u => {
+            const len = Math.hypot(u.x, u.y);
+            if (len > 1e-7) {
+              const un = { x: u.x / len, y: u.y / len };
+              const testPt = { x: v.x + un.x * testDistance, y: v.y + un.y * testDistance };
+              
+              if (satisfiesAll(testPt.x, testPt.y, 1e-3)) {
+                // Check if ray direction is already saved
+                if (!Rays.some(r => Math.hypot(r.x - un.x, r.y - un.y) < 1e-3)) {
+                  Rays.push(un);
+                }
+              }
+            }
+          });
+        });
+      });
+
+      const isUnboundedRegion = Rays.length > 0;
+
+      // 4. Test Boundedness of Objective Function P = ax + by + c
+      // Objective Gradient Vector g = (a, b)
+      const ga = objective.a;
+      const gb = objective.b;
+
+      let isMaxBounded = true;
+      let isMinBounded = true;
+
+      Rays.forEach(r => {
+        const dot = ga * r.x + gb * r.y;
+        if (dot > 1e-5) {
+          isMaxBounded = false; // P grows to +infinity along ray r
+        }
+        if (dot < -1e-5) {
+          isMinBounded = false; // P decreases to -infinity along ray r
+        }
+      });
+
+      // Find Maximum among corner points (if max bounded)
+      let maxVertex = vertices[0];
+      let minVertex = vertices[0];
+
+      vertices.forEach(v => {
+        if (v.p > maxVertex.p) maxVertex = v;
+        if (v.p < minVertex.p) minVertex = v;
+      });
+
+      solutionResult = {
+        isFeasible: true,
+        isBoundedRegion: !isUnboundedRegion,
+        maxState: {
+          bounded: isMaxBounded,
+          val: isMaxBounded ? maxVertex.p : null,
+          point: isMaxBounded ? maxVertex : null
+        },
+        minState: {
+          bounded: isMinBounded,
+          val: isMinBounded ? minVertex.p : null,
+          point: isMinBounded ? minVertex : null
+        }
+      };
+
+      if (document.getElementById('snapGrid').checked) {
+        autoScaleView();
+      }
+
+      updateResultsUI();
+      drawGraph();
+    }
+
+    function getLineIntersection(c1, c2) {
+      const det = c1.a * c2.b - c2.a * c1.b;
+      if (Math.abs(det) < 1e-9) return null; // Parallel lines
+
+      const x = (c1.c * c2.b - c2.c * c1.b) / det;
+      const y = (c1.a * c2.c - c2.a * c1.c) / det;
+      return { x, y };
+    }
+
+    function satisfiesAll(x, y, tol = 1e-6) {
+      return constraints.every(c => (c.a * x + c.b * y) <= c.c + tol);
+    }
+
+    function autoScaleView() {
+      if (vertices.length === 0) return;
+
+      let minX = Math.min(...vertices.map(v => v.x));
+      let maxX = Math.max(...vertices.map(v => v.x));
+      let minY = Math.min(...vertices.map(v => v.y));
+      let maxY = Math.max(...vertices.map(v => v.y));
+
+      const dx = (maxX - minX) || 10;
+      const dy = (maxY - minY) || 10;
+      const pad = Math.max(dx, dy) * 0.5;
+
+      view.xmin = Math.floor(minX - pad);
+      view.xmax = Math.ceil(maxX + pad);
+      view.ymin = Math.floor(minY - pad);
+      view.ymax = Math.ceil(maxY + pad);
+
+      if (view.xmin > -2) view.xmin = -2;
+      if (view.ymin > -2) view.ymin = -2;
+    }
+
+    function updateResultsUI() {
+      const statusBanner = document.getElementById('statusBanner');
+      const statusText = document.getElementById('statusText');
+      const verticesTableBody = document.getElementById('verticesTableBody');
+      const optimumSummary = document.getElementById('optimumSummary');
+      const boundednessNote = document.getElementById('boundednessNote');
+
+      if (!solutionResult.isFeasible) {
+        statusBanner.className = "p-3.5 rounded-lg mb-4 text-sm font-semibold flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200";
+        statusText.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Infeasible Region: No region satisfies all constraints simultaneously.`;
+        verticesTableBody.innerHTML = `<tr><td colspan="2" class="p-3 text-rose-500 italic text-center">Empty Feasible Set</td></tr>`;
+        optimumSummary.innerHTML = `<div class="text-rose-600 font-semibold">No Feasible Solution</div>`;
+        boundednessNote.innerText = "Constraints are contradictory.";
+        return;
+      }
+
+      const isUnboundedReg = !solutionResult.isBoundedRegion;
+      const isGoalMax = objective.goal === 'max';
+      const targetState = isGoalMax ? solutionResult.maxState : solutionResult.minState;
+
+      statusBanner.className = "p-3.5 rounded-lg mb-4 text-sm font-semibold flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+      statusText.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Feasible Region Identified (${isUnboundedReg ? 'Unbounded Region' : 'Bounded Polygon'}) with ${vertices.length} corner points.`;
+
+      // Fill Vertices Table
+      verticesTableBody.innerHTML = '';
+      vertices.forEach((v) => {
+        const isTargetOpt = targetState.bounded && targetState.point && (Math.hypot(v.x - targetState.point.x, v.y - targetState.point.y) < 1e-4);
+        
+        const row = document.createElement('tr');
+        row.className = isTargetOpt ? 'bg-emerald-100/80 font-bold text-emerald-900' : 'hover:bg-slate-50';
+        row.innerHTML = `
+          <td class="p-2 border-b border-slate-100 flex items-center gap-1.5">
+            ${isTargetOpt ? '<i class="fa-solid fa-star text-amber-500 text-xs"></i>' : ''}
+            (${v.x.toFixed(2)}, ${v.y.toFixed(2)})
+          </td>
+          <td class="p-2 border-b border-slate-100">${v.p.toFixed(2)}</td>
+        `;
+        verticesTableBody.appendChild(row);
+      });
+
+      // Goal summary block
+      const maxStr = solutionResult.maxState.bounded 
+        ? `<b>${solutionResult.maxState.val.toFixed(2)}</b> at (${solutionResult.maxState.point.x.toFixed(2)}, ${solutionResult.maxState.point.y.toFixed(2)})`
+        : `<span class="text-amber-600 font-bold">Unbounded (+infinity)</span>`;
+
+      const minStr = solutionResult.minState.bounded 
+        ? `<b>${solutionResult.minState.val.toFixed(2)}</b> at (${solutionResult.minState.point.x.toFixed(2)}, ${solutionResult.minState.point.y.toFixed(2)})`
+        : `<span class="text-amber-600 font-bold">Unbounded (-infinity)</span>`;
+
+      const targetTitle = isGoalMax ? 'Maximum' : 'Minimum';
+      let targetDisplay = '';
+
+      if (targetState.bounded) {
+        targetDisplay = `
+          <div class="p-2.5 rounded bg-indigo-50 border border-indigo-100 mb-2">
+            <div class="text-xs text-indigo-700 uppercase font-bold">Optimal Target (${targetTitle})</div>
+            <div class="text-lg font-black text-indigo-950">P = ${targetState.val.toFixed(2)}</div>
+            <div class="text-xs text-indigo-800">at x = <b>${targetState.point.x.toFixed(2)}</b>, y = <b>${targetState.point.y.toFixed(2)}</b></div>
+          </div>
+        `;
+      } else {
+        targetDisplay = `
+          <div class="p-2.5 rounded bg-amber-50 border border-amber-200 mb-2">
+            <div class="text-xs text-amber-800 uppercase font-bold">Optimal Target (${targetTitle})</div>
+            <div class="text-base font-bold text-amber-900">No Optimal Solution</div>
+            <div class="text-xs text-amber-700">P can increase/decrease infinitely along unbounded ray directions.</div>
+          </div>
+        `;
+      }
+
+      optimumSummary.innerHTML = `
+        ${targetDisplay}
+        <div class="text-xs text-slate-600 space-y-1 pt-1">
+          <div>&bull; Max P: ${maxStr}</div>
+          <div>&bull; Min P: ${minStr}</div>
+        </div>
+      `;
+
+      if (isUnboundedReg) {
+        boundednessNote.innerHTML = `<span class="font-semibold text-slate-700"><i class="fa-solid fa-arrows-up-down-left-right text-indigo-500"></i> Unbounded Region detected:</span> Corner points are verified against extreme ray directions. Points where P extends indefinitely are correctly classified as unbounded.`;
+      } else {
+        boundednessNote.innerHTML = `Bounded region: Optimal solution exists at one of the corner vertices.`;
+      }
+    }
+
+    // Mapping world coordinates to canvas pixels
+    function toCanvasX(x) { return (x - view.xmin) / (view.xmax - view.xmin) * canvas.width; }
+    function toCanvasY(y) { return canvas.height - (y - view.ymin) / (view.ymax - view.ymin) * canvas.height; }
+    function toMathX(cx) { return view.xmin + (cx / canvas.width) * (view.xmax - view.xmin); }
+    function toMathY(cy) { return view.ymin + ((canvas.height - cy) / canvas.height) * (view.ymax - view.ymin); }
+
+    // Main Graph Visualizer
+    function drawGraph() {
+      if (!ctx || canvas.width <= 0 || canvas.height <= 0) return;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 1. Grid and Axes
+      drawGridAndAxes();
+
+      const showShading = document.getElementById('showShading').checked;
+
+      // 2. Feasible Region Polygon Clipping & Fill
+      if (showShading && solutionResult.isFeasible) {
+        drawFeasibleRegionFill();
+      }
+
+      // 3. Draw Constraint Boundary Lines
+      constraints.forEach(c => drawConstraintLine(c));
+
+      // 4. Contour Line through Target Optimum (if bounded)
+      const isGoalMax = objective.goal === 'max';
+      const targetState = isGoalMax ? solutionResult.maxState : solutionResult.minState;
+
+      if (targetState.bounded && targetState.point) {
+        drawObjectiveContour(targetState.point);
+      }
+
+      // 5. Render Vertices and Optimum Marker
+      if (solutionResult.isFeasible) {
+        vertices.forEach(v => {
+          const cx = toCanvasX(v.x);
+          const cy = toCanvasY(v.y);
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, 5.5 * window.devicePixelRatio, 0, Math.PI * 2);
+          ctx.fillStyle = '#334155';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2 * window.devicePixelRatio;
+          ctx.stroke();
+        });
+
+        // Highlight Target Optimum
+        if (targetState.bounded && targetState.point) {
+          const optCx = toCanvasX(targetState.point.x);
+          const optCy = toCanvasY(targetState.point.y);
+
+          ctx.beginPath();
+          ctx.arc(optCx, optCy, 8 * window.devicePixelRatio, 0, Math.PI * 2);
+          ctx.fillStyle = '#10b981'; // Emerald
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2.5 * window.devicePixelRatio;
+          ctx.stroke();
+
+          // Text label
+          ctx.fillStyle = '#0f172a';
+          ctx.font = `bold ${12 * window.devicePixelRatio}px sans-serif`;
+          const goalLabel = isGoalMax ? 'Maximum' : 'Minimum';
+          ctx.fillText(`${goalLabel} (${targetState.point.x.toFixed(1)}, ${targetState.point.y.toFixed(1)})`, optCx + 10, optCy - 10);
+        }
+      }
+    }
+
+    function drawGridAndAxes() {
+      ctx.lineWidth = 1 * window.devicePixelRatio;
+
+      const rangeX = view.xmax - view.xmin;
+      const step = getNiceStep(rangeX / 8);
+
+      const startX = Math.floor(view.xmin / step) * step;
+      const startY = Math.floor(view.ymin / step) * step;
+
+      ctx.strokeStyle = '#f1f5f9';
+      ctx.fillStyle = '#64748b';
+      ctx.font = `${10 * window.devicePixelRatio}px monospace`;
+
+      for (let x = startX; x <= view.xmax; x += step) {
+        const cx = toCanvasX(x);
+        ctx.beginPath();
+        ctx.moveTo(cx, 0);
+        ctx.lineTo(cx, canvas.height);
+        ctx.stroke();
+
+        if (Math.abs(x) > 1e-5) {
+          const cy0 = Math.max(15, Math.min(canvas.height - 15, toCanvasY(0)));
+          ctx.fillText(x.toFixed(step < 1 ? 1 : 0), cx + 3, cy0 - 4);
+        }
+      }
+
+      for (let y = startY; y <= view.ymax; y += step) {
+        const cy = toCanvasY(y);
+        ctx.beginPath();
+        ctx.moveTo(0, cy);
+        ctx.lineTo(canvas.width, cy);
+        ctx.stroke();
+
+        if (Math.abs(y) > 1e-5) {
+          const cx0 = Math.max(5, Math.min(canvas.width - 25, toCanvasX(0)));
+          ctx.fillText(y.toFixed(step < 1 ? 1 : 0), cx0 + 4, cy - 4);
+        }
+      }
+
+      // X & Y Axes
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 2 * window.devicePixelRatio;
+
+      const y0 = toCanvasY(0);
+      ctx.beginPath();
+      ctx.moveTo(0, y0);
+      ctx.lineTo(canvas.width, y0);
+      ctx.stroke();
+
+      const x0 = toCanvasX(0);
+      ctx.beginPath();
+      ctx.moveTo(x0, 0);
+      ctx.lineTo(x0, canvas.height);
+      ctx.stroke();
+    }
+
+    function getNiceStep(rawStep) {
+      const exponent = Math.floor(Math.log10(rawStep));
+      const fraction = rawStep / Math.pow(10, exponent);
+      let niceFraction;
+
+      if (fraction < 1.5) niceFraction = 1;
+      else if (fraction < 3) niceFraction = 2;
+      else if (fraction < 7) niceFraction = 5;
+      else niceFraction = 10;
+
+      return niceFraction * Math.pow(10, exponent);
+    }
+
+    function drawConstraintLine(c) {
+      ctx.strokeStyle = c.color || '#2563eb';
+      ctx.lineWidth = 2.5 * window.devicePixelRatio;
+
+      const pts = getBoundingBoxIntersections(c, view.xmin - 50, view.xmax + 50, view.ymin - 50, view.ymax + 50);
+      if (pts.length >= 2) {
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(pts[0].x), toCanvasY(pts[0].y));
+        ctx.lineTo(toCanvasX(pts[1].x), toCanvasY(pts[1].y));
+        ctx.stroke();
+      }
+    }
+
+    // Clip feasible region against canvas bounding box (Sutherland-Hodgman Polygon Clipping)
+    function drawFeasibleRegionFill() {
+      // Start with canvas viewport polygon
+      let poly = [
+        { x: view.xmin - 2, y: view.ymin - 2 },
+        { x: view.xmax + 2, y: view.ymin - 2 },
+        { x: view.xmax + 2, y: view.ymax + 2 },
+        { x: view.xmin - 2, y: view.ymax + 2 }
+      ];
+
+      // Clip against every constraint line
+      constraints.forEach(c => {
+        poly = clipPolygonWithHalfPlane(poly, c);
+      });
+
+      if (poly.length >= 3) {
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+        ctx.strokeStyle = 'rgba(79, 70, 229, 0.6)';
+        ctx.lineWidth = 1.5 * window.devicePixelRatio;
+
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(poly[0].x), toCanvasY(poly[0].y));
+        for (let i = 1; i < poly.length; i++) {
+          ctx.lineTo(toCanvasX(poly[i].x), toCanvasY(poly[i].y));
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    function clipPolygonWithHalfPlane(poly, c) {
+      const output = [];
+      if (poly.length === 0) return output;
+
+      let s = poly[poly.length - 1];
+      for (let i = 0; i < poly.length; i++) {
+        const e = poly[i];
+        const eIn = (c.a * e.x + c.b * e.y) <= c.c + 1e-6;
+        const sIn = (c.a * s.x + c.b * s.y) <= c.c + 1e-6;
+
+        if (eIn) {
+          if (!sIn) {
+            const intersection = getLineIntersection(c, lineFromTwoPoints(s, e));
+            if (intersection) output.push(intersection);
+          }
+          output.push(e);
+        } else if (sIn) {
+          const intersection = getLineIntersection(c, lineFromTwoPoints(s, e));
+          if (intersection) output.push(intersection);
+        }
+        s = e;
+      }
+      return output;
+    }
+
+    function lineFromTwoPoints(p1, p2) {
+      const a = p2.y - p1.y;
+      const b = p1.x - p2.x;
+      const c = a * p1.x + b * p1.y;
+      return { a, b, c };
+    }
+
+    function drawObjectiveContour(optPt) {
+      if (objective.a === 0 && objective.b === 0) return;
+
+      const P = optPt.p - objective.c;
+      const objConstraint = { a: objective.a, b: objective.b, c: P };
+      const pts = getBoundingBoxIntersections(objConstraint, view.xmin - 50, view.xmax + 50, view.ymin - 50, view.ymax + 50);
+
+      if (pts.length >= 2) {
+        ctx.save();
+        ctx.setLineDash([6 * window.devicePixelRatio, 4 * window.devicePixelRatio]);
+        ctx.strokeStyle = '#9333ea';
+        ctx.lineWidth = 2.5 * window.devicePixelRatio;
+
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(pts[0].x), toCanvasY(pts[0].y));
+        ctx.lineTo(toCanvasX(pts[1].x), toCanvasY(pts[1].y));
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function getBoundingBoxIntersections(c, xmin, xmax, ymin, ymax) {
+      const pts = [];
+
+      if (Math.abs(c.b) > 1e-7) {
+        let y = (c.c - c.a * xmin) / c.b;
+        if (y >= ymin && y <= ymax) pts.push({ x: xmin, y });
+
+        y = (c.c - c.a * xmax) / c.b;
+        if (y >= ymin && y <= ymax) pts.push({ x: xmax, y });
+      }
+
+      if (Math.abs(c.a) > 1e-7) {
+        let x = (c.c - c.b * ymin) / c.a;
+        if (x >= xmin && x <= xmax) pts.push({ x, y: ymin });
+
+        x = (c.c - c.b * ymax) / c.a;
+        if (x >= xmin && x <= xmax) pts.push({ x, y: ymax });
+      }
+
+      return pts;
+    }
+
+    // Drag and interactive mouse zoom handler
+    let isDragging = false;
+    let dragStart = { x: 0, y: 0 };
+
+    function setupCanvasInteractions() {
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStart = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const dxPixels = e.clientX - dragStart.x;
+        const dyPixels = e.clientY - dragStart.y;
+
+        const scaleX = (view.xmax - view.xmin) / rect.width;
+        const scaleY = (view.ymax - view.ymin) / rect.height;
+
+        view.xmin -= dxPixels * scaleX;
+        view.xmax -= dxPixels * scaleX;
+        view.ymin += dyPixels * scaleY;
+        view.ymax += dyPixels * scaleY;
+
+        dragStart = { x: e.clientX, y: e.clientY };
+        drawGraph();
+      });
+
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
+        zoom(zoomFactor);
+      }, { passive: false });
+    }
+
+    function handleMouseMove(e) {
+      const rect = canvas.getBoundingClientRect();
+      const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      const mx = toMathX(cx);
+      const my = toMathY(cy);
+
+      document.getElementById('cursorPos').innerText = `X: ${mx.toFixed(2)}, Y: ${my.toFixed(2)}`;
+    }
+  </script>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+</body>
+</html>

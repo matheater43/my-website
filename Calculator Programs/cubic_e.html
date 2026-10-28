@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cubic Polynomial/Equation - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Cubic Polynomial/Equation</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="2">2</span>
+              <span><strong>CMPLX</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">259</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- External Reference -->
+          <div class="info-item">
+            <span class="info-label">Reference:</span>
+            <span class="info-value">
+              <a href="http://webcal.freetzi.com/casio.fx-50FH/cubic1.htm" target="_blank" rel="noopener noreferrer">
+                http://webcal.freetzi.com/casio.fx-50FH/cubic1.htm</a> (for solving the cubic)
+            </span>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>Write a cubic polynomial in the form $ax^3 + bx^2 + cx + d$</li>
+                <li>Calculate the roots of a cubic polynomial</li>
+              </ul>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>ClrMemory : 1 &rarr; D :
+<span class="small-e">E</span>4i &rarr; X :
+? &rarr; Y : ? &rarr; D :
+DY &rarr; Y :
+&#8722;.5i(Y &#8722; Conjg(Y &rarr; M :
+&#8722;iX &rarr; X :
+Fix 3 :
+&#8722;Rnd(M<span class="frac-key">&lrcorner;</span>X&#179; &rarr; A :
+AX&#179;<span class="m-plus">M+</span> :
+Rnd(M<span class="frac-key">&lrcorner;</span>X &rarr; C :
+.5(Y + Conjg(Y &rarr; M :
+&#8722;Rnd(M<span class="frac-key">&lrcorner;</span>X&#178; &rarr; B :
+BX&#178;<span class="m-plus">M+</span> :
+Norm 1 :
+A<span class="frac-key">&lrcorner;</span>D&#9698; B<span class="frac-key">&lrcorner;</span>D&#9698; C<span class="frac-key">&lrcorner;</span>D&#9698; M<span class="frac-key">&lrcorner;</span>D&#9698;
+If A = 0 : Then B = 0 &#8658; &#8722;M<span class="frac-key">&lrcorner;</span>C&#9698;
+&#8722;C<span class="frac-key">&lrcorner;</span>(2B &rarr; X :
+X + &radic;(X&#178; &#8722; M<span class="frac-key">&lrcorner;</span>B&#9698;
+2X &#8722; Ans&#9698;
+IfEnd :
+-B<span class="frac-key">&lrcorner;</span>(3A &rarr; B :
+C<span class="frac-key">&lrcorner;</span>A &rarr; C :
+B&#179; - B Ans<span class="frac-key">&lrcorner;</span>2 &#8722; M<span class="frac-key">&lrcorner;</span>(2A &rarr; M :
+&radic;((C<span class="frac-key">&lrcorner;</span>3 &#8722; B&#178;)&#179; + Ans&#178;<span class="m-plus">M+</span> :
+If Ans = Conjg(Ans : Then <span class="cube-root">&#179;&radic;</span>(M) + <span class="cube-root">&#179;&radic;</span>(M &#8722; 2Ans :
+Else 2<span class="cube-root">&#179;&radic;</span>(Abs(M))cos(3&#8315;&#185;arg(M :
+IfEnd :
+Ans + B &rarr; A&#9698;
+3B - Ans &rarr; M :
+M<span class="frac-key">&lrcorner;</span>2 + &radic;(AM &#8722; C + M&#178;<span class="frac-key">&lrcorner;</span>4<span class="m-plus">M-</span>&#9698;
+M</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section upright-vars">
+        If the coefficients of $Y$ involve decimals or fractions, a common multiple of the denominators is
+        recorded as $D$. So, by replacing $Y$ by $DY$, the coefficients of $Y$ are all integers.
+        \begin{align*}
+        Y&=AX^3+BX^2+CX+M\\
+        &=A(10^4 i)^3+B(10^4 i)^2+C(10^4 i)+M\\
+        &=A(-10^{12}i)+B(-10^8)+C(10^4i)+M\\
+        &=(-B\times10^8+M)+(-A\times10^{12}+C\times10^4)i
+        \end{align*}
+        $A$, $B$, $C$ and $M$ are then extracted one by one by rounding off the real and imaginary parts to appropriate digits.
+        After that, each coefficient is divided by $D$ to retrieve the coefficients of the original expression.
+        Note that re-scaling the coefficients is not necessary to solve the equation.<br>
+        To solve the cubic equation, consider
+        \begin{align*}
+        Ax^3+Bx^2+Cx+M&=0\\[1mm]
+        x^3+\dfrac{B}{A}x^2+\dfrac{C}{A}x+\dfrac{M}{A}&=0\ \text{......(1)}
+        \end{align*}
+        We proceed by completing the cube which eliminates the $x^2$
+        term. Observe that<br>
+        $(x+k)^3=x^3+3kx^2+3k^2x+k^3$ ......(2)<br>
+        Comparing the coefficients of $x^2$ in (1) and (2), we have
+        <div style="margin-top: 2mm;"> </div>
+        \begin{align*}
+        3k&=\dfrac{B}{A}\\[1mm]
+        k&=\dfrac{B}{3A}
+        \end{align*}
+        So (1) can be rewritten as
+        \begin{align*}
+        x^3+3\left(\dfrac{B}{3A}\right)x^2+3\left(\dfrac{B}{3A}\right)^2x+\left(\dfrac{B}{3A}\right)^3+\dfrac{C}{A}x+\dfrac{M}{A}-3\left(\dfrac{B}{3A}\right)^2x-\left(\dfrac{B}{3A}\right)^3&=0\\[1mm]
+        \left(x+\dfrac{B}{3A}\right)^3+\left(\dfrac{C}{A}-\dfrac{B^2}{3A^2}\right)x+\dfrac{M}{A}-\dfrac{B^3}{27A^3}&=0
+        \end{align*}
+        <div style="margin-top: 2mm;"> </div>
+        By substituting $y=x+\dfrac{B}{3A}$, we have
+        <div style="margin-top: 2mm;"> </div>
+        \begin{align*}
+        y^3+\left(\dfrac{C}{A}-\dfrac{B^2}{3A^2}\right)\left(y-\dfrac{B}{3A}\right)+\dfrac{M}{A}-\dfrac{B^3}{27A^3}&=0\\[1mm]
+        y^3+\left(\dfrac{C}{A}-\dfrac{B^2}{3A^2}\right)y-\dfrac{BC}{3A^2}+\dfrac{B^3}{9A^3}+\dfrac{M}{A}-\dfrac{B^3}{27A^3}&=0\\[1mm]
+        y^3+\left(\dfrac{C}{A}-\dfrac{B^2}{3A^2}\right)y+\dfrac{2B^3}{27A^3}-\dfrac{BC}{3A^2}+\dfrac{M}{A}&=0\\[1mm]
+        y^3+3py+2q&=0\text{ ......(3)}
+        \end{align*}
+        <div style="margin-top: 2mm;"> </div>
+        where $3p=\dfrac{C}{A}-\dfrac{B^2}{3A^2}\Leftrightarrow p=\dfrac{C}{3A}-\dfrac{B^2}{9A^2}$<br>
+        <div style="margin-top: 2mm;"> </div>
+        and $2q=\dfrac{2B^3}{27A^3}-\dfrac{BC}{3A^2}+\dfrac{M}{A}\Leftrightarrow
+        q=\dfrac{B^3}{27A^3}-\dfrac{BC}{6A^2}+\dfrac{M}{2A}$<br>
+        <div style="margin-top: 2mm;"> </div>
+        Now suppose $y=u+v$. We have
+        \begin{align*}
+        y^3&=(u+v)^3\\
+        &=u^3+3u^2v+3uv^2+v^3\\
+        &=u^3+3uv(u+v)+v^3\\
+        &=u^3+3uvy+v^3\\
+        y^3-3uvy-(u^3+v^3)&=0\text{ ......(4)}
+        \end{align*}
+        Comparing (3) and (4), we have
+        \begin{alignat*}{2}
+        -3uv&=3p \quad &&\quad & -(u^3+v^3)&=2q\\
+        uv&=-p \quad &&\quad & u^3+v^3&=-2q\\
+        u^3v^3&=-p^3 \quad &&\quad & 
+        \end{alignat*}        
+        Hence, $u^3$ and $v^3$ are the roots of the quadratic equation $z^2+2qz-p^3=0$, which gives
+        \begin{align*}
+        u^3,\ v^3&=\dfrac{-2q\pm\sqrt{(2q)^2-4(-p)^3}}{2}\\[1mm]
+        &=q\pm\sqrt{q^2+p^3}
+        \end{align*}
+        So the solutions for $u$ and $v$ are
+        $\sqrt[3]{q\pm\sqrt{q^2+p^3}},\ w\sqrt[3]{q\pm\sqrt{q^2+p^3}},\ \overline{w}\sqrt[3]{q\pm\sqrt{q^2+p^3}}$<br>
+        <div style="margin-top: 2mm;"> </div>
+        where $w=-\dfrac{1}{2}+\dfrac{i\sqrt{3}}{2}$ is a complex 3rd root of unity.<br>
+        <div style="margin-top: 2mm;"> </div>
+        Since $u$ and $v$ have to satisfy the condition that $uv = -p$ is a real number, the solutions are given by
+        \begin{align*}
+        x&=y-\dfrac{B}{3A}\\[1mm]
+        &=u+v-\dfrac{B}{3A}\\[1mm]
+        &=\sqrt[3]{q+\sqrt{q^2+p^3}}+\sqrt[3]{q-\sqrt{q^2+p^3}}-\dfrac{B}{3A}=:r\\[1mm]
+        &\quad\text{or }w\sqrt[3]{q+\sqrt{q^2+p^3}}+\overline{w}\sqrt[3]{q-\sqrt{q^2+p^3}}-\dfrac{B}{3A}=:\alpha\\[1mm]
+        &\quad\text{or }\overline{w}\sqrt[3]{q+\sqrt{q^2+p^3}}+w\sqrt[3]{q-\sqrt{q^2+p^3}}-\dfrac{B}{3A}=:\overline{\alpha}
+        \end{align*}
+        In the program, the line 
+        <div class="code-container"><pre><code>B&#179; - B Ans<span class="frac-key">&lrcorner;</span>2 &#8722; M<span class="frac-key">&lrcorner;</span>(2A &rarr; M :</code></pre></div>
+        is
+        \begin{align*}
+        \left(-\dfrac{B}{3A}\right)^3-\left(-\dfrac{B}{3A}\right)\left(\dfrac{C}{A}\right)\times\dfrac{1}{2}-\dfrac{M}{2A}&=-\dfrac{B^3}{27A^2}+\dfrac{BC}{6A^2}-\dfrac{M}{2A}\\
+        &=-q
+        \end{align*}
+        The line
+        <div class="code-container">
+          <pre><code>&radic;((C<span class="frac-key">&lrcorner;</span>3 &#8722; B&#178;)&#179; + Ans&#178;<span class="m-plus">M+</span> :</code></pre>
+        </div>
+        is
+        \begin{align*}
+        -q+\sqrt{\left[\left(\dfrac{C}{A}\right)\times\dfrac{1}{3}-\left(-\dfrac{B}{3A}\right)^2\right]^3+(-q)^2}&=-q+\sqrt{\left(\dfrac{C}{3A}-\dfrac{B^2}{9A^2}\right)^3+q^2}\\[1mm]
+        &=-q+\sqrt{q^2+p^3}
+        \end{align*}
+        This number is real when it is equal to its complex conjugate, in which case the real root $r$ defined above is computed.<br>
+        If this number has a non-zero imaginary part, then we have to take its cube root as a complex number.<br>
+        We write
+        \begin{align*}
+        M&=(re^{i\theta})^3\\
+        &=r^3e^{3i\theta}
+        \end{align*}
+        So the complex root is
+        \begin{align*}
+        \sqrt[3]{q+\sqrt{q^2+p^3}}+\sqrt[3]{q-\sqrt{q^2+p^3}}&=2\text{Re}(u)\\
+        &=2r\cos\theta\\
+        &=2\sqrt[3]{M}\cos\left(\dfrac{\arg M}{3}\right)
+        \end{align*}
+        <div style="margin-top: 2mm;"> </div>
+        To find the other two roots, note that
+        $-\dfrac{B}{A}=r+\alpha+\overline{\alpha}$ and $\dfrac{C}{A}=r\alpha+r\overline{\alpha}+\alpha\overline{\alpha}$.<br>
+        So the line
+        <div class="code-container">
+          <pre><code>M<span class="frac-key">&lrcorner;</span>2 + &radic;(AM &#8722; C + M&#178;<span
+            class="frac-key">&lrcorner;</span>4<span class="m-plus">M-</span>&#9698;</code></pre>
+        </div>
+        is
+        \begin{align*}
+        \dfrac{\alpha+\overline{\alpha}}{2}+\sqrt{r(\alpha+\overline{\alpha})-(r\alpha+r\overline{\alpha}+\alpha\overline{\alpha})+\dfrac{(\alpha+\overline{\alpha})^2}{4}}
+        &=\text{Re}(\alpha)+\sqrt{-\alpha\overline{\alpha}+\dfrac{\alpha^2+2\alpha\overline{\alpha}+\overline{\alpha}^2}{4}}\\[1mm]
+        &=\text{Re}(\alpha)+\sqrt{\dfrac{\alpha^2-2\alpha\overline{\alpha}+\overline{\alpha}^2}{4}}\\[1mm]
+        &=\text{Re}(\alpha)+\sqrt{\dfrac{(\alpha-\overline{\alpha})^2}{4}}\\[1mm]
+        &=\text{Re}(\alpha)+\sqrt{\dfrac{[2\text{Im}(\alpha)i]^2}{4}}\\[1mm]
+        &=\text{Re}(\alpha)+\sqrt{-\text{Im}(\alpha)^2}\\[1mm]
+        &=\text{Re}(\alpha)\pm\text{Im}(\alpha)i
+        \end{align*}
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1</h3>
+        Solve $3x(5-7x)^2=90-(3+2x)^2(10+3x)$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                $3X(5-7X)^2 - 90 + (3+2X)^2(10+3X$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input equation with one side = 0</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input common multiple of denominators, skip if no fractions/decimals</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$159$</td>
+              <td class="text-left">coefficient of $x^3 = 159$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-134$</td>
+              <td class="text-left">coefficient of $x^2 = -134$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$222$</td>
+              <td class="text-left">coefficient of $x = 222$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0$</td>
+              <td class="text-left">constant term = $0$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0$</td>
+              <td class="text-left">1st root = $0$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac{67}{159} + 1.104i$</td>
+              <td class="text-left">2nd root = $\dfrac{67}{159} + 1.104i$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac{67}{159} - 1.104i$</td>
+              <td class="text-left">3rd root = $\dfrac{67}{159} - 1.104i$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2</h3>
+        Solve $\dfrac{2}{5}\left(\dfrac{2x+1}{6}-6x\right)\left(3+\dfrac{x}{2}-x^2\right)+x^2(2x-1)=6x$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                $2 \div 5 \times ((2X+1) \div 6 - 6X)(3 + X \div 2 - X^2)$<br>
+                $ +\; X^2(2X-1) - 6X$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input equation with one side = 0</td>
+            </tr>
+            <tr>
+              <td>
+                $5 \times 6 \times 2$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input common multiple of denominators</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\dfrac{64}{15}$</td>
+              <td class="text-left">coefficient of $x^3 = \dfrac{64}{15}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-\dfrac{11}{5}$</td>
+              <td class="text-left">coefficient of $x^2 = -\dfrac{11}{5}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-\dfrac{383}{30}$</td>
+              <td class="text-left">coefficient of $x = -\dfrac{383}{30}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac{1}{5}$</td>
+              <td class="text-left">constant term = $\dfrac{1}{5}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$2$</td>
+              <td class="text-left">1st root = $2$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac{1}{64}$</td>
+              <td class="text-left">2nd root = $\dfrac{1}{64}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-\dfrac{3}{2}$</td>
+              <td class="text-left">3rd root = $-\dfrac{3}{2}$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 3</h3>
+        Simplify $[(2.4x+1)^2-x](0.15+4x)$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                $((2.4X+1)^2-X)(0.15+4X$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input expression</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">can skip if max. no. of decimal places $\le 3$</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$23.04$</td>
+              <td class="text-left">coefficient of $x^3 = 23.04$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$16.064$</td>
+              <td class="text-left">coefficient of $x^2 = 16.064$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$4.57$</td>
+              <td class="text-left">coefficient of $x = 4.57$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0.15$</td>
+              <td class="text-left">constant term = $0.15$</td>
+            </tr>
+          </tbody>
+        </table>
+        $\thus [(2.4x+1)^2-x](0.15+4x)=23.04x^3+16.064x^2+4.57x+0.15$
+
+        <h3>Example 4</h3>
+        Solve $\dfrac{7(x-2)}{5}+11>3(x-1)$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                $7(X-2) \div 5 + 11 - 3(X-1$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input equation with one side = 0</td>
+            </tr>
+            <tr>
+              <td>
+                $5$ &nbsp; <kbd class="key">EXE</kbd>
+              </td>
+              <td>/</td>
+              <td class="text-left">input common multiple of denominators</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$0$</td>
+              <td class="text-left">coefficient of $x^3 = 0$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0$</td>
+              <td class="text-left">coefficient of $x^2 = 0$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-\dfrac{8}{5}$</td>
+              <td class="text-left">coefficient of $x = -\dfrac{8}{5}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac{56}{5}$</td>
+              <td class="text-left">constant term = $\dfrac{56}{5}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$7$</td>
+              <td class="text-left">1st root = $7$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        Observe that the coefficient of $x$ on the L.H.S. of the inequality is less than that on the R.H.S., so we need to reverse
+        the inequality sign.<br>
+        $\thus$ The solution is $x<7$.
+
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

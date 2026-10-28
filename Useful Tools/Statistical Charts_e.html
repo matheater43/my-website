@@ -1,0 +1,2389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistical Charts - Matheater</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    .chart-serif {
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    /* Drag and drop cursor for data rows */
+    .drag-handle {
+      cursor: grab;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    /* Interactive bar top hover handle */
+    .bar-drag-handle {
+      cursor: ns-resize;
+    }
+
+    /* Custom scrollbar for control panels and viewport */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Direct figure editable text box styling */
+    .figure-text-input {
+      background: transparent;
+      border: 1px solid transparent;
+      outline: none;
+      transition: all 0.15s ease-in-out;
+      border-radius: 4px;
+    }
+
+    .figure-text-input:hover {
+      background: rgba(248, 250, 252, 0.85);
+      border-color: #cbd5e1;
+    }
+
+    .figure-text-input:focus {
+      background: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <!-- Main Application Body -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT PANEL: Controls & Settings -->
+    <section class="lg:col-span-5 xl:col-span-4 flex flex-col gap-5">
+
+      <!-- Accordion / Tabs for Options -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="border-b border-slate-200 bg-slate-50 flex">
+          <button id="tab-data-btn" onclick="switchTab('data')"
+            class="flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-emerald-600 text-emerald-700 bg-white">
+            <i class="fa-solid fa-list-check mr-1.5"></i> Data & Scale
+          </button>
+          <button id="tab-style-btn" onclick="switchTab('style')"
+            class="flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+            <i class="fa-solid fa-sliders mr-1.5"></i> Customization
+          </button>
+        </div>
+
+        <!-- TAB 1: DATA & AXES -->
+        <div id="tab-data" class="p-4 sm:p-5 space-y-5">
+
+          <!-- Title & Axis Labels -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 tracking-wider">Titles & Labels</h3>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Main Title</label>
+              <input type="text" id="cfg-title" value="Numbers of students from different forms in a volleyball team"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">X-Axis Label</label>
+                <input type="text" id="cfg-xlabel" value="Form"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Y-Axis Label</label>
+                <input type="text" id="cfg-ylabel" value="Frequency"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Histogram & Frequency Polygon/Curve X-Axis Scale Settings -->
+          <div id="histogram-settings" class="space-y-3 pt-2 border-t border-slate-200">
+            <h3 class="text-xs  font-bold text-emerald-600 tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-ruler-horizontal"></i> X-Axis Scale Settings
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">X Min Reference</label>
+                <select id="cfg-hist-start-mode"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                  <option value="lower" selected>Lower Class Boundary</option>
+                  <option value="midpoint">Class Mark (Midpoint)</option>
+                </select>
+              </div>
+              <div>
+                <label id="cfg-hist-start-label" class="block text-xs font-semibold text-slate-600 mb-1">Start Value (X
+                  Min)</label>
+                <input type="number" id="cfg-hist-start" value="9.5" step="any"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Fixed Separation (Step)</label>
+                <input type="number" id="cfg-hist-step" value="5" step="any"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+              </div>
+            </div>
+          </div>
+
+          <hr class="border-slate-200">
+
+          <!-- Y-Axis Scale & Subdivisions -->
+          <div class="space-y-3">
+            <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Y-Axis & Grid Paper Settings</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Max Y Value</label>
+                <input type="number" id="cfg-ymax" value="25" min="1" step="1"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <span class="text-[10px] text-slate-400">Grid scale height</span>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Main Grid Step</label>
+                <input type="number" id="cfg-ystep" value="5" min="1" step="1"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Subdivisions per Main Line</label>
+                <select id="cfg-ysubstep"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                  <option value="2">2 Subdivisions</option>
+                  <option value="5">5 Subdivisions</option>
+                  <option value="10" selected>10 Subdivisions</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Grid Square Scale</label>
+                <select id="cfg-grid-scale"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                  <option value="5" selected>Standard (5px / sub-unit)</option>
+                  <option value="8">Compact (8px / sub-unit)</option>
+                  <option value="10">Large (10px / sub-unit)</option>
+                  <option value="14">Extra Large (14px / sub-unit)</option>
+                  <option value="18">Huge (18px / sub-unit)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Label Frequency</label>
+                <select id="cfg-label-freq"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="1">Every Main Line</option>
+                  <option value="2">Every 2nd Main Line</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Grid Extension Mode</label>
+                <select id="cfg-scale-mode"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="fixed" selected>Fixed Scale (Extend Upward)</option>
+                  <option value="fit">Fit Viewport Height</option>
+                </select>
+              </div>
+            </div>
+
+            <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none pt-2 border-t border-slate-100">
+              <input type="checkbox" id="cfg-y-wiggle"
+                class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+              y-axis break
+            </label>
+          </div>
+
+          <hr class="border-slate-200">
+
+          <!-- Bars List Management -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Data Items & Snapping</h3>
+              <button onclick="addBarRow()"
+                class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded transition">
+                <i class="fa-solid fa-plus mr-1"></i> Add Item
+              </button>
+            </div>
+
+            <div id="bar-items-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+              <!-- Data items injected by JavaScript -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TAB 2: STYLING & APPEARANCE -->
+        <div id="tab-style" class="p-4 sm:p-5 space-y-5 hidden">
+
+          <div class="space-y-3">
+            <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Font & Text Styling</h3>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Font Family</label>
+              <select id="cfg-font"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="Times New Roman, Times, serif">Times New Roman</option>
+                <option value="Arial, sans-serif">Arial</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Title Font Size</label>
+                <input type="number" id="cfg-title-size" value="16" min="12" max="36"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Labels Font Size</label>
+                <input type="number" id="cfg-label-size" value="16" min="10" max="24"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+              </div>
+            </div>
+          </div>
+
+          <hr class="border-slate-200">
+
+          <!-- Frequency Polygon/Curve Specific Controls -->
+          <div id="polygon-settings" class="space-y-3 p-3 bg-blue-50/60 rounded-lg border border-blue-100">
+            <h3 class="text-xs  font-bold text-blue-700 tracking-wider flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line"></i> Frequency Polygon/Curve
+                Settings</span>
+              <span class="text-[10px] text-blue-600 font-normal bg-blue-100 px-1.5 py-0.5 rounded"><i
+                  class="fa-solid fa-wand-magic-sparkles mr-1"></i>Least Curvature Spline</span>
+            </h3>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+                  <input type="checkbox" id="cfg-show-crosses" checked
+                    class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                  Show Cross Marks (×)
+                </label>
+
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+                  <input type="checkbox" id="cfg-show-legend"
+                    class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                  Show Legend
+                </label>
+              </div>
+
+              <!-- Dataset 1 Customization -->
+              <div class="p-2.5 bg-white rounded border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-700">Set 1 Style</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Label</label>
+                    <input type="text" id="cfg-ds1-label" value="Zoo A"
+                      class="w-full px-2 py-1 border border-slate-300 rounded text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Line Style</label>
+                    <select id="cfg-ds1-style" class="w-full px-2 py-1 border border-slate-300 rounded text-xs">
+                      <option value="solid" selected>Solid Line (—)</option>
+                      <option value="dashed">Dashed Line (- -)</option>
+                      <option value="dotted">Dotted Line (• •)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Color</label>
+                    <div class="flex items-center gap-1.5">
+                      <input type="color" id="cfg-polygon-color" value="#000000"
+                        class="w-7 h-7 border border-slate-300 rounded cursor-pointer p-0.5">
+                      <input type="text" id="cfg-polygon-color-hex" value="#000000"
+                        class="w-full px-1.5 py-1 border border-slate-300 rounded text-[11px] font-mono">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Thickness</label>
+                    <input type="number" id="cfg-polygon-width" value="2" min="1" max="6" step="0.5"
+                      class="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dataset 2 Customization & Toggle -->
+              <div class="p-2.5 bg-white rounded border border-slate-200 space-y-2">
+                <label
+                  class="flex items-center justify-between text-xs font-bold text-slate-800 cursor-pointer select-none">
+                  <span class="flex items-center gap-1.5 text-blue-700">
+                    <i class="fa-solid fa-code-compare"></i> Enable 2nd Dataset (Comparison)
+                  </span>
+                  <input type="checkbox" id="cfg-enable-ds2"
+                    class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                </label>
+
+                <div id="ds2-options-container" class="space-y-2 pt-1 border-t border-slate-100">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Set 2 Label</label>
+                      <input type="text" id="cfg-ds2-label" value="Zoo B"
+                        class="w-full px-2 py-1 border border-slate-300 rounded text-xs">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Line Style</label>
+                      <select id="cfg-ds2-style" class="w-full px-2 py-1 border border-slate-300 rounded text-xs">
+                        <option value="solid">Solid Line (—)</option>
+                        <option value="dashed">Dashed Line (- -)</option>
+                        <option value="dotted" selected>Dotted Line (• •)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Set 2 Color</label>
+                      <div class="flex items-center gap-1.5">
+                        <input type="color" id="cfg-ds2-color" value="#000000"
+                          class="w-7 h-7 border border-slate-300 rounded cursor-pointer p-0.5">
+                        <input type="text" id="cfg-ds2-color-hex" value="#000000"
+                          class="w-full px-1.5 py-1 border border-slate-300 rounded text-[11px] font-mono">
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-500 mb-0.5">Thickness</label>
+                      <input type="number" id="cfg-ds2-width" value="2" min="1" max="6" step="0.5"
+                        class="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <hr class="border-slate-200">
+
+          <div class="space-y-3">
+            <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Bar Layout & Alignment</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Bar Center Position</label>
+                <select id="cfg-bar-alignment"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="middle" selected>Middle of 2 Main Lines (Default)</option>
+                  <option value="line">At Main Grid Line</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Bar Width (Grid Units)</label>
+                <select id="cfg-bar-grid-width"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="3">3 Grid Squares Wide</option>
+                  <option value="4">4 Grid Squares Wide</option>
+                  <option value="5">5 Grid Squares (Main Step)</option>
+                  <option value="6">6 Grid Squares Wide</option>
+                  <option value="8">8 Grid Squares Wide</option>
+                  <option value="10" selected>10 Grid Squares Wide</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Gap Between Bars</label>
+                <select id="cfg-bar-grid-gap"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="0" selected>0 Units (Adjacent / Stick Together)</option>
+                  <option value="1">1 Grid Square Gap</option>
+                  <option value="2">2 Grid Squares Gap</option>
+                  <option value="3">3 Grid Squares Gap</option>
+                  <option value="5">5 Grid Squares Gap</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Bar Fill Color</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="cfg-bar-color" value="#b3b3b3"
+                    class="w-9 h-9 border border-slate-300 rounded cursor-pointer p-0.5">
+                  <input type="text" id="cfg-bar-color-hex" value="#b3b3b3"
+                    class="w-full px-2 py-1.5 border border-slate-300 rounded text-xs">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Border Color</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="cfg-bar-border" value="#000000"
+                    class="w-9 h-9 border border-slate-300 rounded cursor-pointer p-0.5">
+                  <input type="text" id="cfg-bar-border-hex" value="#000000"
+                    class="w-full px-2 py-1.5 border border-slate-300 rounded text-xs">
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+                <input type="checkbox" id="cfg-bar-transparent" checked
+                  class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                Semi-transparent fill (Show underlying grid lines)
+              </label>
+            </div>
+          </div>
+
+          <hr class="border-slate-200">
+
+          <div class="space-y-3">
+            <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Grid Lines & Framework</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Main Grid Color</label>
+                <input type="color" id="cfg-grid-color" value="#b3b3b3"
+                  class="w-full h-9 border border-slate-300 rounded cursor-pointer p-0.5">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Sub-grid Line Color</label>
+                <input type="color" id="cfg-subgrid-color" value="#cccccc"
+                  class="w-full h-9 border border-slate-300 rounded cursor-pointer p-0.5">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Axis Line Thickness</label>
+                <input type="number" id="cfg-axis-width" value="2" min="1" max="4" step="0.5"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Preset Data Buttons -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+        <h3 class="text-xs  font-bold text-slate-400 tracking-wider">Quick Presets</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="loadSample('volleyball')"
+            class="px-3 py-2 text-xs font-medium rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left transition">
+            <i class="fa-solid fa-chart-column text-emerald-600 mr-1.5"></i> Exam Histogram
+          </button>
+          <button onclick="loadSample('polygon')"
+            class="px-3 py-2 text-xs font-medium rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left transition">
+            <i class="fa-solid fa-chart-line text-blue-600 mr-1.5"></i> Frequency Polygon
+          </button>
+            <button onclick="loadSample('brokenline')"
+              class="px-3 py-2 text-xs font-medium rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left transition">
+              <i class="fa-solid fa-chart-line text-indigo-600 mr-1.5"></i> Broken Line Graph
+            </button>
+          <button onclick="loadSample('survey')"
+            class="px-3 py-2 text-xs font-medium rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left transition">
+            <i class="fa-solid fa-apple-whole text-amber-500 mr-1.5"></i> Favorite Fruit Survey
+          </button>
+          <button onclick="loadSample('empty')"
+            class="px-3 py-2 text-xs font-medium rounded border border-slate-200 hover:bg-slate-50 text-slate-700 text-left transition text-rose-600 hover:bg-rose-50">
+            <i class="fa-solid fa-trash mr-1.5"></i> Clear / Blank Data
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT PANEL: SVG Chart Display / Canvas Preview -->
+    <section class="lg:col-span-7 xl:col-span-8 flex flex-col gap-4">
+
+      <!-- Chart Display Card -->
+      <div
+        class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 w-full flex-1 flex flex-col justify-start items-center relative overflow-hidden min-h-[520px]">
+
+        <!-- Action bar above preview -->
+        <div class="w-full flex items-center justify-between pb-2 mb-1 border-b border-slate-100 flex-wrap gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <label for="cfg-chart-type"
+              class="text-xs font-bold  tracking-wider text-slate-600 flex items-center gap-1">
+              Chart Type:
+            </label>
+            <select id="cfg-chart-type"
+              class="text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 px-2.5 py-1 rounded border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer transition">
+              <option value="barchart">Bar Chart</option>
+              <option value="brokenline">Broken Line Graph</option>
+              <option value="histogram">Histogram</option>
+              <option value="polygon" selected>Frequency Polygon/Curve</option>
+              <option value="cum_polygon">Cumulative Frequency Polygon/Curve</option>
+            </select>
+
+            <!-- Polygon / Curve Toggle Controls -->
+            <div id="poly-curve-toggles"
+              class="hidden items-center gap-1.5 bg-slate-100/80 p-0.5 rounded border border-slate-200">
+              <label
+                class="flex items-center gap-1 text-xs font-semibold text-slate-700 hover:bg-white px-2 py-0.5 rounded cursor-pointer transition select-none">
+                <input type="checkbox" id="cfg-toggle-polygon" checked
+                  class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+                Polygon
+              </label>
+              <label
+                class="flex items-center gap-1 text-xs font-semibold text-slate-700 hover:bg-white px-2 py-0.5 rounded cursor-pointer transition select-none">
+                <input type="checkbox" id="cfg-toggle-curve"
+                  class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5">
+                Curve
+              </label>
+            </div>
+
+            <!-- Data Sets Toggle -->
+            <div id="dataset-toggle-container"
+              class="hidden items-center gap-0.5 bg-slate-100/80 p-0.5 rounded border border-slate-200 text-xs font-semibold select-none">
+              <button id="btn-set-1" onclick="setDatasets(1)" type="button"
+                class="px-2 py-0.5 rounded transition shadow-sm bg-white text-slate-800 border border-slate-200">1
+                Set</button>
+              <button id="btn-set-2" onclick="setDatasets(2)" type="button"
+                class="px-2 py-0.5 rounded transition text-slate-600 hover:text-slate-900 border border-transparent">2
+                Sets</button>
+            </div>
+
+            <!-- Quick Crosses Toggle for Frequency Polygon/Curve -->
+            <label id="quick-crosses-container"
+              class="hidden flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded border border-blue-200 cursor-pointer transition">
+              <input type="checkbox" id="cfg-quick-crosses" checked
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5">
+              Crosses (×)
+            </label>
+
+            <!-- Quick Legend Toggle -->
+            <label id="quick-legend-container"
+              class="hidden flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100/80 hover:bg-slate-200/80 px-2.5 py-1 rounded border border-slate-200 cursor-pointer transition select-none">
+              <input type="checkbox" id="cfg-quick-legend"
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5">
+              Legend
+            </label>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="loadSample('polygon')"
+              class="text-xs px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-100 font-medium text-slate-700 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-left text-slate-500"></i> Reset
+            </button>
+            <button onclick="downloadSVG()"
+              class="text-xs px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-50 font-medium text-slate-700 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-file-code text-slate-500"></i> SVG
+            </button>
+            <button onclick="exportPNG()"
+              class="text-xs px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-700 font-medium text-white shadow-sm transition flex items-center gap-1.5">
+              <i class="fa-solid fa-image"></i> Export PNG
+            </button>
+          </div>
+        </div>
+
+        <!-- SVG Container wrapper with dynamic scrollable viewport -->
+        <div id="chart-viewport"
+          class="w-full flex-1 flex items-start justify-center p-2 overflow-auto max-h-[700px] border border-slate-100 bg-slate-50/50 rounded-lg">
+          <svg id="chart-svg" viewBox="0 0 650 500" class="w-full h-auto drop-shadow-sm select-none"
+            xmlns="http://www.w3.org/2000/svg">
+            <!-- Rendered by JavaScript render() -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Grid Info Footnote -->
+        <div
+          class="w-full pt-3 mt-auto border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
+          <span><i class="fa-solid fa-i-cursor mr-1 text-emerald-600"></i> Tip: Click any text directly on the figure to
+            edit! Drag points/bars to snap.</span>
+          <span id="grid-dimensions-info">Scale: 5px / square</span>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    /* ==========================================================================
+       APPLICATION STATE & DEFAULT DATA
+       ========================================================================== */
+    let chartState = {
+      chartType: "polygon", // "barchart", "brokenline", "histogram", "polygon", or "cum_polygon"
+      showPolygon: true,      // Show straight polygon line segments
+      showCurve: false,       // Show smooth frequency curve replacing straight segments
+      showCrosses: true,      // Show crosses on frequency polygon/curve
+      showLegend: false,      // Legend default turned OFF for 1 set of data
+
+      // Dataset 1 Properties
+      polygonColor: "#000000",// Frequency line and mark color for Set 1
+      polygonLineWidth: 2,    // Set 1 line thickness
+      ds1Label: "Zoo A",       // Set 1 Label
+      ds1Style: "solid",      // Set 1 Style: "solid", "dashed", "dotted"
+
+      // Dataset 2 Properties
+      enableDataset2: false,  // Enable 2nd dataset overlay
+      ds2Label: "Zoo B",       // Set 2 Label
+      ds2Style: "dotted",     // Set 2 Style: "dashed", "dotted", "solid"
+      ds2Color: "#000000",    // Set 2 Line Color
+      ds2LineWidth: 2,        // Set 2 line thickness
+
+      histStartMode: "lower",// "lower" (Lower Class Boundary) or "midpoint" (Class Mark)
+      histStart: 9.5,        // Start number for Histogram X-Axis (X Min)
+      histStep: 5,           // Fixed separation / interval for Histogram X-Axis
+      histWiggle: true,      // Show wiggle/break at axis start
+      yWiggle: false,        // Show wiggle/break at y-axis start
+      title: "Numbers of students from different forms in a volleyball team",
+      xLabel: "Form",
+      yLabel: "Frequency",
+      yMax: 25,              // Default Y-Max
+      yStep: 5,              // Main Grid Interval
+      ySubStep: 10,          // Default 10 subdivisions per main line
+      gridScalePx: 5,        // Pixels per sub-unit grid square
+      gridScaleMode: "fixed",// "fixed" or "fit"
+      labelFreq: 1,
+      fontFamily: "Times New Roman, PMingLiU, 新細明體, serif",
+      titleSize: 16,
+      labelSize: 16,
+      barAlignment: "middle",
+      barGridWidth: 10,      // Bar width in grid squares
+      barGridGap: 0,         // Gap in grid squares
+      barColor: "#b3b3b3",
+      barBorder: "#000000",
+      barTransparent: true,
+      gridColor: "rgba(0, 0, 0, 0.3)",
+      subGridColor: "rgba(0, 0, 0, 0.2)",
+      axisWidth: 2,
+      bars: [
+        { label: "10-14", value: 11, value2: 8 },
+        { label: "15-19", value: 16, value2: 12 },
+        { label: "20-24", value: 24, value2: 20 },
+        { label: "25-29", value: 17, value2: 22 },
+        { label: "30-34", value: 12, value2: 15 },
+        { label: "35-39", value: 5, value2: 9 }
+      ]
+    };
+
+    // Global drag state for interactive snapping
+    let draggingBarIndex = -1;
+    let draggingDataset = 1;
+
+    /* ==========================================================================
+       INITIALIZATION & EVENT LISTENERS
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      bindInputs();
+      updateDatasetToggleUI();
+      updateHistogramVisibility();
+      renderBarInputs();
+      renderChart();
+      setupInteractiveDrag();
+    });
+
+    function setDatasets(numSets) {
+      chartState.enableDataset2 = (numSets === 2);
+      chartState.showLegend = (numSets === 2);
+
+      const enableDs2Input = document.getElementById('cfg-enable-ds2');
+      if (enableDs2Input) {
+        enableDs2Input.checked = chartState.enableDataset2;
+      }
+
+      const legendCb1 = document.getElementById('cfg-show-legend');
+      const legendCb2 = document.getElementById('cfg-quick-legend');
+      if (legendCb1) legendCb1.checked = chartState.showLegend;
+      if (legendCb2) legendCb2.checked = chartState.showLegend;
+
+      updateDatasetToggleUI();
+      renderBarInputs();
+      renderChart();
+    }
+
+    function updateDatasetToggleUI() {
+      const btn1 = document.getElementById('btn-set-1');
+      const btn2 = document.getElementById('btn-set-2');
+      if (!btn1 || !btn2) return;
+
+      if (chartState.enableDataset2) {
+        btn1.className = "px-2 py-0.5 rounded transition text-slate-600 hover:text-slate-900 border border-transparent";
+        btn2.className = "px-2 py-0.5 rounded transition shadow-sm bg-white text-slate-800 border border-slate-200";
+      } else {
+        btn1.className = "px-2 py-0.5 rounded transition shadow-sm bg-white text-slate-800 border border-slate-200";
+        btn2.className = "px-2 py-0.5 rounded transition text-slate-600 hover:text-slate-900 border border-transparent";
+      }
+    }
+
+    function updateHistogramVisibility() {
+      const histPanel = document.getElementById('histogram-settings');
+      const polyPanel = document.getElementById('polygon-settings');
+      const quickCrosses = document.getElementById('quick-crosses-container');
+      const quickLegend = document.getElementById('quick-legend-container');
+      const polyCurveToggles = document.getElementById('poly-curve-toggles');
+      const datasetToggle = document.getElementById('dataset-toggle-container');
+
+      const isBrokenLine = chartState.chartType === 'brokenline';
+      const isPolygonLike = chartState.chartType === 'polygon' || chartState.chartType === 'cum_polygon' || isBrokenLine;
+      const isHistOrPoly = chartState.chartType === 'histogram' || isPolygonLike;
+
+      if (histPanel) histPanel.classList.toggle('hidden', !isHistOrPoly);
+      if (polyPanel) polyPanel.classList.toggle('hidden', !isPolygonLike);
+
+      if (quickCrosses) {
+        quickCrosses.classList.toggle('hidden', !isPolygonLike);
+        quickCrosses.classList.toggle('flex', isPolygonLike);
+      }
+      if (quickLegend) {
+        quickLegend.classList.toggle('hidden', !isPolygonLike);
+        quickLegend.classList.toggle('flex', isPolygonLike);
+      }
+      if (polyCurveToggles) {
+        polyCurveToggles.classList.toggle('hidden', !isPolygonLike || isBrokenLine);
+        polyCurveToggles.classList.toggle('flex', isPolygonLike && !isBrokenLine);
+      }
+      if (datasetToggle) {
+        datasetToggle.classList.toggle('hidden', !isPolygonLike);
+        datasetToggle.classList.toggle('flex', isPolygonLike);
+      }
+    }
+
+    function bindInputs() {
+      const inputMap = [
+        { id: 'cfg-chart-type', key: 'chartType', type: 'text' },
+        { id: 'cfg-toggle-polygon', key: 'showPolygon', type: 'checkbox' },
+        { id: 'cfg-toggle-curve', key: 'showCurve', type: 'checkbox' },
+        { id: 'cfg-show-crosses', key: 'showCrosses', type: 'checkbox' },
+        { id: 'cfg-quick-crosses', key: 'showCrosses', type: 'checkbox' },
+
+        { id: 'cfg-show-legend', key: 'showLegend', type: 'checkbox' },
+        { id: 'cfg-quick-legend', key: 'showLegend', type: 'checkbox' },
+
+        { id: 'cfg-ds1-label', key: 'ds1Label', type: 'text' },
+        { id: 'cfg-ds1-style', key: 'ds1Style', type: 'text' },
+        { id: 'cfg-polygon-color', key: 'polygonColor', type: 'color' },
+        { id: 'cfg-polygon-width', key: 'polygonLineWidth', type: 'float' },
+
+        { id: 'cfg-enable-ds2', key: 'enableDataset2', type: 'checkbox' },
+        { id: 'cfg-ds2-label', key: 'ds2Label', type: 'text' },
+        { id: 'cfg-ds2-style', key: 'ds2Style', type: 'text' },
+        { id: 'cfg-ds2-color', key: 'ds2Color', type: 'color' },
+        { id: 'cfg-ds2-width', key: 'ds2LineWidth', type: 'float' },
+
+        { id: 'cfg-hist-start-mode', key: 'histStartMode', type: 'text' },
+        { id: 'cfg-hist-start', key: 'histStart', type: 'float' },
+        { id: 'cfg-hist-step', key: 'histStep', type: 'float' },
+        { id: 'cfg-y-wiggle', key: 'yWiggle', type: 'checkbox' },
+        { id: 'cfg-title', key: 'title', type: 'text' },
+        { id: 'cfg-xlabel', key: 'xLabel', type: 'text' },
+        { id: 'cfg-ylabel', key: 'yLabel', type: 'text' },
+        { id: 'cfg-ymax', key: 'yMax', type: 'number' },
+        { id: 'cfg-ystep', key: 'yStep', type: 'number' },
+        { id: 'cfg-ysubstep', key: 'ySubStep', type: 'number' },
+        { id: 'cfg-grid-scale', key: 'gridScalePx', type: 'number' },
+        { id: 'cfg-scale-mode', key: 'gridScaleMode', type: 'text' },
+        { id: 'cfg-label-freq', key: 'labelFreq', type: 'number' },
+        { id: 'cfg-font', key: 'fontFamily', type: 'text' },
+        { id: 'cfg-title-size', key: 'titleSize', type: 'number' },
+        { id: 'cfg-label-size', key: 'labelSize', type: 'number' },
+        { id: 'cfg-bar-alignment', key: 'barAlignment', type: 'text' },
+        { id: 'cfg-bar-grid-width', key: 'barGridWidth', type: 'number' },
+        { id: 'cfg-bar-grid-gap', key: 'barGridGap', type: 'number' },
+        { id: 'cfg-bar-color', key: 'barColor', type: 'color' },
+        { id: 'cfg-bar-border', key: 'barBorder', type: 'color' },
+        { id: 'cfg-bar-transparent', key: 'barTransparent', type: 'checkbox' },
+        { id: 'cfg-grid-color', key: 'gridColor', type: 'color' },
+        { id: 'cfg-subgrid-color', key: 'subGridColor', type: 'color' },
+        { id: 'cfg-axis-width', key: 'axisWidth', type: 'float' }
+      ];
+
+      inputMap.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (!el) return;
+
+        const updateVal = () => {
+          if (item.type === 'checkbox') {
+            chartState[item.key] = el.checked;
+            if (item.key === 'showCrosses') {
+              const el1 = document.getElementById('cfg-show-crosses');
+              const el2 = document.getElementById('cfg-quick-crosses');
+              if (el1) el1.checked = el.checked;
+              if (el2) el2.checked = el.checked;
+            }
+            if (item.key === 'showLegend') {
+              const el1 = document.getElementById('cfg-show-legend');
+              const el2 = document.getElementById('cfg-quick-legend');
+              if (el1) el1.checked = el.checked;
+              if (el2) el2.checked = el.checked;
+            }
+          } else if (item.type === 'number' || item.type === 'float') {
+            chartState[item.key] = parseFloat(el.value) || 0;
+          } else {
+            chartState[item.key] = el.value;
+          }
+
+          if (item.key === 'enableDataset2') {
+            chartState.showLegend = el.checked;
+            const legend1 = document.getElementById('cfg-show-legend');
+            const legend2 = document.getElementById('cfg-quick-legend');
+            if (legend1) legend1.checked = chartState.showLegend;
+            if (legend2) legend2.checked = chartState.showLegend;
+
+            updateDatasetToggleUI();
+            renderBarInputs();
+          }
+
+          if (item.key === 'chartType') {
+            updateHistogramVisibility();
+
+            chartState.yWiggle = chartState.chartType === 'brokenline';
+            const yWiggleInput = document.getElementById('cfg-y-wiggle');
+            if (yWiggleInput) yWiggleInput.checked = chartState.yWiggle;
+            if (chartState.chartType === 'brokenline') {
+              chartState.histStartMode = 'lower';
+              chartState.showPolygon = true;
+              chartState.showCurve = false;
+              const modeSelect = document.getElementById('cfg-hist-start-mode');
+              if (modeSelect) modeSelect.value = 'lower';
+            }
+
+            if (chartState.chartType === 'polygon') {
+              chartState.histStartMode = 'lower';
+              chartState.yLabel = "Frequency";
+
+              const modeSelect = document.getElementById('cfg-hist-start-mode');
+              if (modeSelect) modeSelect.value = 'lower';
+
+              const yLabelInput = document.getElementById('cfg-ylabel');
+              if (yLabelInput) yLabelInput.value = chartState.yLabel;
+
+              // Auto-fit Y max back to the highest frequency value
+              let maxVal = 0;
+              chartState.bars.forEach(b => {
+                const val1 = parseFloat(b.value) || 0;
+                const val2 = parseFloat(b.value2) || 0;
+
+                maxVal = Math.max(maxVal, val1);
+                if (chartState.enableDataset2) {
+                  maxVal = Math.max(maxVal, val2);
+                }
+              });
+
+              const step = chartState.yStep || 5;
+              chartState.yMax = Math.max(step, Math.ceil(maxVal / step) * step);
+
+              const yMaxInput = document.getElementById('cfg-ymax');
+              if (yMaxInput) yMaxInput.value = chartState.yMax;
+            } else if (chartState.chartType === 'cum_polygon') {
+              chartState.histStartMode = 'lower';
+              chartState.yLabel = "Cumulative frequency";
+              const modeSelect = document.getElementById('cfg-hist-start-mode');
+              if (modeSelect) modeSelect.value = 'lower';
+              const yLabelInput = document.getElementById('cfg-ylabel');
+              if (yLabelInput) yLabelInput.value = chartState.yLabel;
+
+              let cumSum1 = 0;
+              let cumSum2 = 0;
+              chartState.bars.forEach(b => {
+                cumSum1 += (parseFloat(b.value) || 0);
+                cumSum2 += (parseFloat(b.value2) || 0);
+              });
+              const highestCum = chartState.enableDataset2 ? Math.max(cumSum1, cumSum2) : cumSum1;
+              const step = chartState.yStep || 5;
+              chartState.yMax = Math.max(step, Math.ceil(highestCum / step) * step);
+              const yMaxInput = document.getElementById('cfg-ymax');
+              if (yMaxInput) yMaxInput.value = chartState.yMax;
+            } else {
+              let maxVal = 0;
+              chartState.bars.forEach(b => {
+                const val = parseFloat(b.value) || 0;
+                const val2 = parseFloat(b.value2) || 0;
+                if (val > maxVal) maxVal = val;
+                if (chartState.enableDataset2 && val2 > maxVal) maxVal = val2;
+              });
+              const step = chartState.yStep || 5;
+              chartState.yMax = Math.max(step, Math.ceil(maxVal / step) * step);
+              const yMaxInput = document.getElementById('cfg-ymax');
+              if (yMaxInput) yMaxInput.value = chartState.yMax;
+            }
+            if (chartState.chartType === 'histogram' || chartState.chartType === 'polygon' || chartState.chartType === 'cum_polygon' || chartState.chartType === 'brokenline') {
+              chartState.barGridGap = 0;
+              const gapSelect = document.getElementById('cfg-bar-grid-gap');
+              if (gapSelect) gapSelect.value = "0";
+            }
+            renderBarInputs();
+          }
+
+          if (item.key === 'yStep' || item.key === 'ySubStep') {
+            snapAllBarsToGrid();
+            renderBarInputs();
+          }
+
+          if (item.key === 'histStart' || item.key === 'histStep' || item.key === 'histStartMode') {
+            renderBarInputs();
+          }
+
+          if (item.id === 'cfg-bar-color') document.getElementById('cfg-bar-color-hex').value = el.value;
+          if (item.id === 'cfg-bar-border') document.getElementById('cfg-bar-border-hex').value = el.value;
+          if (item.id === 'cfg-polygon-color') document.getElementById('cfg-polygon-color-hex').value = el.value;
+          if (item.id === 'cfg-ds2-color') document.getElementById('cfg-ds2-color-hex').value = el.value;
+
+          renderChart();
+        };
+
+        el.addEventListener('input', updateVal);
+        el.addEventListener('change', updateVal);
+      });
+
+      document.getElementById('cfg-bar-color-hex').addEventListener('change', (e) => {
+        chartState.barColor = e.target.value;
+        document.getElementById('cfg-bar-color').value = e.target.value;
+        renderChart();
+      });
+
+      document.getElementById('cfg-bar-border-hex').addEventListener('change', (e) => {
+        chartState.barBorder = e.target.value;
+        document.getElementById('cfg-bar-border').value = e.target.value;
+        renderChart();
+      });
+
+      document.getElementById('cfg-polygon-color-hex').addEventListener('change', (e) => {
+        chartState.polygonColor = e.target.value;
+        document.getElementById('cfg-polygon-color').value = e.target.value;
+        renderChart();
+      });
+
+      document.getElementById('cfg-ds2-color-hex').addEventListener('change', (e) => {
+        chartState.ds2Color = e.target.value;
+        document.getElementById('cfg-ds2-color').value = e.target.value;
+        renderChart();
+      });
+    }
+
+    /* ==========================================================================
+       DIRECT ON-FIGURE TEXT EDITING SYNC HANDLERS
+       ========================================================================== */
+    function updateTitleFromFigure(val) {
+      chartState.title = val;
+      const cfg = document.getElementById('cfg-title');
+      if (cfg) cfg.value = val;
+    }
+
+    function updateYLabelFromFigure(val) {
+      chartState.yLabel = val;
+      const cfg = document.getElementById('cfg-ylabel');
+      if (cfg) cfg.value = val;
+    }
+
+    function updateXLabelFromFigure(val) {
+      chartState.xLabel = val;
+      const cfg = document.getElementById('cfg-xlabel');
+      if (cfg) cfg.value = val;
+    }
+
+    function updateDs1LabelFromFigure(val) {
+      chartState.ds1Label = val;
+      const cfg = document.getElementById('cfg-ds1-label');
+      if (cfg) cfg.value = val;
+    }
+
+    function updateDs2LabelFromFigure(val) {
+      chartState.ds2Label = val;
+      const cfg = document.getElementById('cfg-ds2-label');
+      if (cfg) cfg.value = val;
+    }
+
+    function updateBarLabelFromFigure(index, val) {
+      if (chartState.bars[index]) {
+        chartState.bars[index].label = val;
+        renderBarInputs();
+      }
+    }
+
+    function updateYMaxFromFigure(val) {
+      const num = parseFloat(val);
+      if (!isNaN(num) && num > 0) {
+        chartState.yMax = num;
+        const cfg = document.getElementById('cfg-ymax');
+        if (cfg) cfg.value = num;
+        renderBarInputs();
+        renderChart();
+      }
+    }
+
+    function updateYStepFromFigure(val) {
+      const num = parseFloat(val);
+      if (!isNaN(num) && num > 0) {
+        chartState.yStep = num;
+        const cfg = document.getElementById('cfg-ystep');
+        if (cfg) cfg.value = num;
+        snapAllBarsToGrid();
+        renderBarInputs();
+        renderChart();
+      }
+    }
+
+    function updateHistStartFromFigure(val) {
+      const num = parseFloat(val);
+      if (!isNaN(num)) {
+        chartState.histStart = num;
+        const cfg = document.getElementById('cfg-hist-start');
+        if (cfg) cfg.value = num;
+        renderBarInputs();
+        renderChart();
+      }
+    }
+
+    function updateHistTickFromFigure(index, val) {
+      const num = parseFloat(val);
+      if (!isNaN(num)) {
+        if (index === 0) {
+          chartState.histStart = num;
+          const cfg = document.getElementById('cfg-hist-start');
+          if (cfg) cfg.value = num;
+        } else {
+          // Update step based on tick offset
+          const calculatedStep = (num - chartState.histStart) / index;
+          if (calculatedStep > 0) {
+            chartState.histStep = Math.round(calculatedStep * 100) / 100;
+            const cfgStep = document.getElementById('cfg-hist-step');
+            if (cfgStep) cfgStep.value = chartState.histStep;
+          }
+        }
+        renderBarInputs();
+        renderChart();
+      }
+    }
+
+    /* ==========================================================================
+       BAR & DATASET LIST MANAGEMENT
+       ========================================================================== */
+    function renderBarInputs() {
+      const container = document.getElementById('bar-items-container');
+      container.innerHTML = '';
+
+      const subValue = (chartState.yStep > 0 && chartState.ySubStep > 0)
+        ? chartState.yStep / chartState.ySubStep
+        : 1;
+
+      const isBrokenLine = chartState.chartType === 'brokenline';
+      const isHistOrPoly = chartState.chartType === 'histogram' || chartState.chartType === 'polygon' || chartState.chartType === 'cum_polygon';
+      const showDs2 = (chartState.chartType === 'polygon' || chartState.chartType === 'cum_polygon' || isBrokenLine) && chartState.enableDataset2;
+      const histStartVal = chartState.histStartMode === 'midpoint'
+        ? (chartState.histStart - chartState.histStep / 2)
+        : chartState.histStart;
+
+      chartState.bars.forEach((bar, index) => {
+        if (bar.value2 === undefined) bar.value2 = Math.max(0, bar.value - 2);
+
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200';
+
+        let labelInputHtml = '';
+        if (isBrokenLine) {
+          labelInputHtml = `
+            <input type="text" value="${escapeHtml(bar.label)}"
+                   oninput="updateBarData(${index}, 'label', this.value)"
+                   placeholder="Label"
+                   class="${showDs2 ? 'w-1/3' : 'w-1/2'} px-2 py-1 bg-white border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">`;
+        } else if (isHistOrPoly) {
+          if (chartState.histStartMode === 'midpoint') {
+            const midpoint = Math.round((chartState.histStart + index * chartState.histStep) * 100) / 100;
+            labelInputHtml = `
+              <div class="${showDs2 ? 'w-1/3' : 'w-1/2'} px-1.5 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[11px] font-mono text-center truncate" title="Class Mark: ${midpoint}">
+                ${midpoint}
+              </div>`;
+          } else {
+            const lower = Math.round((histStartVal + index * chartState.histStep) * 100) / 100;
+            const upper = Math.round((histStartVal + (index + 1) * chartState.histStep) * 100) / 100;
+            labelInputHtml = `
+              <div class="${showDs2 ? 'w-1/3' : 'w-1/2'} px-1.5 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded text-[11px] font-mono text-center truncate">
+                [${lower}–${upper}]
+              </div>`;
+          }
+        } else {
+          labelInputHtml = `
+            <input type="text" value="${escapeHtml(bar.label)}" 
+                   oninput="updateBarData(${index}, 'label', this.value)" 
+                   placeholder="Label" 
+                   class="${showDs2 ? 'w-1/3' : 'w-1/2'} px-2 py-1 bg-white border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">`;
+        }
+
+        row.innerHTML = `
+          <div class="drag-handle text-slate-400 hover:text-slate-600 px-0.5">
+            <i class="fa-solid fa-grip-vertical text-xs"></i>
+          </div>
+          ${labelInputHtml}
+          <div class="${showDs2 ? 'w-1/3' : 'w-1/2'} flex items-center gap-1" title="Set 1 / Main Value">
+            <input type="number" value="${bar.value}" 
+                   onchange="updateBarData(${index}, 'value', this.value)"
+                   step="${subValue}"
+                   placeholder="Val 1" 
+                   class="w-full px-1.5 py-1 bg-white border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono">
+          </div>
+          ${showDs2 ? `
+          <div class="w-1/3 flex items-center gap-1" title="Set 2 / Comparison Value">
+            <input type="number" value="${bar.value2}" 
+                   onchange="updateBarData(${index}, 'value2', this.value)"
+                   step="${subValue}"
+                   placeholder="Val 2" 
+                   class="w-full px-1.5 py-1 bg-blue-50/50 border border-blue-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono">
+          </div>` : ''}
+          <button onclick="deleteBarRow(${index})" class="text-slate-400 hover:text-rose-600 p-1 transition" title="Delete Row">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function updateBarData(index, key, value) {
+      if (key === 'value' || key === 'value2') {
+        const rawVal = parseFloat(value) || 0;
+        const subValue = (chartState.yStep > 0 && chartState.ySubStep > 0)
+          ? chartState.yStep / chartState.ySubStep
+          : 1;
+        chartState.bars[index][key] = Math.round(rawVal / subValue) * subValue;
+      } else {
+        chartState.bars[index].label = value;
+      }
+      renderChart();
+    }
+
+    function addBarRow() {
+      const count = chartState.bars.length + 1;
+      const subValue = (chartState.yStep > 0 && chartState.ySubStep > 0)
+        ? chartState.yStep / chartState.ySubStep
+        : 1;
+      chartState.bars.push({ label: `Group ${count}`, value: subValue * 5, value2: subValue * 3 });
+      renderBarInputs();
+      renderChart();
+    }
+
+    function deleteBarRow(index) {
+      if (chartState.bars.length <= 1) return;
+      chartState.bars.splice(index, 1);
+      renderBarInputs();
+      renderChart();
+    }
+
+    /* ==========================================================================
+       LEAST AVERAGE CURVATURE SPLINE (NATURAL CUBIC SPLINE ALGORITHM)
+       By Holladay's Theorem, a Natural Cubic Spline minimizes total bending energy 
+       \int f''(x)^2 dx, producing the smooth curve of least average curvature.
+       ========================================================================== */
+    function getSmoothCurvePath(points) {
+      if (!points || points.length < 2) return "";
+      if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+
+      const n = points.length - 1;
+      const x = points.map(p => p.x);
+      const y = points.map(p => p.y);
+
+      // Step 1: Calculate segment widths h_i
+      const h = new Array(n);
+      for (let i = 0; i < n; i++) {
+        h[i] = x[i + 1] - x[i];
+        if (h[i] <= 0) h[i] = 0.0001; // Protect against overlapping X coordinates
+      }
+
+      // Step 2: Set up tridiagonal system for natural boundary conditions (M_0 = 0, M_n = 0)
+      const a = new Array(n);
+      const b = new Array(n);
+      const c = new Array(n);
+      const d = new Array(n);
+
+      for (let i = 1; i < n; i++) {
+        a[i] = h[i - 1];
+        b[i] = 2 * (h[i - 1] + h[i]);
+        c[i] = h[i];
+        d[i] = 6 * ((y[i + 1] - y[i]) / h[i] - (y[i] - y[i - 1]) / h[i - 1]);
+      }
+
+      // Step 3: Solve tridiagonal system using Thomas Algorithm
+      const M = new Array(n + 1).fill(0);
+      const cPrime = new Array(n).fill(0);
+      const dPrime = new Array(n).fill(0);
+
+      if (n > 1) {
+        cPrime[1] = c[1] / b[1];
+        dPrime[1] = d[1] / b[1];
+
+        for (let i = 2; i < n; i++) {
+          const denom = b[i] - a[i] * cPrime[i - 1];
+          cPrime[i] = c[i] / denom;
+          dPrime[i] = (d[i] - a[i] * dPrime[i - 1]) / denom;
+        }
+
+        M[n - 1] = dPrime[n - 1];
+        for (let i = n - 2; i >= 1; i--) {
+          M[i] = dPrime[i] - cPrime[i] * M[i + 1];
+        }
+      }
+
+      // Step 4: Convert spline polynomial segments directly into SVG Cubic Bezier control points
+      let pathData = `M ${x[0].toFixed(2)} ${y[0].toFixed(2)}`;
+      for (let i = 0; i < n; i++) {
+        const dyLeft = (y[i + 1] - y[i]) / h[i] - (h[i] / 6) * (2 * M[i] + M[i + 1]);
+        const dyRight = (y[i + 1] - y[i]) / h[i] + (h[i] / 6) * (M[i] + 2 * M[i + 1]);
+
+        const cp1x = x[i] + h[i] / 3;
+        const cp1y = y[i] + (h[i] / 3) * dyLeft;
+
+        const cp2x = x[i + 1] - h[i] / 3;
+        const cp2y = y[i + 1] - (h[i] / 3) * dyRight;
+
+        pathData += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${x[i + 1].toFixed(2)} ${y[i + 1].toFixed(2)}`;
+      }
+
+      return pathData;
+    }
+
+    function getDashArray(style) {
+      if (style === 'dashed') return '8 5';
+      if (style === 'dotted') return '2 4';
+      return 'none';
+    }
+
+    /* ==========================================================================
+       SVG GRAPH PAPER RENDER ENGINE WITH DIRECT EDITABLE TEXT BOXES
+       ========================================================================== */
+    function renderChart() {
+      const svg = document.getElementById('chart-svg');
+      if (!svg) return;
+
+      svg.innerHTML = '';
+
+      const isPolygon = chartState.chartType === 'polygon';
+      const isCumPolygon = chartState.chartType === 'cum_polygon';
+      const isBrokenLine = chartState.chartType === 'brokenline';
+      const isPolygonLike = isPolygon || isCumPolygon || isBrokenLine;
+      const isHistogram = chartState.chartType === 'histogram';
+      const showDs2 = isPolygonLike && chartState.enableDataset2;
+
+      const yMax = Math.max(chartState.yMax, 1);
+      const yStep = Math.max(chartState.yStep, 0.1);
+      const ySubSteps = [2, 5, 10].includes(chartState.ySubStep) ? chartState.ySubStep : 5;
+
+      const subUnitVal = yStep / ySubSteps;
+      const totalSubUnitsY = Math.ceil(yMax / subUnitVal);
+      const roundedYMax = totalSubUnitsY * subUnitVal;
+
+      let pxPerSubSquare = chartState.gridScalePx;
+      let plotHeight = totalSubUnitsY * pxPerSubSquare;
+
+      if (chartState.gridScaleMode === 'fit') {
+        plotHeight = 350;
+        pxPerSubSquare = plotHeight / totalSubUnitsY;
+      }
+
+      const marginTop = 65;
+      const marginBottom = 85;
+      const marginLeft = 90;
+
+      const barGridWidth = chartState.barGridWidth || ySubSteps;
+      const barGridGap = chartState.barGridGap !== undefined ? chartState.barGridGap : 0;
+      const totalBars = chartState.bars.length;
+      const alignment = chartState.barAlignment || 'middle';
+
+      const firstCenterSquare = (alignment === 'line') ? ySubSteps : 1.5 * ySubSteps;
+      const firstBarLeftSquare = firstCenterSquare - (barGridWidth / 2);
+
+      const lastBarRightSquare = firstBarLeftSquare + totalBars * barGridWidth + Math.max(totalBars - 1, 0) * barGridGap;
+      const totalGridSquaresX = isCumPolygon
+        ? (totalBars + 2) * ySubSteps
+        : (isBrokenLine
+          ? (totalBars + 1) * ySubSteps
+          : (isPolygon
+          ? (totalBars + 3) * ySubSteps
+          : Math.max(Math.ceil(lastBarRightSquare + ySubSteps), ySubSteps * 4)));
+      const plotWidth = totalGridSquaresX * pxPerSubSquare;
+
+      const totalSvgWidth = Math.max(650, marginLeft + plotWidth + 40);
+      const totalSvgHeight = marginTop + plotHeight + marginBottom;
+
+      svg.setAttribute("viewBox", `0 0 ${totalSvgWidth} ${totalSvgHeight}`);
+      svg.setAttribute("width", "100%");
+      svg.setAttribute("height", "100%");
+
+      const dimInfo = document.getElementById('grid-dimensions-info');
+      if (dimInfo) {
+        dimInfo.textContent = `Grid Square: ${pxPerSubSquare.toFixed(1)}px | Plot: ${totalGridSquaresX} × ${totalSubUnitsY} squares`;
+      }
+
+      const fontFamily = chartState.fontFamily;
+      const titleSize = chartState.titleSize;
+      const labelSize = chartState.labelSize;
+
+      const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      bg.setAttribute("width", "100%");
+      bg.setAttribute("height", "100%");
+      bg.setAttribute("fill", "#ffffff");
+      svg.appendChild(bg);
+
+      // 1. RENDER EDITABLE MAIN TITLE
+      const titleWidth = Math.min(plotWidth + 80, totalSvgWidth - 40);
+      const titleHeight = Math.max(34, titleSize + 14);
+      const titleX = marginLeft + (plotWidth - titleWidth) / 2;
+
+      const foTitle = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+      foTitle.setAttribute("x", titleX);
+      foTitle.setAttribute("y", 22);
+      foTitle.setAttribute("width", titleWidth);
+      foTitle.setAttribute("height", titleHeight);
+
+      const divTitle = document.createElement("div");
+      divTitle.className = "w-full h-full flex items-center justify-center";
+      divTitle.innerHTML = `
+        <input type="text" value="${escapeHtml(chartState.title)}"
+          placeholder="Enter Chart Title..."
+          style="font-family: ${fontFamily}; font-size: ${titleSize}px; font-weight: bold; color: #000000;"
+          class="w-full h-full text-center figure-text-input px-2 py-0.5"
+          oninput="updateTitleFromFigure(this.value)" />
+      `;
+      foTitle.appendChild(divTitle);
+      svg.appendChild(foTitle);
+
+      // 2. RENDER EDITABLE Y-AXIS LABEL (Rotated -90 degrees)
+      const yLabelWidth = plotHeight;
+      const yLabelHeight = Math.max(32, labelSize + 12);
+      const yLabelCenterX = 25;
+      const yLabelCenterY = marginTop + plotHeight / 2;
+
+      const foYLabel = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+      foYLabel.setAttribute("x", yLabelCenterX - yLabelWidth / 2);
+      foYLabel.setAttribute("y", yLabelCenterY - yLabelHeight / 2);
+      foYLabel.setAttribute("width", yLabelWidth);
+      foYLabel.setAttribute("height", yLabelHeight);
+      foYLabel.setAttribute("transform", `rotate(-90 ${yLabelCenterX} ${yLabelCenterY})`);
+
+      const divYLabel = document.createElement("div");
+      divYLabel.className = "w-full h-full flex items-center justify-center";
+      divYLabel.innerHTML = `
+        <input type="text" value="${escapeHtml(chartState.yLabel)}"
+          placeholder="Enter Y-Axis Label..."
+          style="font-family: ${fontFamily}; font-size: ${labelSize}px; color: #000000;"
+          class="w-full h-full text-center figure-text-input px-2 py-0.5"
+          oninput="updateYLabelFromFigure(this.value)" />
+      `;
+      foYLabel.appendChild(divYLabel);
+      svg.appendChild(foYLabel);
+
+      // 3. RENDER EDITABLE X-AXIS LABEL
+      const xLabelWidth = Math.min(plotWidth, totalSvgWidth - 80);
+      const xLabelHeight = Math.max(32, labelSize + 12);
+      const xLabelX = marginLeft + (plotWidth - xLabelWidth) / 2;
+      const xLabelY = totalSvgHeight - 48;
+
+      const foXLabel = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+      foXLabel.setAttribute("x", xLabelX);
+      foXLabel.setAttribute("y", xLabelY);
+      foXLabel.setAttribute("width", xLabelWidth);
+      foXLabel.setAttribute("height", xLabelHeight);
+
+      const divXLabel = document.createElement("div");
+      divXLabel.className = "w-full h-full flex items-center justify-center";
+      divXLabel.innerHTML = `
+        <input type="text" value="${escapeHtml(chartState.xLabel)}"
+          placeholder="Enter X-Axis Label..."
+          style="font-family: ${fontFamily}; font-size: ${labelSize}px; color: #000000;"
+          class="w-full h-full text-center figure-text-input px-2 py-0.5"
+          oninput="updateXLabelFromFigure(this.value)" />
+      `;
+      foXLabel.appendChild(divXLabel);
+      svg.appendChild(foXLabel);
+
+      function getYPixel(val) {
+        return marginTop + plotHeight - (val / roundedYMax) * plotHeight;
+      }
+
+      // 4. RENDER HORIZONTAL GRID LINES & EDITABLE Y-AXIS TICK VALUES
+      for (let subIndex = 0; subIndex <= totalSubUnitsY; subIndex++) {
+        const currentVal = subIndex * subUnitVal;
+        const yPos = getYPixel(currentVal);
+        const isMajor = (subIndex % ySubSteps === 0) || (subIndex === totalSubUnitsY);
+        const isMidMajor = (ySubSteps === 10 && subIndex % 5 === 0 && !isMajor);
+
+        const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        hLine.setAttribute("x1", marginLeft);
+        hLine.setAttribute("x2", marginLeft + plotWidth);
+        hLine.setAttribute("y1", yPos);
+        hLine.setAttribute("y2", yPos);
+
+        if (isMajor) {
+          hLine.setAttribute("stroke", chartState.gridColor);
+          hLine.setAttribute("stroke-width", chartState.axisWidth);
+        } else if (isMidMajor) {
+          hLine.setAttribute("stroke", chartState.subGridColor);
+          hLine.setAttribute("stroke-width", "1.2");
+        } else {
+          hLine.setAttribute("stroke", chartState.subGridColor);
+          hLine.setAttribute("stroke-width", "0.6");
+        }
+        svg.appendChild(hLine);
+
+        if (isMajor) {
+          const majorIndex = subIndex / ySubSteps;
+          if (majorIndex % chartState.labelFreq === 0) {
+            const displayVal = Math.round(currentVal * 100) / 100;
+
+            const foYTick = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+            foYTick.setAttribute("x", marginLeft - 58);
+            foYTick.setAttribute("y", yPos - 12);
+            foYTick.setAttribute("width", 48);
+            foYTick.setAttribute("height", 24);
+
+            const isTopTick = (subIndex === totalSubUnitsY);
+            const isFirstMajor = (majorIndex === 1);
+
+            const onInputCode = isTopTick ? "updateYMaxFromFigure(this.value)" : (isFirstMajor ? "updateYStepFromFigure(this.value)" : "");
+
+            foYTick.innerHTML = `
+              <div class="w-full h-full flex items-center justify-end">
+                <input type="text" value="${displayVal}"
+                  style="font-family: ${fontFamily}; font-size: ${labelSize * 0.9}px; color: #000000;"
+                  class="w-full h-full text-right figure-text-input px-1 font-mono"
+                  onchange="${onInputCode}" />
+              </div>
+            `;
+            svg.appendChild(foYTick);
+
+            const yTick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            yTick.setAttribute("x1", marginLeft - 6);
+            yTick.setAttribute("x2", marginLeft);
+            yTick.setAttribute("y1", yPos);
+            yTick.setAttribute("y2", yPos);
+            yTick.setAttribute("stroke", "#000000");
+            yTick.setAttribute("stroke-width", chartState.axisWidth);
+            svg.appendChild(yTick);
+          }
+        }
+      }
+
+      // 5. RENDER VERTICAL GRAPH PAPER GRID LINES
+      for (let xSub = 0; xSub <= totalGridSquaresX; xSub++) {
+        const xPos = marginLeft + xSub * pxPerSubSquare;
+        const isMajorX = (xSub % ySubSteps === 0) || (xSub === totalGridSquaresX);
+        const isMidMajorX = (ySubSteps === 10 && xSub % 5 === 0 && !isMajorX);
+
+        const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        vLine.setAttribute("x1", xPos);
+        vLine.setAttribute("x2", xPos);
+        vLine.setAttribute("y1", marginTop);
+        vLine.setAttribute("y2", marginTop + plotHeight);
+
+        if (isMajorX) {
+          vLine.setAttribute("stroke", chartState.gridColor);
+          vLine.setAttribute("stroke-width", chartState.axisWidth);
+        } else if (isMidMajorX) {
+          vLine.setAttribute("stroke", chartState.subGridColor);
+          vLine.setAttribute("stroke-width", "1.2");
+        } else {
+          vLine.setAttribute("stroke", chartState.subGridColor);
+          vLine.setAttribute("stroke-width", "0.6");
+        }
+        svg.appendChild(vLine);
+      }
+
+      // 6. RENDER DATA (BARS OR FREQUENCY POLYGON/CURVE)
+      if (!isPolygonLike) {
+        chartState.bars.forEach((bar, index) => {
+          const currentSquareX = firstBarLeftSquare + index * (barGridWidth + barGridGap);
+          const barLeftPx = marginLeft + currentSquareX * pxPerSubSquare;
+          const barWidthPx = barGridWidth * pxPerSubSquare;
+
+          const snappedValue = Math.round(bar.value / subUnitVal) * subUnitVal;
+          const barTopPx = getYPixel(snappedValue);
+          const barHeightPx = (marginTop + plotHeight) - barTopPx;
+
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", barLeftPx);
+          rect.setAttribute("y", barTopPx);
+          rect.setAttribute("width", barWidthPx);
+          rect.setAttribute("height", Math.max(barHeightPx, 0));
+          rect.setAttribute("fill", chartState.barColor);
+          rect.setAttribute("stroke", chartState.barBorder);
+          rect.setAttribute("stroke-width", "1.5");
+          rect.setAttribute("data-bar-index", index);
+          rect.setAttribute("fill-opacity", chartState.barTransparent ? "0.45" : "1.0");
+          svg.appendChild(rect);
+
+          const dragHandle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          dragHandle.setAttribute("x", barLeftPx);
+          dragHandle.setAttribute("y", barTopPx - 4);
+          dragHandle.setAttribute("width", barWidthPx);
+          dragHandle.setAttribute("height", 8);
+          dragHandle.setAttribute("fill", "transparent");
+          dragHandle.setAttribute("class", "bar-drag-handle");
+          dragHandle.setAttribute("data-bar-index", index);
+          dragHandle.setAttribute("data-dataset", "1");
+          svg.appendChild(dragHandle);
+
+          if (!isHistogram) {
+            const barCenterPx = barLeftPx + barWidthPx / 2;
+            const xTick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xTick.setAttribute("x1", barCenterPx);
+            xTick.setAttribute("x2", barCenterPx);
+            xTick.setAttribute("y1", marginTop + plotHeight);
+            xTick.setAttribute("y2", marginTop + plotHeight + 6);
+            xTick.setAttribute("stroke", "#000000");
+            xTick.setAttribute("stroke-width", chartState.axisWidth);
+            svg.appendChild(xTick);
+
+            const foBarLabel = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+            const boxW = Math.max(barWidthPx + 12, 60);
+            foBarLabel.setAttribute("x", barCenterPx - boxW / 2);
+            foBarLabel.setAttribute("y", marginTop + plotHeight + 6);
+            foBarLabel.setAttribute("width", boxW);
+            foBarLabel.setAttribute("height", 28);
+
+            foBarLabel.innerHTML = `
+              <div class="w-full h-full flex items-center justify-center">
+                <input type="text" value="${escapeHtml(bar.label)}"
+                  style="font-family: ${fontFamily}; font-size: ${labelSize * 0.9}px; color: #000000;"
+                  class="w-full h-full text-center figure-text-input px-1"
+                  oninput="updateBarLabelFromFigure(${index}, this.value)" />
+              </div>
+            `;
+            svg.appendChild(foBarLabel);
+          }
+        });
+      } else {
+        // FREQUENCY POLYGON / CURVE LOGIC
+        const buildPoints = (dsKey) => {
+          const pts = [];
+          const yOrigin = marginTop + plotHeight;
+          const startVal = chartState.histStart;
+          const stepVal = chartState.histStep;
+
+          if (isCumPolygon) {
+            const xPx0 = marginLeft + 1 * ySubSteps * pxPerSubSquare;
+            const numValue0 = Math.round((startVal - stepVal) * 100) / 100;
+            pts.push({ x: xPx0, y: yOrigin, value: 0, numValue: numValue0, isExtra: true, index: -1, tickIndex: 0 });
+
+            let runningVal = 0;
+            for (let i = 0; i < totalBars; i++) {
+              const bVal = parseFloat(chartState.bars[i][dsKey]) || 0;
+              runningVal += bVal;
+              const gridLineIndex = i + 2;
+              const xPx = marginLeft + gridLineIndex * ySubSteps * pxPerSubSquare;
+              const numValue = Math.round((startVal + i * stepVal) * 100) / 100;
+              const val = Math.round(runningVal / subUnitVal) * subUnitVal;
+              const yPx = getYPixel(val);
+
+              pts.push({ x: xPx, y: yPx, value: val, numValue: numValue, isExtra: false, index: i, tickIndex: i + 1 });
+            }
+          } else if (isBrokenLine) {
+            for (let i = 0; i < totalBars; i++) {
+              const x = marginLeft + (i + 1) * ySubSteps * pxPerSubSquare;
+              const value = parseFloat(chartState.bars[i][dsKey]) || 0;
+              const snappedValue = Math.round(value / subUnitVal) * subUnitVal;
+              pts.push({
+                x,
+                y: getYPixel(snappedValue),
+                value: snappedValue,
+                numValue: chartState.bars[i].label,
+                isExtra: false,
+                index: i,
+                tickIndex: i
+              });
+            }
+          } else {
+            for (let i = -1; i <= totalBars; i++) {
+              const gridLineIndex = i + 2;
+              const xPx = marginLeft + gridLineIndex * ySubSteps * pxPerSubSquare;
+              const numValue = Math.round((startVal + i * stepVal) * 100) / 100;
+
+              let yPx, val;
+              if (i === -1 || i === totalBars) {
+                yPx = yOrigin;
+                val = 0;
+              } else {
+                const bVal = parseFloat(chartState.bars[i][dsKey]) || 0;
+                val = Math.round(bVal / subUnitVal) * subUnitVal;
+                yPx = getYPixel(val);
+              }
+
+              pts.push({ x: xPx, y: yPx, value: val, numValue: numValue, isExtra: (i === -1 || i === totalBars), index: i, tickIndex: i + 1 });
+            }
+          }
+          return pts;
+        };
+
+        const allPoints1 = buildPoints('value');
+        const allPoints2 = showDs2 ? buildPoints('value2') : [];
+
+        const drawSeries = (points, color, strokeWidth, style, dsNum) => {
+          if (!points || points.length === 0) return;
+          const dashPattern = getDashArray(style);
+
+          if (chartState.showPolygon || isBrokenLine) {
+            const polylinePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            const pathData = points.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x} ${pt.y}`).join(' ');
+            polylinePath.setAttribute("d", pathData);
+            polylinePath.setAttribute("fill", "none");
+            polylinePath.setAttribute("stroke", color);
+            polylinePath.setAttribute("stroke-width", strokeWidth);
+            polylinePath.setAttribute("stroke-linejoin", "round");
+            polylinePath.setAttribute("stroke-linecap", "round");
+            if (dashPattern !== 'none') polylinePath.setAttribute("stroke-dasharray", dashPattern);
+            if (chartState.showCurve) polylinePath.setAttribute("stroke-opacity", "0.35");
+            svg.appendChild(polylinePath);
+          }
+
+          if (chartState.showCurve && !isBrokenLine) {
+            const curvePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            const curveData = getSmoothCurvePath(points);
+            curvePath.setAttribute("d", curveData);
+            curvePath.setAttribute("fill", "none");
+            curvePath.setAttribute("stroke", color);
+            curvePath.setAttribute("stroke-width", strokeWidth);
+            curvePath.setAttribute("stroke-linejoin", "round");
+            curvePath.setAttribute("stroke-linecap", "round");
+            if (dashPattern !== 'none') curvePath.setAttribute("stroke-dasharray", dashPattern);
+            svg.appendChild(curvePath);
+          }
+
+          points.forEach(pt => {
+            if (chartState.showCrosses) {
+              const crossGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+              const r = 5.5;
+
+              const crossPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              const crossData = `M ${pt.x - r} ${pt.y - r} L ${pt.x + r} ${pt.y + r} M ${pt.x + r} ${pt.y - r} L ${pt.x - r} ${pt.y + r}`;
+              crossPath.setAttribute("d", crossData);
+              crossPath.setAttribute("stroke", color);
+              crossPath.setAttribute("stroke-width", "2.2");
+              crossPath.setAttribute("stroke-linecap", "round");
+              crossGroup.appendChild(crossPath);
+
+              if (!pt.isExtra) {
+                const dragHandle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                dragHandle.setAttribute("cx", pt.x);
+                dragHandle.setAttribute("cy", pt.y);
+                dragHandle.setAttribute("r", 9);
+                dragHandle.setAttribute("fill", "transparent");
+                dragHandle.setAttribute("class", "bar-drag-handle");
+                dragHandle.setAttribute("data-bar-index", pt.index);
+                dragHandle.setAttribute("data-dataset", dsNum);
+                crossGroup.appendChild(dragHandle);
+              }
+
+              svg.appendChild(crossGroup);
+            }
+
+            if (dsNum === 1) {
+              const xTick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+              xTick.setAttribute("x1", pt.x);
+              xTick.setAttribute("x2", pt.x);
+              xTick.setAttribute("y1", marginTop + plotHeight);
+              xTick.setAttribute("y2", marginTop + plotHeight + 6);
+              xTick.setAttribute("stroke", "#000000");
+              xTick.setAttribute("stroke-width", chartState.axisWidth);
+              svg.appendChild(xTick);
+
+              const foXTick = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+              foXTick.setAttribute("x", pt.x - 28);
+              foXTick.setAttribute("y", marginTop + plotHeight + 6);
+              foXTick.setAttribute("width", 56);
+              foXTick.setAttribute("height", 28);
+
+              foXTick.innerHTML = `
+                <div class="w-full h-full flex items-center justify-center">
+                  <input type="text" value="${pt.numValue}"
+                    style="font-family: ${fontFamily}; font-size: ${labelSize * 0.9}px; color: #000000;"
+                    class="w-full h-full text-center figure-text-input px-0.5 font-mono"
+                    onchange="updateHistTickFromFigure(${pt.tickIndex}, this.value)" />
+                </div>
+              `;
+              svg.appendChild(foXTick);
+            }
+          });
+        };
+
+        drawSeries(allPoints1, chartState.polygonColor, chartState.polygonLineWidth, chartState.ds1Style, 1);
+        if (showDs2) {
+          drawSeries(allPoints2, chartState.ds2Color, chartState.ds2LineWidth, chartState.ds2Style, 2);
+        }
+
+        // EDITABLE LEGEND LABELS
+        if (chartState.showLegend) {
+          const legendGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          const legX = marginLeft + plotWidth - (ySubSteps * pxPerSubSquare * 2.8);
+          const legY = marginTop + (ySubSteps * pxPerSubSquare * 0.4);
+
+          const line1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line1.setAttribute("x1", legX);
+          line1.setAttribute("x2", legX + 36);
+          line1.setAttribute("y1", legY + 12);
+          line1.setAttribute("y2", legY + 12);
+          line1.setAttribute("stroke", chartState.polygonColor);
+          line1.setAttribute("stroke-width", chartState.polygonLineWidth);
+          const dash1 = getDashArray(chartState.ds1Style);
+          if (dash1 !== 'none') line1.setAttribute("stroke-dasharray", dash1);
+          legendGroup.appendChild(line1);
+
+          const foLeg1 = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+          foLeg1.setAttribute("x", legX + 42);
+          foLeg1.setAttribute("y", legY);
+          foLeg1.setAttribute("width", 110);
+          foLeg1.setAttribute("height", 24);
+
+          foLeg1.innerHTML = `
+            <div class="w-full h-full flex items-center">
+              <input type="text" value="${escapeHtml(chartState.ds1Label || "Zoo A")}"
+                style="font-family: ${fontFamily}; font-size: ${labelSize * 0.95}px; color: #000000;"
+                class="w-full h-full text-left figure-text-input px-1"
+                oninput="updateDs1LabelFromFigure(this.value)" />
+            </div>
+          `;
+          legendGroup.appendChild(foLeg1);
+
+          if (showDs2) {
+            const line2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line2.setAttribute("x1", legX);
+            line2.setAttribute("x2", legX + 36);
+            line2.setAttribute("y1", legY + 30);
+            line2.setAttribute("y2", legY + 30);
+            line2.setAttribute("stroke", chartState.ds2Color);
+            line2.setAttribute("stroke-width", chartState.ds2LineWidth);
+            const dash2 = getDashArray(chartState.ds2Style);
+            if (dash2 !== 'none') line2.setAttribute("stroke-dasharray", dash2);
+            legendGroup.appendChild(line2);
+
+            const foLeg2 = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+            foLeg2.setAttribute("x", legX + 42);
+            foLeg2.setAttribute("y", legY + 18);
+            foLeg2.setAttribute("width", 110);
+            foLeg2.setAttribute("height", 24);
+
+            foLeg2.innerHTML = `
+              <div class="w-full h-full flex items-center">
+                <input type="text" value="${escapeHtml(chartState.ds2Label || "Zoo B")}"
+                  style="font-family: ${fontFamily}; font-size: ${labelSize * 0.95}px; color: #000000;"
+                  class="w-full h-full text-left figure-text-input px-1"
+                  oninput="updateDs2LabelFromFigure(this.value)" />
+              </div>
+            `;
+            legendGroup.appendChild(foLeg2);
+          }
+
+          svg.appendChild(legendGroup);
+        }
+      }
+
+      // Histogram X-Axis Ticks
+      if (isHistogram && totalBars > 0) {
+        if (chartState.histStartMode === 'midpoint') {
+          chartState.bars.forEach((bar, index) => {
+            const currentSquareX = firstBarLeftSquare + index * (barGridWidth + barGridGap);
+            const barLeftPx = marginLeft + currentSquareX * pxPerSubSquare;
+            const barWidthPx = barGridWidth * pxPerSubSquare;
+            const barCenterPx = barLeftPx + barWidthPx / 2;
+            const numValue = Math.round((chartState.histStart + index * chartState.histStep) * 100) / 100;
+
+            const xTick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xTick.setAttribute("x1", barCenterPx);
+            xTick.setAttribute("x2", barCenterPx);
+            xTick.setAttribute("y1", marginTop + plotHeight);
+            xTick.setAttribute("y2", marginTop + plotHeight + 6);
+            xTick.setAttribute("stroke", "#000000");
+            xTick.setAttribute("stroke-width", chartState.axisWidth);
+            svg.appendChild(xTick);
+
+            const foXTick = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+            foXTick.setAttribute("x", barCenterPx - 28);
+            foXTick.setAttribute("y", marginTop + plotHeight + 6);
+            foXTick.setAttribute("width", 56);
+            foXTick.setAttribute("height", 28);
+
+            foXTick.innerHTML = `
+              <div class="w-full h-full flex items-center justify-center">
+                <input type="text" value="${numValue}"
+                  style="font-family: ${fontFamily}; font-size: ${labelSize * 0.9}px; color: #000000;"
+                  class="w-full h-full text-center figure-text-input px-0.5 font-mono"
+                  onchange="updateHistTickFromFigure(${index}, this.value)" />
+              </div>
+            `;
+            svg.appendChild(foXTick);
+          });
+        } else {
+          const startVal = chartState.histStart;
+          const stepVal = chartState.histStep;
+
+          for (let i = 0; i <= totalBars; i++) {
+            const boundarySquareX = firstBarLeftSquare + i * barGridWidth + Math.max(i - 1, 0) * barGridGap;
+            const boundaryPx = marginLeft + boundarySquareX * pxPerSubSquare;
+            const numValue = Math.round((startVal + i * stepVal) * 100) / 100;
+
+            const xTick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xTick.setAttribute("x1", boundaryPx);
+            xTick.setAttribute("x2", boundaryPx);
+            xTick.setAttribute("y1", marginTop + plotHeight);
+            xTick.setAttribute("y2", marginTop + plotHeight + 6);
+            xTick.setAttribute("stroke", "#000000");
+            xTick.setAttribute("stroke-width", chartState.axisWidth);
+            svg.appendChild(xTick);
+
+            const foXTick = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+            foXTick.setAttribute("x", boundaryPx - 28);
+            foXTick.setAttribute("y", marginTop + plotHeight + 6);
+            foXTick.setAttribute("width", 56);
+            foXTick.setAttribute("height", 28);
+
+            foXTick.innerHTML = `
+              <div class="w-full h-full flex items-center justify-center">
+                <input type="text" value="${numValue}"
+                  style="font-family: ${fontFamily}; font-size: ${labelSize * 0.9}px; color: #000000;"
+                  class="w-full h-full text-center figure-text-input px-0.5 font-mono"
+                  onchange="updateHistTickFromFigure(${i}, this.value)" />
+              </div>
+            `;
+            svg.appendChild(foXTick);
+          }
+        }
+      }
+
+      // 7. RENDER MAIN AXIS BORDER LINES
+      const yOrigin = marginTop + plotHeight;
+
+      if (chartState.yWiggle) {
+        const sub3Py = yOrigin - 0.3 * ySubSteps * pxPerSubSquare;
+        const sub4Py = yOrigin - 0.4 * ySubSteps * pxPerSubSquare;
+        const sub5Py = yOrigin - 0.5 * ySubSteps * pxPerSubSquare;
+        const sub6Py = yOrigin - 0.6 * ySubSteps * pxPerSubSquare;
+        const sub7Py = yOrigin - 0.7 * ySubSteps * pxPerSubSquare;
+        const wiggleAmp = 12;
+        const yAxisPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        yAxisPath.setAttribute("d", [
+          `M ${marginLeft} ${yOrigin}`,
+          `L ${marginLeft} ${sub3Py}`,
+          `L ${marginLeft - wiggleAmp} ${sub4Py}`,
+          `L ${marginLeft} ${sub5Py}`,
+          `L ${marginLeft + wiggleAmp} ${sub6Py}`,
+          `L ${marginLeft} ${sub7Py}`,
+          `L ${marginLeft} ${marginTop}`
+        ].join(" "));
+        yAxisPath.setAttribute("fill", "none");
+        yAxisPath.setAttribute("stroke", "#000000");
+        yAxisPath.setAttribute("stroke-width", chartState.axisWidth);
+        yAxisPath.setAttribute("stroke-linejoin", "miter");
+        svg.appendChild(yAxisPath);
+      } else {
+        const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        yAxis.setAttribute("x1", marginLeft);
+        yAxis.setAttribute("x2", marginLeft);
+        yAxis.setAttribute("y1", marginTop);
+        yAxis.setAttribute("y2", yOrigin);
+        yAxis.setAttribute("stroke", "#000000");
+        yAxis.setAttribute("stroke-width", chartState.axisWidth);
+        svg.appendChild(yAxis);
+      }
+
+      if ((isHistogram || isPolygonLike) && chartState.histWiggle && !isBrokenLine) {
+        const sub3Px = marginLeft + 0.3 * ySubSteps * pxPerSubSquare;
+        const sub4Px = marginLeft + 0.4 * ySubSteps * pxPerSubSquare;
+        const sub5Px = marginLeft + 0.5 * ySubSteps * pxPerSubSquare;
+        const sub6Px = marginLeft + 0.6 * ySubSteps * pxPerSubSquare;
+        const sub7Px = marginLeft + 0.7 * ySubSteps * pxPerSubSquare;
+        const wiggleAmp = 12;
+
+        const xAxisPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const pathData = [
+          `M ${marginLeft} ${yOrigin}`,
+          `L ${sub3Px} ${yOrigin}`,
+          `L ${sub4Px} ${yOrigin - wiggleAmp}`,
+          `L ${sub5Px} ${yOrigin}`,
+          `L ${sub6Px} ${yOrigin + wiggleAmp}`,
+          `L ${sub7Px} ${yOrigin}`,
+          `L ${marginLeft + plotWidth} ${yOrigin}`
+        ].join(" ");
+
+        xAxisPath.setAttribute("d", pathData);
+        xAxisPath.setAttribute("fill", "none");
+        xAxisPath.setAttribute("stroke", "#000000");
+        xAxisPath.setAttribute("stroke-width", chartState.axisWidth);
+        xAxisPath.setAttribute("stroke-linejoin", "miter");
+        svg.appendChild(xAxisPath);
+      } else {
+        const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        xAxis.setAttribute("x1", marginLeft);
+        xAxis.setAttribute("x2", marginLeft + plotWidth);
+        xAxis.setAttribute("y1", yOrigin);
+        xAxis.setAttribute("y2", yOrigin);
+        xAxis.setAttribute("stroke", "#000000");
+        xAxis.setAttribute("stroke-width", chartState.axisWidth);
+        svg.appendChild(xAxis);
+      }
+    }
+
+    /* ==========================================================================
+       PRESET DATA LOADERS
+       ========================================================================== */
+    function loadSample(type) {
+      if (type === 'volleyball') {
+        chartState.chartType = "histogram";
+        chartState.histStartMode = "lower";
+        chartState.histStart = 9.5;
+        chartState.histStep = 5;
+        chartState.enableDataset2 = false;
+        chartState.showLegend = false;
+        chartState.title = "Numbers of students from different forms in a volleyball team";
+        chartState.xLabel = "Form / Class Interval";
+        chartState.yLabel = "Number of students";
+        chartState.yMax = 25;
+        chartState.yStep = 5;
+        chartState.ySubStep = 10;
+        chartState.titleSize = 16;
+        chartState.labelSize = 16;
+        chartState.barAlignment = "middle";
+        chartState.barGridWidth = 10;
+        chartState.barGridGap = 0;
+        chartState.barColor = "#b3b3b3";
+        chartState.barBorder = "#000000";
+        chartState.barTransparent = true;
+        chartState.bars = [
+          { label: "10-14", value: 11, value2: 8 },
+          { label: "15-19", value: 16, value2: 12 },
+          { label: "20-24", value: 24, value2: 20 },
+          { label: "25-29", value: 17, value2: 15 },
+          { label: "30-34", value: 12, value2: 9 },
+          { label: "35-39", value: 5, value2: 3 }
+        ];
+      } else if (type === 'polygon') {
+        chartState.chartType = "polygon";
+        chartState.showPolygon = true;
+        chartState.showCurve = false;
+        chartState.showCrosses = true;
+        chartState.enableDataset2 = false;
+        chartState.showLegend = false;
+        chartState.ds1Label = "Zoo A";
+        chartState.ds1Style = "solid";
+        chartState.polygonColor = "#000000";
+        chartState.ds2Label = "Zoo B";
+        chartState.ds2Style = "dotted";
+        chartState.ds2Color = "#000000";
+        chartState.histStartMode = "lower";
+        chartState.histStart = 9.5;
+        chartState.histStep = 5;
+        chartState.title = "Frequency Polygon Comparison between Zoo A and Zoo B";
+        chartState.xLabel = "Form";
+        chartState.yLabel = "Frequency";
+        chartState.yMax = 25;
+        chartState.yStep = 5;
+        chartState.ySubStep = 10;
+        chartState.titleSize = 16;
+        chartState.labelSize = 16;
+        chartState.barAlignment = "middle";
+        chartState.barGridWidth = 10;
+        chartState.barGridGap = 0;
+        chartState.bars = [
+          { label: "10-14", value: 11, value2: 7 },
+          { label: "15-19", value: 16, value2: 12 },
+          { label: "20-24", value: 24, value2: 18 },
+          { label: "25-29", value: 17, value2: 21 },
+          { label: "30-34", value: 12, value2: 15 },
+          { label: "35-39", value: 5, value2: 8 }
+        ];
+      } else if (type === 'brokenline') {
+        chartState.chartType = "brokenline";
+        chartState.showPolygon = true;
+        chartState.showCurve = false;
+        chartState.showCrosses = true;
+        chartState.enableDataset2 = false;
+        chartState.showLegend = false;
+        chartState.histStartMode = "lower";
+        chartState.yWiggle = true;
+        chartState.title = "Monthly Temperature Change";
+        chartState.xLabel = "Month";
+        chartState.yLabel = "Temperature (°C)";
+        chartState.yMax = 35;
+        chartState.yStep = 5;
+        chartState.histWiggle = false;
+        chartState.bars = [
+          { label: "Jan", value: 15, value2: 12 },
+          { label: "Feb", value: 17, value2: 14 },
+          { label: "Mar", value: 21, value2: 18 },
+          { label: "Apr", value: 25, value2: 22 },
+          { label: "May", value: 28, value2: 26 },
+          { label: "Jun", value: 31, value2: 29 }
+        ];
+      } else if (type === 'survey') {
+        chartState.chartType = "barchart";
+        chartState.enableDataset2 = false;
+        chartState.showLegend = false;
+        chartState.title = "Students' Favorite Fruits";
+        chartState.xLabel = "Fruit";
+        chartState.yLabel = "Number of Votes";
+        chartState.yMax = 20;
+        chartState.yStep = 5;
+        chartState.ySubStep = 10;
+        chartState.titleSize = 16;
+        chartState.labelSize = 16;
+        chartState.barAlignment = "middle";
+        chartState.barGridWidth = 10;
+        chartState.barGridGap = 0;
+        chartState.barColor = "#cbd5e1";
+        chartState.barBorder = "#0f172a";
+        chartState.barTransparent = true;
+        chartState.bars = [
+          { label: "Apple", value: 18, value2: 10 },
+          { label: "Banana", value: 14, value2: 8 },
+          { label: "Orange", value: 9, value2: 12 },
+          { label: "Grape", value: 15, value2: 11 }
+        ];
+      } else if (type === 'empty') {
+        chartState.chartType = "polygon";
+        chartState.enableDataset2 = false;
+        chartState.showLegend = false;
+        chartState.title = "Blank Grid Chart";
+        chartState.xLabel = "Category";
+        chartState.yLabel = "Frequency";
+        chartState.yMax = 10;
+        chartState.yStep = 2;
+        chartState.ySubStep = 10;
+        chartState.titleSize = 16;
+        chartState.labelSize = 16;
+        chartState.barAlignment = "middle";
+        chartState.barGridWidth = 2;
+        chartState.barGridGap = 0;
+        chartState.barTransparent = true;
+        chartState.bars = [
+          { label: "Group A", value: 4, value2: 2 }
+        ];
+      }
+
+      document.getElementById('cfg-chart-type').value = chartState.chartType;
+      document.getElementById('cfg-toggle-polygon').checked = chartState.showPolygon;
+      document.getElementById('cfg-toggle-curve').checked = chartState.showCurve;
+      document.getElementById('cfg-show-crosses').checked = chartState.showCrosses;
+      document.getElementById('cfg-quick-crosses').checked = chartState.showCrosses;
+
+      document.getElementById('cfg-show-legend').checked = chartState.showLegend;
+      document.getElementById('cfg-quick-legend').checked = chartState.showLegend;
+
+      document.getElementById('cfg-ds1-label').value = chartState.ds1Label;
+      document.getElementById('cfg-ds1-style').value = chartState.ds1Style;
+      document.getElementById('cfg-polygon-color').value = chartState.polygonColor;
+      document.getElementById('cfg-polygon-color-hex').value = chartState.polygonColor;
+
+      document.getElementById('cfg-enable-ds2').checked = chartState.enableDataset2;
+      document.getElementById('cfg-ds2-label').value = chartState.ds2Label;
+      document.getElementById('cfg-ds2-style').value = chartState.ds2Style;
+      document.getElementById('cfg-ds2-color').value = chartState.ds2Color;
+      document.getElementById('cfg-ds2-color-hex').value = chartState.ds2Color;
+
+      document.getElementById('cfg-hist-start-mode').value = chartState.histStartMode;
+      document.getElementById('cfg-hist-start').value = chartState.histStart;
+      document.getElementById('cfg-hist-step').value = chartState.histStep;
+      document.getElementById('cfg-title').value = chartState.title;
+      document.getElementById('cfg-xlabel').value = chartState.xLabel;
+      document.getElementById('cfg-ylabel').value = chartState.yLabel;
+      document.getElementById('cfg-ymax').value = chartState.yMax;
+      document.getElementById('cfg-y-wiggle').checked = chartState.yWiggle;
+      document.getElementById('cfg-ystep').value = chartState.yStep;
+      document.getElementById('cfg-ysubstep').value = chartState.ySubStep;
+      document.getElementById('cfg-title-size').value = chartState.titleSize;
+      document.getElementById('cfg-label-size').value = chartState.labelSize;
+      document.getElementById('cfg-bar-alignment').value = chartState.barAlignment;
+      document.getElementById('cfg-bar-grid-width').value = chartState.barGridWidth;
+      document.getElementById('cfg-bar-grid-gap').value = chartState.barGridGap;
+      document.getElementById('cfg-bar-color').value = chartState.barColor;
+      document.getElementById('cfg-bar-border').value = chartState.barBorder;
+      document.getElementById('cfg-bar-transparent').checked = chartState.barTransparent;
+
+      updateDatasetToggleUI();
+      updateHistogramVisibility();
+      renderBarInputs();
+      renderChart();
+    }
+
+    /* ==========================================================================
+       UTILITY, EXPORT & INTERACTIVE FUNCTIONS
+       ========================================================================== */
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function switchTab(tab) {
+      const dataTab = document.getElementById('tab-data');
+      const styleTab = document.getElementById('tab-style');
+      const dataBtn = document.getElementById('tab-data-btn');
+      const styleBtn = document.getElementById('tab-style-btn');
+
+      if (!dataTab || !styleTab) return;
+
+      if (tab === 'data') {
+        dataTab.classList.remove('hidden');
+        styleTab.classList.add('hidden');
+        dataBtn.className = "flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-emerald-600 text-emerald-700 bg-white";
+        styleBtn.className = "flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700";
+      } else {
+        dataTab.classList.add('hidden');
+        styleTab.classList.remove('hidden');
+        styleBtn.className = "flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-emerald-600 text-emerald-700 bg-white";
+        dataBtn.className = "flex-1 py-3 px-4 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700";
+      }
+    }
+
+    function snapAllBarsToGrid() {
+      const subValue = (chartState.yStep > 0 && chartState.ySubStep > 0)
+        ? chartState.yStep / chartState.ySubStep
+        : 1;
+      chartState.bars.forEach(bar => {
+        bar.value = Math.round(bar.value / subValue) * subValue;
+        if (bar.value2 !== undefined) {
+          bar.value2 = Math.round(bar.value2 / subValue) * subValue;
+        }
+      });
+    }
+
+    function setupInteractiveDrag() {
+      const svg = document.getElementById('chart-svg');
+      if (!svg) return;
+
+      const getEventY = (e) => e.touches ? e.touches[0].clientY : e.clientY;
+
+      const handleStart = (e) => {
+        const target = e.target;
+        if (target && target.classList.contains('bar-drag-handle')) {
+          draggingBarIndex = parseInt(target.getAttribute('data-bar-index'), 10);
+          draggingDataset = parseInt(target.getAttribute('data-dataset') || "1", 10);
+          e.preventDefault();
+        }
+      };
+
+      const handleMove = (e) => {
+        if (draggingBarIndex < 0 || draggingBarIndex >= chartState.bars.length) return;
+
+        const rect = svg.getBoundingClientRect();
+        const clientY = getEventY(e);
+        const yInSvg = clientY - rect.top;
+
+        const viewBox = svg.viewBox.baseVal;
+        const scaleY = viewBox.height / rect.height;
+        const svgY = yInSvg * scaleY;
+
+        const marginTop = 65;
+        const yMax = Math.max(chartState.yMax, 1);
+        const yStep = Math.max(chartState.yStep, 0.1);
+        const ySubSteps = [2, 5, 10].includes(chartState.ySubStep) ? chartState.ySubStep : 5;
+        const subUnitVal = yStep / ySubSteps;
+        const totalSubUnitsY = Math.ceil(yMax / subUnitVal);
+        const roundedYMax = totalSubUnitsY * subUnitVal;
+
+        let pxPerSubSquare = chartState.gridScalePx;
+        let plotHeight = totalSubUnitsY * pxPerSubSquare;
+        if (chartState.gridScaleMode === 'fit') plotHeight = 350;
+
+        const plotBottom = marginTop + plotHeight;
+        let distFromBottom = plotBottom - svgY;
+        distFromBottom = Math.max(0, Math.min(plotHeight, distFromBottom));
+
+        let val = (distFromBottom / plotHeight) * roundedYMax;
+        val = Math.round(val / subUnitVal) * subUnitVal;
+        val = Math.max(0, Math.min(roundedYMax, val));
+
+        const dsKey = draggingDataset === 2 ? 'value2' : 'value';
+
+        if (chartState.chartType === 'cum_polygon') {
+          const n = chartState.bars.length;
+          const cum = [];
+          let run = 0;
+          for (let i = 0; i < n; i++) {
+            run += (parseFloat(chartState.bars[i][dsKey]) || 0);
+            cum.push(run);
+          }
+
+          const dragIdx = draggingBarIndex;
+          cum[dragIdx] = val;
+
+          // Forward propagation: ensure monotonic increasing order
+          for (let i = dragIdx + 1; i < n; i++) {
+            if (cum[i] < cum[dragIdx]) cum[i] = cum[dragIdx];
+            if (cum[i] > roundedYMax) cum[i] = roundedYMax;
+          }
+
+          // Backward propagation: ensure monotonic increasing order
+          for (let i = dragIdx - 1; i >= 0; i--) {
+            if (cum[i] > cum[dragIdx]) cum[i] = cum[dragIdx];
+            if (cum[i] < 0) cum[i] = 0;
+          }
+
+          // Recompute individual frequencies from constrained cumulative points
+          for (let i = 0; i < n; i++) {
+            const prevCum = (i === 0) ? 0 : cum[i - 1];
+            chartState.bars[i][dsKey] = Math.round((cum[i] - prevCum) * 100) / 100;
+          }
+        } else {
+          chartState.bars[draggingBarIndex][dsKey] = val;
+        }
+
+        renderBarInputs();
+        renderChart();
+      };
+
+      const handleEnd = () => {
+        draggingBarIndex = -1;
+      };
+
+      svg.addEventListener('mousedown', handleStart);
+      svg.addEventListener('mousemove', handleMove);
+      window.addEventListener('mouseup', handleEnd);
+
+      svg.addEventListener('touchstart', handleStart, { passive: false });
+      svg.addEventListener('touchmove', handleMove, { passive: false });
+      window.addEventListener('touchend', handleEnd);
+    }
+
+    /* Convert all HTML inputs inside foreignObjects to native SVG <text> elements for clean export */
+    function getExportSvgClone(svg) {
+      const viewBox = svg.viewBox.baseVal;
+      const width = viewBox.width || 650;
+      const height = viewBox.height || 500;
+
+      const clone = svg.cloneNode(true);
+      clone.setAttribute("width", width);
+      clone.setAttribute("height", height);
+      if (!clone.getAttribute("xmlns")) {
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      }
+
+      const foreignObjects = Array.from(clone.querySelectorAll("foreignObject"));
+      foreignObjects.forEach(fo => {
+        const input = fo.querySelector("input");
+        if (!input) return;
+
+        const textVal = input.value || "";
+        if (!textVal.trim()) {
+          fo.remove();
+          return;
+        }
+
+        const x = parseFloat(fo.getAttribute("x") || "0");
+        const y = parseFloat(fo.getAttribute("y") || "0");
+        const foWidth = parseFloat(fo.getAttribute("width") || "0");
+        const foHeight = parseFloat(fo.getAttribute("height") || "0");
+        const transform = fo.getAttribute("transform");
+
+        const computedStyle = input.style;
+        const fontSize = computedStyle.fontSize || "14px";
+        const fontFamily = computedStyle.fontFamily || "serif";
+        const fontWeight = computedStyle.fontWeight || "normal";
+        const fill = computedStyle.color || "#000000";
+
+        let textAnchor = "middle";
+        if (input.classList.contains("text-right")) textAnchor = "end";
+        if (input.classList.contains("text-left")) textAnchor = "start";
+
+        const textElem = document.createElementNS("http://www.w3.org/2000/svg", "text");
+
+        let textX = x + foWidth / 2;
+        if (textAnchor === "start") textX = x + 4;
+        if (textAnchor === "end") textX = x + foWidth - 4;
+
+        const numFontSize = parseFloat(fontSize) || 14;
+        const textY = y + foHeight / 2 + (numFontSize / 3);
+
+        textElem.setAttribute("x", textX);
+        textElem.setAttribute("y", textY);
+        textElem.setAttribute("text-anchor", textAnchor);
+        textElem.setAttribute("font-family", fontFamily);
+        textElem.setAttribute("font-size", fontSize);
+        textElem.setAttribute("font-weight", fontWeight);
+        textElem.setAttribute("fill", fill);
+        if (transform) {
+          textElem.setAttribute("transform", transform);
+        }
+        textElem.textContent = textVal;
+
+        fo.parentNode.replaceChild(textElem, fo);
+      });
+
+      return clone;
+    }
+
+    function downloadSVG() {
+      const svg = document.getElementById('chart-svg');
+      if (!svg) return;
+
+      const clone = getExportSvgClone(svg);
+      const serializer = new XMLSerializer();
+      let source = serializer.serializeToString(clone);
+
+      const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = (chartState.title || "chart").replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".svg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportPNG() {
+      const svg = document.getElementById('chart-svg');
+      if (!svg) return;
+
+      const viewBox = svg.viewBox.baseVal;
+      const width = viewBox.width || 650;
+      const height = viewBox.height || 500;
+
+      const clone = getExportSvgClone(svg);
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(clone);
+
+      const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgString);
+
+      const img = new Image();
+      img.onload = function () {
+        const scale = 2; // High-DPI 2x resolution export
+        const canvas = document.createElement("canvas");
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+
+        const ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.scale(scale, scale);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const a = document.createElement("a");
+        a.download = (chartState.title || "chart").replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".png";
+        a.href = canvas.toDataURL("image/png", 1.0);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+
+      img.src = svgDataUrl;
+    }
+  </script>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+</body>
+
+</html>

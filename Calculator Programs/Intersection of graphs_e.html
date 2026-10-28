@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intersection of Graphs - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Intersection of Graphs</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="5">5</span>
+              <span><strong>REG Lin</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">155</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              Find the coordinates of the point of intersection between a line and a circle/quadratic/line
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>ClrStat : ? &rarr; A : ? &rarr; B : ? &rarr; C : ? &rarr; D : ? &rarr; X : ? &rarr; Y : X , Y <span class="stat-var">DT</span> : 
+? &rarr; X : ? &rarr; Y :
+If D = 0 : Then <span class="stat-var">&Sigma;y</span> &rarr; D :
+ClrStat :
+B <span class="frac-key">&lrcorner;</span> A , C <span class="frac-key">&lrcorner;</span> A <span class="stat-var">DT</span> :
+X <span class="frac-key">&lrcorner;</span> D , Y <span class="frac-key">&lrcorner;</span> D <span class="stat-var">DT</span> :
+a&#9698; b&#9698;
+Else (2AC<span class="stat-var">&Sigma;x</span> &#8722; B&sup2;<span class="stat-var">&Sigma;y</span> + ABX) <span class="frac-key">&lrcorner;</span> (2(B&sup2;D + A&sup2;<span class="stat-var">&Sigma;x</span> &rarr; M :
+M + &radic;(M&sup2; &#8722; (C&sup2;<span class="stat-var">&Sigma;x</span> + BCX + B&sup2;Y) <span class="frac-key">&lrcorner;</span> (B&sup2;D + A&sup2;<span class="stat-var">&Sigma;x</span> &rarr; X&#9698;
+B&#8315;&sup1;(C &#8722; A Ans&#9698;
+2M &#8722; X&#9698;
+B&#8315;&sup1;(C &#8722; A Ans :
+IfEnd</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1 (line and circle)</h3>
+        Solve
+        $\begin{cases}
+        3x - y = 5\\[1mm]
+        x^2 + y^2 - 8x - 4y + 15 = 0
+        \end{cases}$.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ for the straight line</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ for the straight line</td>
+            </tr>
+            <tr>
+              <td>$5$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on the R.H.S. for the straight line</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x^2$</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y^2$</td>
+            </tr>
+            <tr>
+              <td>$-8$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ for the circle</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ for the circle</td>
+            </tr>
+            <tr>
+              <td>$15$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant for the circle</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$3$</td>
+              <td class="text-left">/</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$4$</td>
+              <td class="text-left">1st solution $=(3,4)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$2$</td>
+              <td class="text-left">/</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1$</td>
+              <td class="text-left">2nd solution $=(2,1)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2 (line and quadratic)</h3>
+        Solve
+        $\begin{cases}
+        y=2x-3\\[1mm]
+        y=2x^2-3x-1
+        \end{cases}$.
+        <div class="line-skipper"></div>
+        Re-arrange the terms as follows:
+        \begin{cases}
+        -2x+y=-3\\[1mm]
+        2x^2-3x-y-1=0
+        \end{cases}
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$-2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ for the straight line</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ for the straight line</td>
+            </tr>
+            <tr>
+              <td>$-3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on the R.H.S. for the straight line</td>
+            </tr>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x^2$</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y^2$</td>
+            </tr>
+            <tr>
+              <td>$-3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ for the quadratic</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ for the quadratic</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant for the quadratic</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$2$</td>
+              <td class="text-left">/</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1$</td>
+              <td class="text-left">1st solution $=(2,1)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$\dfrac12$</td>
+              <td class="text-left">/</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-2$</td>
+              <td class="text-left">2nd solution $=\left(\dfrac12,-2\right)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 3 (two lines)</h3>
+        Solve
+        $\begin{cases}
+        3x+2y=7\\[1mm]
+        4x-y=2
+        \end{cases}$.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$7$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on the R.H.S. in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x^2$</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y^2$</td>
+            </tr>
+            <tr>
+              <td>$4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on the R.H.S. in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$1$</td>
+              <td class="text-left">$x=1$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$2$</td>
+              <td class="text-left">$y=2$</td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

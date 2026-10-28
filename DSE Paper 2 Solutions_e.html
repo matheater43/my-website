@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSE Paper 2 Solutions - Math Website</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+  
+  <style>
+    /* Styling specific to the Solutions Grid */
+    .year-grid-section {
+      margin-top: 1.5rem;
+    }
+    
+    .year-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .year-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--card-bg);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+      transition: all var(--transition-fast);
+      text-decoration: none !important;
+    }
+
+    .year-card:hover {
+      background-color: var(--primary-color);
+      color: #ffffff !important;
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+    }
+    
+    .year-card.special-card {
+      background-color: #f1f5f9;
+      font-size: 1.4rem;
+      grid-column: span 2;
+    }
+
+    .year-card.special-card:hover {
+      background-color: var(--primary-color);
+      color: #ffffff !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <div id="global-navbar-e"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <header class="solution-header">
+      <h1>HKDSE Mathematics Paper 2 Solutions</h1>
+      <p style="color: var(--text-muted); margin-top: 0.5rem;">
+        Select a year or paper below to view detailed step-by-step solutions and answer keys.
+      </p>
+    </header>
+
+    <!-- Past Paper Years Grid -->
+    <section class="card year-grid-section">
+      <h2>Official Papers</h2>
+      <div class="year-grid">
+        <a href="DSE Paper 2 Solutions/2026_e.html" class="year-card">2026</a>
+        <a href="DSE Paper 2 Solutions/2025_e.html" class="year-card">2025</a>
+        <a href="DSE Paper 2 Solutions/2024_e.html" class="year-card">2024</a>
+        <a href="DSE Paper 2 Solutions/2023_e.html" class="year-card">2023</a>
+        <a href="DSE Paper 2 Solutions/2022_e.html" class="year-card">2022</a>
+        <a href="DSE Paper 2 Solutions/2021_e.html" class="year-card">2021</a>
+        <a href="DSE Paper 2 Solutions/2020_e.html" class="year-card">2020</a>
+        <a href="DSE Paper 2 Solutions/2019_e.html" class="year-card">2019</a>
+        <a href="DSE Paper 2 Solutions/2018_e.html" class="year-card">2018</a>
+        <a href="DSE Paper 2 Solutions/2017_e.html" class="year-card">2017</a>
+        <a href="DSE Paper 2 Solutions/2016_e.html" class="year-card">2016</a>
+        <a href="DSE Paper 2 Solutions/2015_e.html" class="year-card">2015</a>
+        <a href="DSE Paper 2 Solutions/2014_e.html" class="year-card">2014</a>
+        <a href="DSE Paper 2 Solutions/2013_e.html" class="year-card">2013</a>
+        <a href="DSE Paper 2 Solutions/2012_e.html" class="year-card">2012</a>
+      </div>
+    </section>
+
+    <!-- Official Sample/Practice Papers Grid -->
+    <section class="card year-grid-section">
+      <h2>Sample & Practice Papers</h2>
+      <div class="year-grid">
+        <a href="DSE Paper 2 Solutions/Sample Paper_e.html" class="year-card special-card">Sample Paper</a>
+        <a href="DSE Paper 2 Solutions/Practice Paper_e.html" class="year-card special-card">Practice Paper</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" title="Back to Top">&uarr;</button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+</body>

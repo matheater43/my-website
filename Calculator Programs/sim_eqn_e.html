@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Equations in Two Unknowns - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Linear Equations in Two Unknowns</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="1">1</span>
+              <span><strong>COMP</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">46/50</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              Solve simultaneous linear equations of the form $\begin{cases}ax+by=c\\[1mm] dx+ey=f\end{cases}$
+            </div>
+          </div>
+      
+        </div>
+      </div>
+      </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>? &rarr; A : ? &rarr; B : ? &rarr; C : ? &rarr; D : ? &rarr; X : ? &rarr; Y :
+(CX &#8722; BY) &divide; (AX &#8722; BD) <span class="code-emphasis">&rarr; X</span>&#9698;
+B&#8315;&#185;C &#8722; AAns <span class="code-emphasis">&rarr; Y</span></code></pre>
+        </div>
+        The parts highlighted in green can be omitted if the solutions need not be saved.
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section upright-vars">
+        Consider the simultaneous equations
+        \begin{cases}
+        Ax+By=C\quad&\text{......(1)}\\[1mm]
+        Dx+Xy=Y\quad&\text{......(2)}
+        \end{cases}
+        (1) $\times\, X$: $AXx+BXy=CX\quad$ ......(3)<br>
+        (2) $\times\, B$: $BDx+BXy=BY\quad$ ......(4)<br>
+        (3) $-$ (4): $\begin{aligned}[t]
+        (AX-BD)x&=CX-BY\\[1mm]
+        x&=\dfrac{CX-BY}{AX-BD}
+        \end{aligned}$<br>
+        From (1): $y=B^{-1}C-Ax$
+
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1</h3>
+        Solve $\begin{cases}2x+3y=-4\\[1mm] 7x-4y=15\end{cases}$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on R.H.S. in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$7$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$15$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on R.H.S. in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$1$</td>
+              <td class="text-left">$x=1$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$-2$</td>
+              <td class="text-left">$y=-2$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2 <span class="dse-ref">DSE 2021 (I) Q5</span></h3>
+        For $\begin{cases}3x=y\\[1mm] 2(y-20)=x+20\end{cases}$ , find $x+y$.<br>
+        <div class="line-skipper"></div>
+        We move the variables to the L.H.S. and the constants to the R.H.S. to get
+        \begin{cases}
+        3x-y=0\\[1mm] 
+        -x+2y=20+2\times20\end{cases}
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on R.H.S. in the 1st equation</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>$20+2\times 20$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant on R.H.S. in the 2nd equation</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$12$</td>
+              <td class="text-left">$x=12$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$36$</td>
+              <td class="text-left">$y=36$</td>
+            </tr>
+          </tbody>
+        </table>
+        \begin{align}
+        x+y&=12+36\\
+        &=48
+        \end{align}
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

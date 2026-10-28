@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Point of Intersection of 2 Lines + Area of Polygon - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Point of Intersection of 2 Lines + Area of Polygon</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section upright-vars">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="2">2</span>
+              <span><strong>CMPLX</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">153</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- External Reference -->
+          <div class="info-item">
+            <span class="info-label">Reference:</span>
+            <span class="info-value">
+              <a href="https://www.youtube.com/watch?v=fhkMaKtYB3Q" target="_blank" rel="noopener noreferrer">
+                https://www.youtube.com/watch?v=fhkMaKtYB3Q</a> (with minor modifications)
+            </span>
+          </div>
+
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Modifications:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>The boolean &lsquo;$M=0$&rsquo; is simplified to $M$</li>
+                <li>Used While loop instead of 2 sets of Goto's</li>
+                <li>Removed unnecessary usage of $D$ in While loop</li>
+              </ul>
+            </div>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>Find the coordinates of the point of intersection of 2 straight lines</li>
+                <li>Find the area of a polygon given the coordinates of its vertices</li>
+              </ul>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>Lbl 1 :
+? &rarr; A : ? &rarr; B : ? &rarr; C : ? &rarr; D :
+B &#8722; A &rarr; X :
+D &#8722; C &rarr; Y :
+(AYConjg(X) &#8722; CXConjg(Y) + XYConjg(C &#8722; A))<span class="frac-key">&lrcorner;</span>(YConjg(X) &#8722; XConjg(Y&#9698;
+? &rarr; M : M &rArr; Goto 1 :
+0 &rarr; Y :
+Lbl 3 :
+? &rarr; A : A &rarr; B : M<span class="m-plus">M&#8722;</span> :
+? &rarr; C :
+While C &ne; B :
+BConjg(C<span class="m-plus">M+</span> : C &rarr; B : M + CConjg(A :
+4&#8315;&#185;Abs(Ans &#8722; Conjg(Ans &rarr; X :
+? &rarr; C :
+WhileEnd :
+If Y = 0 : Then X &rarr; Y :
+Goto 3 :
+IfEnd :
+? &rarr; M : MX<span class="frac-key">&lrcorner;</span>Y</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section upright-vars">
+        $z$ lies on the straight line passing through $A$ and $B$<br>
+        $\Leftrightarrow$ $z-A$ and $B-A$ are parallel <br>
+        $\Leftrightarrow$ $z-A=k(B-A)$ for some real number $k$<br>
+        <div style="margin-top: 2mm;"> </div>
+        $\Leftrightarrow$ $\dfrac{z-A}{B-A}$ is a real number<br>
+        <div style="margin-top: 2mm;"> </div>
+        $\Leftrightarrow$ $\dfrac{z-A}{B-A}=\overline{\dfrac{z-A}{B-A}}\quad$ ......(*)<br>
+        <div style="margin-top: 2mm;"> </div>
+        From (*),
+        \begin{aligned}
+        (z-A)(\overline{B}-\overline{A})&=(B-A)(\overline{z}-\overline{A})\\
+        (\overline{B}-\overline{A})z-(B-A)\overline{z}&=\overline{B}A-\overline{A}B\quad\text{ ......(1)}
+        \end{aligned}
+        Similarly,
+        $z$ lies on the straight line passing through $C$ and $D$<br>
+        $\Leftrightarrow$ $(\overline{D}-\overline{C})z-(D-C)\overline{z}=\overline{D}C-\overline{C}D\quad$ ......(2)<br>
+        $(1) \times (D - C)$:<br>
+        $(D-C)(\overline{B}-\overline{A})z-(D-C)(B-A)\overline{z}=(\overline{B}A-\overline{A}B)(D-C)\quad$ ......(3)<br>
+        $(2) \times (B - A)$:<br>
+        $(B-A)(\overline{D}-\overline{C})z-(D-C)(B-A)\overline{z}=(\overline{D}C-\overline{C}D)(B-A)\quad$ ......(4)<br>
+        $(3) - (4)$:
+        \begin{aligned}
+        (D-C)(\overline{B}-\overline{A})z-(B-A)(\overline{D}-\overline{C})z&=(\overline{B}A-\overline{A}B)(D-C)-(\overline{D}C-\overline{C}D)(B-A)\\[1mm]
+        z&=\dfrac{(\overline{B}A-\overline{A}B)(D-C)-(\overline{D}C-\overline{C}D)(B-A)}{(D-C)(\overline{B}-\overline{A})-(B-A)(\overline{D}-\overline{C})}
+        \end{aligned}
+        By substituting $X = B - A$ and $Y = D - C$, we have
+        \begin{aligned}
+        z&=\dfrac{[(\overline{A+X})A-\overline{A}(A+X)]Y-[(\overline{C+Y})C-\overline{C}(C+Y)]X}{Y\overline{X}-X\overline{Y}}\\[1mm]
+        &=\dfrac{\overline{X}AY-\overline{A}XY-\overline{Y}CX+\overline{C}YX}{Y\overline{X}-X\overline{Y}}\\[1mm]
+        &=\dfrac{AY\overline{X}-CX\overline{Y}-XY(\overline{A+C})}{Y\overline{X}-X\overline{Y}}
+        \end{aligned}
+        <div style="margin-top: 2mm;"> </div>
+        The area of the $n$-sided polygon defined by the vertices $z_1 = (x_1, y_1), z_2 = (x_2, y_2), ..., z_n = (x_n, y_n)$
+        can be calculated using the shoelace formula:<br>
+        <div style="margin-top: 2mm;"> </div>
+        $A=\dfrac{1}{2}\displaystyle\sum_{i\,=\,1}^n (x_iy_{i+1}-x_{i+1}y_i)\quad$ ......(**)<br>
+        <div style="margin-top: 2mm;"> </div>
+        where $(x_{n+1}, y_{n+1}) = (x_1, y_1)$.<br>
+        Now for $a=a_1+a_2 i$ and $b=b_1+b_2 i$, we have
+        \begin{aligned}
+        \text{Im}(a\overline{b})&=\text{Im}[(a_1+a_2 i)(b_1-b_2 i)]\\
+        &=a_2 b_1 - a_1 b_2\\
+        &=-(a_1 b_2 - a_2 b_1)
+        \end{aligned}
+        So (**) can be rewritten as
+        <div style="margin-top: 2mm;"> </div>
+        \begin{aligned}\displaystyle
+        A&=\dfrac{1}{2}\sum_{i\,=\,1}^n [-\text{Im}(z_i \overline{z_{i+1}})]\\[1mm]
+        &=\dfrac{1}{2}\sum_{i\,=\,1}^n \left(-\dfrac{z_i \overline{z_{i+1}}-\overline{z_i \overline{z_{i+1}}}}{2i}\right)\\[1mm]
+        &=\dfrac{i}{4}\sum_{i\,=\,1}^n (z_i \overline{z_{i+1}}-\overline{z_i \overline{z_{i+1}}})\\[1mm]
+        &=\dfrac{1}{4}\bigg\vert\sum_{i\,=\,1}^n (z_i \overline{z_{i+1}}-\overline{z_i \overline{z_{i+1}}})\bigg\vert\\[1mm]
+        \end{aligned}
+        <div style="margin-top: 2mm;"> </div>
+        For the 2nd last line, since the area must be positive, the sum must be of the form $-bi$, where $b > 0$.<br>
+        So taking the absolute value of the sum is equivalent to multiplying it by $i$. (e.g. $(-8i)i = 8 =
+        |-8i|$)
+        <div class="line-skipper"></div>
+        <b>Note: </b> The coordinates of the vertices of a polygon must be inputted in clockwise/anticlockwise direction.<br>
+        e.g. Do NOT input the coordinates of the vertices of $ABCD$ in this order: $A \rightarrow C \rightarrow B \rightarrow D$
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1</h3>
+        Let $A=(10,1),\ B(12,0),\ C=(0,0)$ and $D=(12,1)$. Find the coordinates of the point of intersection of $AB$ and $CD$.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$10 + i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $A$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$12$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $B$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $C$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$12 + i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $D$ in complex form</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\dfrac{72}{7} + \dfrac{6}{7}i$</td>
+              <td class="text-left">coordinates of the point of intersection = $\left(\dfrac{72}{7}, \dfrac{6}{7}\right)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2</h3>
+        Let $A=(0,2),\ B(3,5),\ C=(1,0)$ and $D=(6,2)$. Let $P$ be the point of intersection of $AB$ and $CD$. If the coordinate
+        axes are re-scaled such that the area of $ABCD$ is $30$, find the area of $\Delta ACP$ in this coordinate system.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $A$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$3 + 5i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $B$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $C$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$6 + 2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $D$ in complex form</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$-4 - 2i$ &nbsp; </td>
+              <td class="text-left">coordinates of $P = (-4, -2)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$0$ <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">find another point of intersection $\Rightarrow$ input &lsquo;1&rsquo;<br>go to next step
+                $\Rightarrow$ input &lsquo;0&rsquo;</td>
+            </tr>
+            <tr>
+              <td>$2i$ <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $A$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$3 + 5i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $B$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$1$ <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $C$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$6 + 2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $D$ in complex form</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">press <kbd class="key" style="margin-left: 0px;">EXE</kbd> again for final vertex</td>
+            </tr>
+            <tr>
+              <td>$2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $A$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $C$ in complex form</td>
+            </tr>
+            <tr>
+              <td>$-4 - 2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of $P$ in complex form</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">press <kbd class="key" style="margin-left: 0px;">EXE</kbd> again for final vertex</td>
+            </tr>
+            <tr>
+              <td>$30$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input area of $ABCD$</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$12$ &nbsp; </td>
+              <td class="text-left">area of $\Delta ACP = 12$</td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

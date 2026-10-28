@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" width="192.18" height="228.37" viewBox="0 0 192.18 228.37">
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-linejoin="bevel" fill="none" stroke="#000000" d="M294.855 193.301H1757.66"/>
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M1686.67 236.438 1761.39 193.301 1686.67 150.164"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-17.1852" x="179.382">x</tspan></text>
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-linejoin="bevel" fill="none" stroke="#000000" d="M408.238 79.9141V2109.64"/>
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M365.102 2038.66 408.238 2113.38 451.379 2038.66"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-216.762" x="38.2031">y</tspan></text>
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-linejoin="bevel" fill="none" stroke="#000000" d="M1315.32 193.301 408.238 1894.08"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-9.4918" x="116.584">A</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-9.4918" x="124.05392">(</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-9.4918" x="127.923839 133.18885">a,</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-9.4918" x="137.60782 142.58483">0)</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-186.9178" x="7.970825">B</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-186.9178" x="16.034886 19.904887">(0</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-186.9178" x="24.881766 29.300904">,b</tspan></text>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-186.9178" x="33.575906">)</tspan></text>
+<path transform="matrix(.1,0,0,-.1,0,228.37)" stroke-width="7.4721" stroke-linecap="butt" stroke-linejoin="bevel" fill="none" stroke="#000000" d="M408.238 193.301H1315.36L408.238 1894.14Z"/>
+<text xml:space="preserve" transform="matrix(1 0 -0 1 0 228.37)" font-size="9.96264" font-family="Computer Modern"><tspan y="-10.0117" x="30.9715">O</tspan></text>
+</svg>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applications of Trigonometry - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Applications of Trigonometry</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section upright-vars">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="5">5</span>
+              <span><strong>REG Lin</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">162/164</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- External Reference -->
+          <div class="info-item">
+            <span class="info-label">Reference:</span>
+            <span class="info-value">
+              <a href="https://www.youtube.com/watch?v=9ugvg040md8" target="_blank" rel="noopener noreferrer">
+                https://www.youtube.com/watch?v=9ugvg040md8</a> (with minor modification)
+            </span>
+          </div>
+
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Modification:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                Used &lsquo;If&rsquo; instead of Goto
+              </ul>
+            </div>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>Find the angle between two lines</li>
+                <li>Find the angle between a line and a plane</li>
+                <li>Find the angle between two planes</li>
+              </ul>
+            </div>
+          </div>
+      
+        </div>
+        <span style="color: red;"><strong>Warning - This program involves heavy use of concepts beyond the scope of the curriculum.</strong></span>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code><span class="code-emphasis">Deg :</span> FreqOn : For 1 &rarr; M To 2 : ? &rarr; A : ? &rarr; B : ? &rarr; C : ? &rarr; D : 
+If D &ne; &pi; : Then ? &rarr; X : ? &rarr; Y : 
+M = 1 &rArr; BY &#8722; CX , DC &#8722; AY ; AX &#8722; BD <span class="stat-var">DT</span> : IfEnd :
+DM = &pi; &rArr; A , B ; C <span class="stat-var">DT</span> : Next : 
+If D &ne; &pi; : Then BY &#8722; CX &rarr; M : DC &#8722; AY &rarr; C : AX &#8722; BD &rarr; A : 
+Else A &rarr; M : C &rarr; A : B &rarr; C : IfEnd : 
+(<span class="stat-var">maxX</span>M + <span class="stat-var">maxY</span>C + nA) &divide; &radic;(<span class="stat-var">maxX</span>&sup2; + <span class="stat-var">maxY</span>&sup2; + n&sup2;)&radic;(M&sup2; + C&sup2; + A&sup2; &rarr; M : cos&#8315;&#185;(M &#9698; 
+sin&#8315;&#185;(Abs(M</code></pre>
+        </div>
+        The part highlighted in green can be omitted if the calculator is in DEG mode.
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section upright-vars">
+        The <code>FreqOn</code> command ensures that old statistical data are wiped.<br>
+        For a vector $\mathbf{a}=(a_1,a_2,a_3)$, its length $\Vert\mathbf a\Vert$ is:
+        $$\Vert\mathbf a\Vert = \sqrt{a_1^2+a_2^2+a_3^2}$$
+        The dot product of 2 vectors $\mathbf{a}=(a_1,a_2,a_3)$ and $\mathbf{b}=(b_1,b_2,b_3)$ is:
+        $$\mathbf{a}\cdot\mathbf{b}=a_1b_1+a_2b_2+a_3b_3$$
+        The dot product is also related to the angle $\theta$ between $\mathbf{a}$ and $\mathbf{b}$ by:
+        \begin{align}
+        \mathbf{a}\cdot\mathbf{b}&=\Vert\mathbf a\Vert \Vert\mathbf b\Vert \cos \theta\\[1mm]
+        \cos \theta &=\dfrac{\mathbf{a}\cdot\mathbf{b}}{\Vert\mathbf a\Vert \Vert\mathbf b\Vert}\\[1mm]
+        \cos \theta &= \dfrac{a_1b_1+a_2b_2+a_3b_3}{\sqrt{a_1^2+a_2^2+a_3^2}\sqrt{b_1^2+b_2^2+b_3^2}}\quad\text{......(*)}
+        \end{align}
+        The cross product of 2 vectors $\mathbf{a}=(a_1,a_2,a_3)$ and $\mathbf{b}=(b_1,b_2,b_3)$ is:
+        $$\mathbf{a}\times\mathbf{b}=(a_2b_3-a_3b_2,a_3b_1-a_1b_3,a_1b_2-a_2b_1)$$
+        It is a vector perpendicular to both $\mathbf{a}$ and $\mathbf{b}$, 
+        i.e. a normal vector of the plane formed by $\mathbf{a}$ and $\mathbf{b}$.
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Angle between two lines</h3>
+        Since $D=\pi$ in both iterations, the two vectors are stored as $(\maxX,\maxY,n)$ and $(M,C,A)$.<br>
+        The angle is found by (*) in the first display.
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Angle between a line and a plane</h3>
+        Let $\theta$ be the angle between the line and the plane.<br>
+        (*) is computed for the vector representing the line and the normal vector of the plane.<br>
+        <strong>Case 1:</strong> The angle between the 2 vectors is <u>an acute angle</u>.<br>
+        The angle in (*) is $90\degree - \theta$.
+        <img src="../Calculator Programs/app_trig_1.svg" style="max-width: 200px; margin: 0 auto;">
+        From (*),
+        \begin{align}
+        \cos (90\degree - \theta) &= M \\
+        \sin \theta &= M\\
+        \theta &= \sin^{-1} M
+        \end{align}
+        <strong>Case 2:</strong> The angle between the 2 vectors is <u>an obtuse angle</u>.<br>
+        The angle in (*) is $90\degree + \theta$.
+        <img src="../Calculator Programs/app_trig_2.svg" style="max-width: 200px; margin: 0 auto;">
+        From (*),
+        \begin{align}
+        \cos (90\degree + \theta) &= M \\
+        -\sin \theta &= M\\
+        \sin \theta &= -M\\
+        \theta &= \sin^{-1} (-M)\quad\text{(Note: $M< 0$)}
+        \end{align}
+        Combining cases 1 and 2, we have $\theta = \sin^{-1} \vert M \vert$.<br>
+        This is the second display.
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Angle between two planes</h3>
+        (*) is computed for the 2 normal vectors of the planes.<br>
+        The first display gives the required angle.<br>
+        To ensure that the angle is computed correctly,
+        the input order of the 2 vectors representing each plane must follow the right-hand rule.
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1 (Angle between two lines) <span class="dse-ref">DSE 2024 (II) Q40</span></h3>
+        Find $\angle PRS$ in the figure.
+        <img src="../Calculator Programs/app_trig_line_line_eg.svg" style="max-width: 550px; margin: 0 auto;">
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$\sqrt{3}$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{RP}$</td>
+            </tr>
+            <tr>
+              <td>$\pi$ &nbsp; <kbd class="key">EXE</kbd> </td>
+              <td>/</td>
+              <td class="text-left">line input</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $1$ &nbsp; <kbd
+                class="key">EXE</kbd></td>
+                <td>/</td>
+                <td class="text-left">input $\overrightarrow{RS}$</td>
+              </tr>
+            <tr>
+              <td>$\pi$ &nbsp; <kbd class="key">EXE</kbd> </td>
+              <td>/</td>
+              <td class="text-left">line input</td>
+            </tr>
+              <tr>
+                <td>/</td>
+                <td>$69.29518895$</td>
+              <td class="text-left">$\angle PRS=69.29518895\degree$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2 (Angle between a line and a plane) <span class="dse-ref">DSE 2018 (II) Q41</span></h3>
+        Find the angle between $BX$ and the plane $ABGF$ in the figure.
+        <img src="../Calculator Programs/app_trig_line_plane_eg.png" style="max-width: 400px; margin: 0 auto;">
+        The plane $ABGF$ is spanned by $\overrightarrow{AB}$ and $\overrightarrow{AF}$.<br>
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$-12$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $8$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $9$ &nbsp;
+                <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{BX}$</td>
+            </tr>
+            <tr>
+              <td>$\pi$ &nbsp; <kbd class="key">EXE</kbd> </td>
+              <td>/</td>
+              <td class="text-left">line input</td>
+            </tr>
+            <tr>
+              <td>$12$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{AB}$</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $13$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{BF}$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip the 1st display for line-plane angle</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$28.07248694$</td>
+              <td class="text-left">angle $=28.07248694\degree$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 3 (Angle between two planes) <span class="dse-ref">DSE 2026 (II) Q40</span></h3>
+        Find the angle between $\Delta ABC$ and $\Delta BCE$ in the figure.
+        <img src="../Calculator Programs/app_trig_plane_plane_eg.png" style="max-width: 400px; margin: 0 auto;">
+        The line of intersection between $\Delta ABC$ and $\Delta BCE$ is $BC$.<br>
+        $\Delta ABC$ is spanned by $\overrightarrow{CA}$ and $\overrightarrow{CB}$.<br>
+        $\Delta BCE$ is spanned by $\overrightarrow{CE}$ and $\overrightarrow{CB}$.<br>
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{CA}$</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{CB}$</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $-2$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{CE}$</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $1$ &nbsp; <kbd class="key">EXE</kbd> &nbsp; $0$ &nbsp; <kbd
+                  class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input $\overrightarrow{CB}$</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$70.52877937$</td>
+              <td class="text-left">angle $=70.52877937\degree$</td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interconversion between bases 2 and 10 - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Interconversion between bases 2 and 10</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section upright-vars">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="3">3</span>
+              <span><strong>BASE</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">61</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- External Reference -->
+          <div class="info-item">
+            <span class="info-label">Reference:</span>
+            <span class="info-value">
+              <a href="https://www.youtube.com/watch?v=czotqTj_ST4" target="_blank" rel="noopener noreferrer">
+                hhttps://www.youtube.com/watch?v=czotqTj_ST4</a> (with minor modifications)
+            </span>
+          </div>
+
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Modification:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                Uses &lsquo;If&rsquo; instead of &lsquo;Goto&rsquo;
+              </ul>
+            </div>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>Converts a denary number into a binary number (up to 16 digits)</li>
+                <li>Converts a binary number (up to 16 digits) into a denary number</li>
+              </ul>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>ClrMemory :
+Dec :
+? &rarr; M :
+If M : Then ? &rarr; A :
+A &divide; 256 &rarr; B :
+A &#8722; 256B &rarr; C :
+Bin :
+B &#9698;
+C &#9698;
+IfEnd :
+Bin :
+? &rarr; A : ? &rarr; B :
+Dec :
+256A + B</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1 <span class="dse-ref">DSE 2015 (II) Q33</span></h3>
+        Convert $3147_{10}$ into a binary number.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">$1\Rightarrow$ input in base 10<br>$0\Rightarrow$ input in base 2</td>
+            </tr>
+            <tr>
+              <td>$3147$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input number in base 10</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$1100$</td>
+              <td class="text-left">number in base 2 begins with $1100$</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$1001011$</td>
+              <td class="text-left">remaining 8 digits is $1001011$ (omitting leftmost zeros)</td>
+            </tr>
+          </tbody>
+        </table>
+        $\thus 3147_{10}=110001001011_2$
+
+        <h3>Example 2 <span class="dse-ref">DSE 2026 (II) Q31</span></h3>
+        Convert $1010100000001110_{2}$ into a denary number.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">$1\Rightarrow$ input in base 10<br>$0\Rightarrow$ input in base 2</td>
+            </tr>
+            <tr>
+              <td>$10101000$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input number in base 2 without the rightmost 8 digits</td>
+            </tr>
+            <tr>
+              <td>$1110$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input the rightmost 8 digits (omitting leftmost zeros)</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$43022$</td>
+              <td class="text-left">number in base 10 is $43022$</td>
+            </tr>
+          </tbody>
+        </table>
+        $\thus 1010100000001110_{2}=43022$
+        </table>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

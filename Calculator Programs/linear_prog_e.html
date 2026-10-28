@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Programming - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Linear Programming</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="5">5</span>
+              <span><strong>REG Lin</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">141</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              Find the maximum/minimum value of an objective function $P=ax+by$ subject to linear constraints.
+            </div>
+          </div>
+      
+        </div>
+      </div>
+      </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>? &rarr; A : ? &rarr; B :
+? &rarr; C : ? &rarr; D : Lbl 0 : ? &rarr; X : ? &rarr; Y :
+&#8722;1 &rarr; M : XD &gt; YC &rArr; 1 &rarr; M :
+If CY &gt; DX : Then 1 : Else &#8722;1 : IfEnd :
+AnsAY &gt; AnsBX &rArr; MAD &gt; MBC :
+If Ans : Then ClrStat : A, B <span class="stat-var">DT</span> :
+? &rarr; A : ? &rarr; B :
+CY &#8722; XD :
+Ans&#8315;&#185;(<span class="stat-var">&Sigma;x</span>AY &#8722; <span class="stat-var">&Sigma;x</span>BD + <span
+  class="stat-var">&Sigma;y</span>CB &#8722; <span class="stat-var">&Sigma;y</span>XA&#9698;
+<span class="stat-var">&Sigma;x</span> &rarr; A : <span class="stat-var">&Sigma;y</span> &rarr; B :
+Else &pi;&#9698; IfEnd :
+X &rarr; C : Y &rarr; D :
+Goto 0</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section upright-vars">
+        Let the objective function be $\mathrm f(x,y)= Ax + By$.<br>
+        Suppose we want to find the minimum value of $\mathrm f$ subject to certain linear constraints.<br>
+        Pick any two of the constraints. <br>
+        By multiplying both sides by $-1$ if necessary, the two constraints can be written in the form<br>
+        <div style="margin-top: 2mm;"> </div>
+        (*): $\begin{cases}
+        Cx+Dy\ge k_1 &\text{ ......(1)}\\[1mm]
+        Xx+Yy\ge k_2 &\text{ ......(2)}
+        \end{cases}$<br>
+        <div style="margin-top: 2mm;"> </div>
+        Let $P$ be the point of intersection of the straight lines $L_1: Cx + Dy = k_1$ and $L_2 : Xx + Yy = k_2$.<br>
+        Suppose $P_1$ and $P_2$ are points other than $P$ satisfying (*), and they lie on $L_1$ and $L_2$ respectively.<br>
+        Note that if the value of $\mathrm f$ decreases from $P_1$ to $P$ along $L_1$ and increases from $P$ to $P_2$ along $L_2$, then $P$ is a local minimum of $\mathrm f$.<br>
+        Hence, we can take $k_1=k_2=0$ and (*) reduces to<br>
+        <div style="margin-top: 2mm;"> </div>
+        (**): $\begin{cases}
+        Cx+Dy\ge 0 &\text{ ......(3)}\\[1mm]
+        Xx+Yy\ge 0 &\text{ ......(4)}
+        \end{cases}$<br>
+        <div style="margin-top: 2mm;"> </div>
+        Now $P=(0, 0)$ and $\mathrm f(0,0)=0$.<br>
+        If the value of $\mathrm f$ decreases from $P_1$ to $(0, 0)$ along $L_1$ and increases from $(0, 0)$ to $P_2$ along $L_2$, then 
+        $(0, 0)$ is a local minimum of $\mathrm f$.<br>
+        Take $P_1 = (D, -C)$. To check that $P_1$ satisfies (**), we require that $P_1$ satisfies (4), i.e.<br>
+        $X(D) + Y(-C) > 0 \Leftrightarrow XD > YC$	......(i)<br>
+        Take $P_2 = (Y, -X)$. To check that $P_2$ satisfies (**), we require that $P_2$ satisfies (3), i.e.<br>
+        $C(Y) + D(-X) > 0 \Leftrightarrow CY > DX$	......(ii)<br>
+        There are 4 cases.<br>
+        <b>Case 1:</b> Both (i) and (ii) hold, i.e. $XD > YC$ and $CY > DX$.<br>
+        $(0, 0)$ is a local minimum of $\mathrm f$ when $P$ decreases from $P_1 = (D, -C)$ to $(0, 0)$ along $L_1$ and increases from $(0, 0)$ to $P_2 = (Y, -X)$ along $L_2$, i.e.
+        <div style="margin-top: 2mm;"> </div>
+        \begin{alignat*}{2}
+        A(D)+B(-C)&>0 \quad &&\text{and}\quad & 0&< A(Y)+B(-X)\\[1mm]
+        AD&>BC \quad &&\text{and}\quad & AY&>BX
+        \end{alignat*}        
+        <div class="line-skipper"></div>
+
+        <b>Case 2:</b> (i) holds but (ii) does not hold, i.e. $XD > YC$ and $CY < DX$.<br>
+        Then $P_2=(-Y,X)$ satifies (3).<br>
+        $(0, 0)$ is a local minimum of $\mathrm f$ when $P$ decreases from $P_1 = (D, -C)$ to $(0, 0)$ along $L_1$ and increases from $(0, 0)$ to $P_2 = (-Y, X)$ along $L_2$, i.e.
+        <div style="margin-top: 2mm;"> </div>
+        \begin{alignat*}{2}
+        A(D)+B(-C)&>0 \quad &&\text{and}\quad & 0&< A(-Y)+B(X)\\[1mm]
+        AD&>BC \quad &&\text{and}\quad & AY&< BX
+        \end{alignat*}        
+        <div class="line-skipper"></div>
+        
+        <b>Case 3:</b> (i) does not hold but (ii) holds, i.e. $XD < YC$ and $CY > DX$.<br>
+        Then $P_1=(-D,C)$ satifies (4).<br>
+        $(0, 0)$ is a local minimum of $\mathrm f$ when $P$ decreases from $P_1 = (-D, C)$ to $(0, 0)$ along $L_1$ and increases from $(0, 0)$ to $P_2 = (Y, -X)$ along $L_2$, i.e.
+        <div style="margin-top: 2mm;"> </div>
+        \begin{alignat*}{2}
+        A(-D)+B(C)&>0 \quad &&\text{and}\quad & 0&< A(Y)+B(-X)\\[1mm]
+        AD&< BC \quad &&\text{and}\quad & AY&>BX
+        \end{alignat*}        
+        <div class="line-skipper"></div>
+
+        <b>Case 4:</b> Both (i) and (ii) do not hold, i.e. $XD < YC$ and $CY < DX$.<br>
+        Then $P_1=(-D,C)$ satifies (4) and $P_2=(-Y,X)$ satifies (3).<br>
+        $(0, 0)$ is a local minimum of $\mathrm f$ when $P$ decreases from $P_1 = (-D, C)$ to $(0, 0)$ along $L_1$ and increases from $(0, 0)$ to $P_2 = (-Y, X)$ along $L_2$, i.e.
+        \begin{alignat*}{2}
+        A(-D)+B(C)&>0 \quad &&\text{and}\quad & 0&< A(-Y)+B(X)\\[1mm]
+        AD&< BC \quad &&\text{and}\quad & AY&< BX
+        \end{alignat*}        
+        <div class="line-skipper"></div>
+
+        Combining the 4 cases, we know that $(0, 0)$ is a local minimum of $\mathrm f$ when
+        $MAD > MBC$ and $NAY > NBX$, where<br>
+        $(M, N) = (1, 1)$ in case 1;<br>
+        $(M, N) = (1, -1)$ in case 2;<br>
+        $(M, N) = (-1, 1)$ in case 3;<br>
+        $(M, N) = (-1, -1)$ in case 4.<br>
+        After running through all pairs of constraints, the minimum value of $\mathrm f$ is the maximum of the local minima.<br>
+        If we want to find the maximum value of $P$ instead, then simply write each inequality with &lsquo;$\le$&rsquo; instead and go through the same steps as above. <br>
+        The feasible region of any pairs of constraints will switch to the opposite side of the point of intersection.<br>
+        As a result, if originally $\mathrm f$ decreases from $P_1$ to $P$ along $L_1$ and increases from $P$ to $P_2$ along $L_2$, then now f increases from $P_1$ to $P$ along $L_1$ and decreases from $P$ to $P_2$ along $L_2$. <br>
+        So $P$ is a maximum point of $\mathrm f$.<br>
+        
+        <div class="line-skipper"></div>
+
+        <b>Note: </b>Regardless of the number of constraints, all pairs of constraints must be tested in order to determine the maximum/minimum.
+
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1</h3>
+        Find the minimum value of the function $\mathrm f=2x+y$ subject to the constraints
+        \begin{cases}
+        3x-2y+4\ge0\\[1mm]
+        x\le2\\[1mm]
+        y\ge-1
+        \end{cases}
+        <div class="line-skipper"></div>
+        Since we are finding the minimum value, write each inequality with &lsquo;$\ge$&rsquo; and put the constant on the R.H.S.:
+        \begin{cases}
+        3x-2y\ge-4\\[1mm]
+        -x\ge-2\\[1mm]
+        y\ge-1
+        \end{cases}
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in $\mathrm f$</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in $\mathrm f$</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no minimum for the 1st and 2nd constraints</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no minimum for the 2nd and 3rd constraints</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-2$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant term in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant term in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$-5$</td>
+              <td class="text-left">minimum for the 3rd and 1st constraints $=-5$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        Since all pairs of constraints are tested, the minimum value of $\mathrm f$ is $-5$.
+
+        <h3>Example 2</h3>
+        Find the maximum value of the function $\mathrm f=-x-3y$ subject to the constraints
+        \begin{cases}
+        3x+y\le24\\[1mm]
+        4x+5y\ge1\\[1mm]
+        3x-4y\le24\\[1mm]
+        5x-7y\ge-12
+        \end{cases}
+        <div class="line-skipper"></div>
+        Since we are finding the maximum value, write each inequality with &lsquo;$\le$&rsquo; and put the constant on the R.H.S.:
+        \begin{cases}
+        3x+y\le24\\[1mm]
+        -4x-5y\le-1\\[1mm]
+        3x-4y\le24\\[1mm]
+        -5x+7y\le12
+        \end{cases}
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in $\mathrm f$</td>
+            </tr>
+            <tr>
+              <td>$-3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in $\mathrm f$</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>$-5$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>$24$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$14.545$</td>
+              <td class="text-left">maximum for the 1st and 2nd constraints $= 14.545$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>$-1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>$24$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input constant in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$5$</td>
+              <td class="text-left">maximum for the 2nd and 3rd constraints $= 5$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$-5$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 4th constraint</td>
+            </tr>
+            <tr>
+              <td>$7$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 4th constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no maximum for the 3rd and 4th constraints</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 1st constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no maximum for the 4th and 1st constraints</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 3rd constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no maximum for the 1st and 3rd constraints</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">proceed to next input</td>
+            </tr>
+            <tr>
+              <td>$-4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td>$-5$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 2nd constraint</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd> <kbd class="key">EXE</kbd> <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip the inputs (already checked the 3rd and 2nd constraints)</td>
+            </tr>
+            <tr>
+              <td>$-5$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $x$ in the 4th constraint</td>
+            </tr>
+            <tr>
+              <td>$7$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coefficient of $y$ in the 4th constraint</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\pi$</td>
+              <td class="text-left">no maximum for the 2nd and 4th constraints</td>
+            </tr>
+          </tbody>
+        </table>
+        Since all pairs of constraints are tested, the maximum value of $\mathrm f$ is the minimum of all maxima, i.e. $5$.
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Calculator & Visualizer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Global Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <!-- Global Component Loader Script -->
+    <script src="../assets/js/global.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        /* body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        } */
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="global-navbar-e"></header>
+
+    <!-- Main Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Column: Unified Inputs Grid & Presets -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Unified 6-Field Input Card -->
+            <div class="bg-indigo-100/60 border border-indigo-200/80 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-semibold text-indigo-950 flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-4 h-4 text-indigo-600"></i> Enter Given Values
+                    </h2>
+                    <span id="detectedModeBadge" class="text-xs px-2.5 py-1 rounded-full bg-indigo-200/80 text-indigo-800 font-medium">3 Values Needed</span>
+                </div>
+
+                <p class="text-xs text-indigo-900/70 mb-4">Enter any 3 values (at least 1 side). The calculated sides & angles will automatically populate and lock until cleared.</p>
+
+                <!-- 6 Fields Layout (Sides on Left, Angles on Right) -->
+                <form id="triangleForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
+                    
+                    <div class="bg-indigo-200/40 border border-indigo-200 rounded-xl overflow-hidden shadow-inner">
+                        <!-- Table Header with embedded Deg/Rad toggle above Angles -->
+                        <div class="grid grid-cols-2 text-center text-xs font-semibold py-2 bg-indigo-200/70 text-indigo-900 border-b border-indigo-200 items-center px-2">
+                            <div>Sides</div>
+                            <div class="flex items-center justify-center gap-2">
+                                <span>Angles</span>
+                                <!-- Unit Toggle -->
+                                <div class="bg-white/80 p-0.5 rounded-md border border-indigo-300 flex items-center text-[10px] font-semibold shadow-xs">
+                                    <button type="button" id="unitDeg" onclick="setAngleUnit('deg')" class="px-1.5 py-0.5 rounded bg-indigo-600 text-white transition-all">°</button>
+                                    <button type="button" id="unitRad" onclick="setAngleUnit('rad')" class="px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900 transition-all">rad</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 grid grid-cols-2 gap-3 bg-indigo-100/30">
+                            <!-- Side A & Angle A -->
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">Side A</span>
+                                <input type="number" step="any" id="field-a" placeholder="a" oninput="onInputChanged('a')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">∠ A</span>
+                                <input type="number" step="any" id="field-A" placeholder="A" oninput="onInputChanged('A')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+
+                            <!-- Side B & Angle B -->
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">Side B</span>
+                                <input type="number" step="any" id="field-b" placeholder="b" oninput="onInputChanged('b')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">∠ B</span>
+                                <input type="number" step="any" id="field-B" placeholder="B" oninput="onInputChanged('B')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+
+                            <!-- Side C & Angle C -->
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">Side C</span>
+                                <input type="number" step="any" id="field-c" placeholder="c" oninput="onInputChanged('c')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+                            <div class="flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all">
+                                <span class="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 flex items-center shrink-0 border-r border-slate-200 w-20">∠ C</span>
+                                <input type="number" step="any" id="field-C" placeholder="C" oninput="onInputChanged('C')" class="w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-1 flex gap-3">
+                        <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 text-sm">
+                            <i data-lucide="calculator" class="w-4 h-4"></i> Calculate Triangle
+                        </button>
+                        <button type="button" onclick="resetForm()" class="bg-white hover:bg-slate-50 text-slate-700 font-medium px-3.5 py-2.5 rounded-xl border border-slate-300 transition-colors shadow-sm" title="Reset Inputs">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i> Quick Presets
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="loadPreset('345')" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-xs text-slate-700 transition-all flex items-center gap-1.5 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 3-4-5 Right Triangle
+                    </button>
+                    <button onclick="loadPreset('equilateral')" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-xs text-slate-700 transition-all flex items-center gap-1.5 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Equilateral (5, 5, 5)
+                    </button>
+                    <button onclick="loadPreset('golden')" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-xs text-slate-700 transition-all flex items-center gap-1.5 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Golden Triangle
+                    </button>
+                    <button onclick="loadPreset('ambiguous')" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-xs text-slate-700 transition-all flex items-center gap-1.5 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-rose-500"></span> SSA Ambiguous (2 Sol)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error/Warning Alert Box -->
+            <div id="errorAlert" class="hidden bg-rose-50 border border-rose-200 rounded-2xl p-4 text-rose-800 text-sm flex items-start gap-3 shadow-sm">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-rose-600 shrink-0 mt-0.5"></i>
+                <div id="errorMessage">Invalid inputs or impossible triangle configuration.</div>
+            </div>
+
+            <!-- Properties & Classification -->
+            <div id="classificationCard" class="hidden bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Classification</h3>
+                <div class="flex flex-wrap gap-2" id="badgesContainer">
+                    <!-- Badges injected by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Visualizer & Output Metrics -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+
+            <!-- Dynamic SVG Visualizer Card -->
+            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <h2 class="font-semibold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i> Triangle Figure
+                        </h2>
+                        <!-- Multi-solution switcher (For SSA) -->
+                        <div id="solutionSwitcher" class="hidden flex items-center bg-indigo-50 p-1 rounded-lg border border-indigo-100 text-xs">
+                            <button id="solBtn1" onclick="switchSolution(0)" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm">Triangle 1</button>
+                            <button id="solBtn2" onclick="switchSolution(1)" class="px-2.5 py-1 rounded text-slate-600 hover:text-slate-900">Triangle 2</button>
+                        </div>
+                    </div>
+
+                    <!-- Overlay Toggles with Color-Coded Badges -->
+                    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+                        <label class="flex items-center gap-1.5 bg-cyan-50 px-2 py-1 rounded-lg border border-cyan-200 text-cyan-800 font-medium cursor-pointer hover:bg-cyan-100 transition-colors">
+                            <input type="checkbox" id="toggleAltitudes" onchange="renderSVG()" class="rounded border-cyan-300 text-cyan-600 focus:ring-0"> Altitudes
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200 text-emerald-800 font-medium cursor-pointer hover:bg-emerald-100 transition-colors">
+                            <input type="checkbox" id="toggleMedians" onchange="renderSVG()" class="rounded border-emerald-300 text-emerald-600 focus:ring-0"> Medians
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200 text-amber-800 font-medium cursor-pointer hover:bg-amber-100 transition-colors">
+                            <input type="checkbox" id="toggleBisectors" onchange="renderSVG()" class="rounded border-amber-300 text-amber-600 focus:ring-0"> Angle Bisectors
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-fuchsia-50 px-2 py-1 rounded-lg border border-fuchsia-200 text-fuchsia-800 font-medium cursor-pointer hover:bg-fuchsia-100 transition-colors">
+                            <input type="checkbox" id="togglePerpBisectors" onchange="renderSVG()" class="rounded border-fuchsia-300 text-fuchsia-600 focus:ring-0"> Perp. Bisectors
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-purple-50 px-2 py-1 rounded-lg border border-purple-200 text-purple-800 font-medium cursor-pointer hover:bg-purple-100 transition-colors">
+                            <input type="checkbox" id="toggleIncircle" onchange="renderSVG()" class="rounded border-purple-300 text-purple-600 focus:ring-0"> Incircle
+                        </label>
+                        <label class="flex items-center gap-1.5 bg-violet-50 px-2 py-1 rounded-lg border border-violet-200 text-violet-800 font-medium cursor-pointer hover:bg-violet-100 transition-colors">
+                            <input type="checkbox" id="toggleCircumcircle" onchange="renderSVG()" class="rounded border-violet-300 text-violet-600 focus:ring-0"> Circumcircle
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SVG Canvas Container -->
+                <div class="w-full h-80 sm:h-96 bg-slate-50/70 rounded-xl border border-slate-200 relative flex items-center justify-center overflow-hidden p-2">
+                    <svg id="triangleSvg" class="w-full h-full" viewBox="-250 -200 500 400" preserveAspectRatio="xMidYMid meet">
+                        <!-- Default placeholder text -->
+                        <text x="0" y="0" fill="#94a3b8" text-anchor="middle" font-size="14" font-family="Inter">Enter parameters and calculate to render figure</text>
+                    </svg>
+                    <!-- Floating Legend -->
+                    <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur border border-slate-200/90 rounded-lg p-2 text-[11px] text-slate-600 flex gap-3 shadow-sm">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> Sides (a,b,c)</span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Angles (A,B,C)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Measurements Table -->
+            <div id="resultsCard" class="hidden bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-indigo-600"></i> Triangle Metrics Breakdown
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Primary Sides -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                        <div class="text-xs text-slate-500 font-medium mb-2 flex items-center justify-between">
+                            <span>Sides Length</span>
+                            <span class="text-indigo-600 font-mono">a, b, c</span>
+                        </div>
+                        <div class="space-y-1.5 code-font text-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Side a:</span> <span id="res-a" class="text-slate-900 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Side b:</span> <span id="res-b" class="text-slate-900 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Side c:</span> <span id="res-c" class="text-slate-900 font-semibold">-</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Angles -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                        <div class="text-xs text-slate-500 font-medium mb-2 flex items-center justify-between">
+                            <span>Angles</span>
+                            <span class="text-amber-600 font-mono">A, B, C</span>
+                        </div>
+                        <div class="space-y-1.5 code-font text-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Angle A:</span> <span id="res-A" class="text-amber-700 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Angle B:</span> <span id="res-B" class="text-amber-700 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Angle C:</span> <span id="res-C" class="text-amber-700 font-semibold">-</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Area & Perimeter -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                        <div class="text-xs text-slate-500 font-medium mb-2 flex items-center justify-between">
+                            <span>Area & Perimeter</span>
+                            <i data-lucide="box" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        </div>
+                        <div class="space-y-1.5 code-font text-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Area:</span> <span id="res-area" class="text-emerald-700 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Perimeter:</span> <span id="res-perimeter" class="text-slate-900 font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Semiperimeter:</span> <span id="res-semi" class="text-slate-900 font-semibold">-</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Altitudes -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                        <div class="text-xs text-slate-500 font-medium mb-2 flex items-center justify-between">
+                            <span>Altitudes (Heights)</span>
+                            <span class="text-cyan-600 font-mono">h_a, h_b, h_c</span>
+                        </div>
+                        <div class="space-y-1.5 code-font text-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Height h_a:</span> <span id="res-ha" class="text-slate-900">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Height h_b:</span> <span id="res-hb" class="text-slate-900">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Height h_c:</span> <span id="res-hc" class="text-slate-900">-</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Circles & Radii -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                        <div class="text-xs text-slate-500 font-medium mb-2 flex items-center justify-between">
+                            <span>Incircle & Circumcircle</span>
+                            <i data-lucide="disc" class="w-3.5 h-3.5 text-purple-600"></i>
+                        </div>
+                        <div class="space-y-1.5 code-font text-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Inradius (r):</span> <span id="res-inradius" class="text-purple-700">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Circumradius (R):</span> <span id="res-circumradius" class="text-purple-700">-</span></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Explanation Steps -->
+                <div class="mt-5 border-t border-slate-200 pt-4">
+                    <button onclick="toggleSteps()" class="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold focus:outline-none">
+                        <i data-lucide="chevron-right" id="stepsChevron" class="w-4 h-4 transition-transform"></i> View Calculation Formulas & Steps
+                    </button>
+                    <div id="stepsContainer" class="hidden mt-3 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-2 code-font">
+                        <!-- Dynamic solution steps -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Global App State
+        let angleUnit = 'deg';   // 'deg' or 'rad'
+        let solutions = [];      // Array of solved triangle objects
+        let activeSolutionIdx = 0;
+        let userProvidedKeys = new Set(); // Tracks parameters explicitly typed by user
+
+        const allParamKeys = ['a', 'b', 'c', 'A', 'B', 'C'];
+
+        // Presets definition
+        const presets = {
+            '345': { a: 3, b: 4, c: 5 },
+            'equilateral': { a: 5, b: 5, c: 5 },
+            'golden': { a: 1, C: 108, b: 1.6180339 },
+            'ambiguous': { a: 7, b: 9, A: 45 }
+        };
+
+        window.onload = () => {
+            lucide.createIcons();
+            resetForm();
+        };
+
+        function setAngleUnit(unit) {
+            if (angleUnit === unit) return;
+            
+            // Convert any non-empty angle input fields
+            ['A', 'B', 'C'].forEach(key => {
+                const el = document.getElementById(`field-${key}`);
+                if (el && el.value !== '') {
+                    const val = parseFloat(el.value);
+                    if (!isNaN(val)) {
+                        el.value = unit === 'deg' ? (val * 180 / Math.PI).toFixed(3) : (val * Math.PI / 180).toFixed(3);
+                    }
+                }
+            });
+
+            angleUnit = unit;
+
+            const btnDeg = document.getElementById('unitDeg');
+            const btnRad = document.getElementById('unitRad');
+
+            if (unit === 'deg') {
+                btnDeg.className = "px-1.5 py-0.5 rounded bg-indigo-600 text-white transition-all";
+                btnRad.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900 transition-all";
+            } else {
+                btnRad.className = "px-1.5 py-0.5 rounded bg-indigo-600 text-white transition-all";
+                btnDeg.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900 transition-all";
+            }
+
+            calculate();
+        }
+
+        function resetForm() {
+            userProvidedKeys.clear();
+            allParamKeys.forEach(key => {
+                const el = document.getElementById(`field-${key}`);
+                if (el) {
+                    el.value = '';
+                    resetFieldStyle(el);
+                }
+            });
+            document.getElementById('detectedModeBadge').innerText = "3 Values Needed";
+            clearCalculatedState();
+        }
+
+        function clearCalculatedState() {
+            solutions = [];
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('classificationCard').classList.add('hidden');
+            hideError();
+            const svg = document.getElementById('triangleSvg');
+            svg.innerHTML = `<text x="0" y="0" fill="#94a3b8" text-anchor="middle" font-size="14" font-family="Inter">Enter parameters and calculate to render figure</text>`;
+        }
+
+        function loadPreset(key) {
+            const p = presets[key];
+            if (!p) return;
+
+            resetForm();
+
+            Object.keys(p).forEach(k => {
+                const el = document.getElementById(`field-${k}`);
+                if (el) {
+                    el.value = p[k];
+                    userProvidedKeys.add(k);
+                }
+            });
+
+            calculate();
+        }
+
+        function onInputChanged(changedKey) {
+            userProvidedKeys.clear();
+            let count = 0;
+
+            allParamKeys.forEach(key => {
+                const el = document.getElementById(`field-${key}`);
+                if (el) {
+                    if (el.readOnly) {
+                        el.value = '';
+                        resetFieldStyle(el);
+                    } else if (el.value.trim() !== '' && !isNaN(parseFloat(el.value))) {
+                        userProvidedKeys.add(key);
+                        count++;
+                    }
+                }
+            });
+
+            if (count >= 3) {
+                calculate();
+            } else {
+                clearCalculatedState();
+                document.getElementById('detectedModeBadge').innerText = `${3 - count} More Needed`;
+            }
+        }
+
+        // Conversion utilities
+        const toRad = deg => deg * (Math.PI / 180);
+        const toDeg = rad => rad * (180 / Math.PI);
+
+        function parseAngle(val) {
+            return angleUnit === 'deg' ? toRad(val) : val;
+        }
+
+        function formatAngle(rad) {
+            if (angleUnit === 'deg') {
+                return (toDeg(rad)).toFixed(3) + '°';
+            }
+            return rad.toFixed(3) + ' rad';
+        }
+
+        function formatNum(num) {
+            return Number.isInteger(num) ? num.toString() : num.toFixed(3);
+        }
+
+        function resetFieldStyle(el) {
+            el.readOnly = false;
+            el.parentElement.className = "flex rounded-lg border border-slate-300 bg-white overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all";
+            el.className = "w-full px-2.5 py-2 text-sm text-slate-900 code-font focus:outline-none bg-transparent";
+        }
+
+        function makeCalculatedReadOnly(el) {
+            el.readOnly = true;
+            el.parentElement.className = "flex rounded-lg border border-emerald-500 bg-emerald-50/70 overflow-hidden shadow-xs transition-all";
+            el.className = "w-full px-2.5 py-2 text-sm text-emerald-900 font-semibold code-font focus:outline-none bg-transparent cursor-not-allowed";
+        }
+
+        // MAIN CALCULATION ENGINE
+        function calculate() {
+            hideError();
+            solutions = [];
+            activeSolutionIdx = 0;
+
+            allParamKeys.forEach(k => {
+                const el = document.getElementById(`field-${k}`);
+                if (el && !userProvidedKeys.has(k)) {
+                    resetFieldStyle(el);
+                }
+            });
+
+            const values = {};
+            let sidesCount = 0;
+            let anglesCount = 0;
+
+            userProvidedKeys.forEach(k => {
+                const el = document.getElementById(`field-${k}`);
+                if (el && el.value.trim() !== '') {
+                    const raw = parseFloat(el.value);
+                    if (!isNaN(raw) && raw > 0) {
+                        const isAngle = ['A', 'B', 'C'].includes(k);
+                        values[k] = isAngle ? parseAngle(raw) : raw;
+                        if (isAngle) anglesCount++; else sidesCount++;
+                    }
+                }
+            });
+
+            const totalInputs = sidesCount + anglesCount;
+
+            if (totalInputs < 3) {
+                document.getElementById('detectedModeBadge').innerText = `${3 - totalInputs} More Needed`;
+                showError("Please enter at least 3 values (and at least 1 side length).");
+                return;
+            }
+
+            if (sidesCount === 0) {
+                showError("At least one side length is required to calculate triangle dimensions.");
+                return;
+            }
+
+            try {
+                let solvedCase = "";
+
+                if (sidesCount === 3) {
+                    solvedCase = "SSS";
+                    solveSSS(values.a, values.b, values.c);
+                } else if (sidesCount === 2 && anglesCount >= 1) {
+                    if (values.a && values.b && values.C) {
+                        solvedCase = "SAS";
+                        solveSAS(values.a, values.b, values.C);
+                    } else if (values.b && values.c && values.A) {
+                        solvedCase = "SAS";
+                        solveSAS(values.b, values.c, values.A);
+                    } else if (values.a && values.c && values.B) {
+                        solvedCase = "SAS";
+                        solveSAS(values.a, values.c, values.B);
+                    } else if (values.a && values.b && values.A) {
+                        solvedCase = "SSA";
+                        solveSSA(values.a, values.b, values.A);
+                    } else if (values.a && values.b && values.B) {
+                        solvedCase = "SSA";
+                        solveSSA(values.b, values.a, values.B);
+                    } else if (values.b && values.c && values.B) {
+                        solvedCase = "SSA";
+                        solveSSA(values.b, values.c, values.B);
+                    } else if (values.b && values.c && values.C) {
+                        solvedCase = "SSA";
+                        solveSSA(values.c, values.b, values.C);
+                    } else if (values.a && values.c && values.A) {
+                        solvedCase = "SSA";
+                        solveSSA(values.a, values.c, values.A);
+                    } else if (values.a && values.c && values.C) {
+                        solvedCase = "SSA";
+                        solveSSA(values.c, values.a, values.C);
+                    }
+                } else if (sidesCount === 1 && anglesCount >= 2) {
+                    let A = values.A, B = values.B, C = values.C;
+                    if (A && B && !C) C = Math.PI - A - B;
+                    else if (A && C && !B) B = Math.PI - A - C;
+                    else if (B && C && !A) A = Math.PI - B - C;
+
+                    if (values.c && values.A && values.B) {
+                        solvedCase = "ASA";
+                        solveASA(A, B, values.c);
+                    } else if (values.a && values.B && values.C) {
+                        solvedCase = "ASA";
+                        solveASA(B, C, values.a);
+                    } else if (values.b && values.A && values.C) {
+                        solvedCase = "ASA";
+                        solveASA(A, C, values.b);
+                    } else if (values.a) {
+                        solvedCase = "AAS";
+                        solveAAS(A, B, values.a);
+                    } else if (values.b) {
+                        solvedCase = "AAS";
+                        solveAAS(B, A, values.b);
+                    } else if (values.c) {
+                        solvedCase = "AAS";
+                        solveAAS(C, A, values.c);
+                    }
+                }
+
+                if (solutions.length === 0) {
+                    showError("Could not construct a valid triangle with the given inputs.");
+                    return;
+                }
+
+                document.getElementById('detectedModeBadge').innerText = `${solvedCase} Mode Detected`;
+                updateUI(values);
+
+            } catch (err) {
+                showError(err.message || "An error occurred during calculation.");
+            }
+        }
+
+        // TRIANGLE ENGINE & SOLVERS
+        function createTriangleObj(a, b, c, A, B, C, steps = []) {
+            if (a <= 0 || b <= 0 || c <= 0) throw new Error("Side lengths must be positive.");
+            if (A <= 0 || B <= 0 || C <= 0) throw new Error("Angles must be positive.");
+            if (Math.abs((A + B + C) - Math.PI) > 0.001) throw new Error("Sum of angles must equal 180°.");
+
+            const s = (a + b + c) / 2;
+            const area = Math.sqrt(Math.max(0, s * (s - a) * (s - b) * (s - c)));
+
+            if (isNaN(area) || area <= 0) throw new Error("Invalid triangle dimensions (zero or negative area).");
+
+            const perimeter = a + b + c;
+            const ha = (2 * area) / a;
+            const hb = (2 * area) / b;
+            const hc = (2 * area) / c;
+
+            const inradius = area / s;
+            const circumradius = (a * b * c) / (4 * area);
+
+            const degA = toDeg(A), degB = toDeg(B), degC = toDeg(C);
+            const sortedAngles = [degA, degB, degC].sort((x, y) => x - y);
+            const sortedSides = [a, b, c].sort((x, y) => x - y);
+
+            let angleType = "Acute";
+            if (Math.abs(sortedAngles[2] - 90) < 0.01) angleType = "Right";
+            else if (sortedAngles[2] > 90) angleType = "Obtuse";
+
+            let sideType = "Scalene";
+            if (Math.abs(sortedSides[0] - sortedSides[2]) < 0.001) sideType = "Equilateral";
+            else if (Math.abs(sortedSides[0] - sortedSides[1]) < 0.001 || Math.abs(sortedSides[1] - sortedSides[2]) < 0.001) sideType = "Isosceles";
+
+            return {
+                a, b, c, A, B, C,
+                area, perimeter, semi: s,
+                ha, hb, hc,
+                inradius, circumradius,
+                angleType, sideType,
+                steps
+            };
+        }
+
+        function solveSSS(a, b, c) {
+            if (a + b <= c || a + c <= b || b + c <= a) {
+                throw new Error("Triangle Inequality Theorem violated: Sum of any 2 sides must be greater than the 3rd side.");
+            }
+            const A = Math.acos((b * b + c * c - a * a) / (2 * b * c));
+            const B = Math.acos((a * a + c * c - b * b) / (2 * a * c));
+            const C = Math.PI - A - B;
+            solutions.push(createTriangleObj(a, b, c, A, B, C, [
+                `1. Applied Law of Cosines for Angle A: cos(A) = (b² + c² - a²) / (2bc)`,
+                `2. Applied Law of Cosines for Angle B: cos(B) = (a² + c² - b²) / (2ac)`,
+                `3. Angle C = 180° - A - B`
+            ]));
+        }
+
+        function solveSAS(a, b, C) {
+            if (C >= Math.PI) throw new Error("Angle C must be less than 180°.");
+            const c = Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(C));
+            const A = Math.acos((b * b + c * c - a * a) / (2 * b * c));
+            const B = Math.PI - A - C;
+            solutions.push(createTriangleObj(a, b, c, A, B, C, [
+                `1. Law of Cosines for side c = √(a² + b² - 2ab·cos(C))`,
+                `2. Law of Cosines for Angle A = arccos((b² + c² - a²)/(2bc))`,
+                `3. Angle B = 180° - A - C`
+            ]));
+        }
+
+        function solveASA(A, B, c) {
+            if (A + B >= Math.PI) throw new Error("Sum of Angles A and B must be less than 180°.");
+            const C = Math.PI - A - B;
+            const a = c * Math.sin(A) / Math.sin(C);
+            const b = c * Math.sin(B) / Math.sin(C);
+            solutions.push(createTriangleObj(a, b, c, A, B, C, [
+                `1. Calculated third angle C = 180° - A - B`,
+                `2. Law of Sines for side a = c · sin(A) / sin(C)`,
+                `3. Law of Sines for side b = c · sin(B) / sin(C)`
+            ]));
+        }
+
+        function solveAAS(A, B, a) {
+            if (A + B >= Math.PI) throw new Error("Sum of Angles A and B must be less than 180°.");
+            const C = Math.PI - A - B;
+            const b = a * Math.sin(B) / Math.sin(A);
+            const c = a * Math.sin(C) / Math.sin(A);
+            solutions.push(createTriangleObj(a, b, c, A, B, C, [
+                `1. Calculated third angle C = 180° - A - B`,
+                `2. Law of Sines for side b = a · sin(B) / sin(A)`,
+                `3. Law of Sines for side c = a · sin(C) / sin(A)`
+            ]));
+        }
+
+        function solveSSA(a, b, A) {
+            const sinB = (b * Math.sin(A)) / a;
+            if (sinB > 1.00001) throw new Error("No triangle exists with given SSA parameters (sin(B) > 1).");
+
+            if (Math.abs(sinB - 1) < 0.00001) {
+                const B = Math.PI / 2;
+                const C = Math.PI - A - B;
+                const c = a * Math.sin(C) / Math.sin(A);
+                solutions.push(createTriangleObj(a, b, c, A, B, C, [
+                    `1. sin(B) = b·sin(A)/a = 1.0 (Right Angle B = 90°)`,
+                    `2. Angle C = 180° - A - 90°`,
+                    `3. Side c = a · sin(C) / sin(A)`
+                ]));
+                return;
+            }
+
+            const B1 = Math.asin(Math.min(1, sinB));
+            const C1 = Math.PI - A - B1;
+            if (C1 > 0) {
+                const c1 = a * Math.sin(C1) / Math.sin(A);
+                solutions.push(createTriangleObj(a, b, c1, A, B1, C1, [
+                    `1. Acute angle B₁ = arcsin(b·sin(A)/a)`,
+                    `2. Angle C₁ = 180° - A - B₁`,
+                    `3. Side c₁ = a · sin(C₁) / sin(A)`
+                ]));
+            }
+
+            const B2 = Math.PI - B1;
+            const C2 = Math.PI - A - B2;
+            if (C2 > 0) {
+                const c2 = a * Math.sin(C2) / Math.sin(A);
+                solutions.push(createTriangleObj(a, b, c2, A, B2, C2, [
+                    `1. Ambiguous Case (SSA): Second possible angle B₂ = 180° - B₁`,
+                    `2. Angle C₂ = 180° - A - B₂`,
+                    `3. Side c₂ = a · sin(C₂) / sin(A)`
+                ]));
+            }
+        }
+
+        // UPDATE UI & AUTO-FILL CALCULATED VALUES
+        function updateUI(userInputs) {
+            const switcher = document.getElementById('solutionSwitcher');
+            if (solutions.length > 1) {
+                switcher.classList.remove('hidden');
+                document.getElementById('solBtn1').className = activeSolutionIdx === 0 ? "px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm" : "px-2.5 py-1 rounded text-slate-600 hover:text-slate-900";
+                document.getElementById('solBtn2').className = activeSolutionIdx === 1 ? "px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm" : "px-2.5 py-1 rounded text-slate-600 hover:text-slate-900";
+            } else {
+                switcher.classList.add('hidden');
+            }
+
+            const tri = solutions[activeSolutionIdx];
+            if (!tri) return;
+
+            // Auto-fill newly computed unknown fields with 3 decimal places
+            allParamKeys.forEach(k => {
+                const el = document.getElementById(`field-${k}`);
+                const isAngle = ['A', 'B', 'C'].includes(k);
+                const computedVal = isAngle ? (angleUnit === 'deg' ? toDeg(tri[k]) : tri[k]) : tri[k];
+
+                if (!userInputs[k]) {
+                    el.value = computedVal.toFixed(3);
+                    makeCalculatedReadOnly(el);
+                } else {
+                    resetFieldStyle(el);
+                }
+            });
+
+            // Show Cards
+            document.getElementById('resultsCard').classList.remove('hidden');
+            document.getElementById('classificationCard').classList.remove('hidden');
+
+            // Populate Breakdown
+            document.getElementById('res-a').innerText = formatNum(tri.a);
+            document.getElementById('res-b').innerText = formatNum(tri.b);
+            document.getElementById('res-c').innerText = formatNum(tri.c);
+
+            document.getElementById('res-A').innerText = formatAngle(tri.A);
+            document.getElementById('res-B').innerText = formatAngle(tri.B);
+            document.getElementById('res-C').innerText = formatAngle(tri.C);
+
+            document.getElementById('res-area').innerText = formatNum(tri.area);
+            document.getElementById('res-perimeter').innerText = formatNum(tri.perimeter);
+            document.getElementById('res-semi').innerText = formatNum(tri.semi);
+
+            document.getElementById('res-ha').innerText = formatNum(tri.ha);
+            document.getElementById('res-hb').innerText = formatNum(tri.hb);
+            document.getElementById('res-hc').innerText = formatNum(tri.hc);
+
+            document.getElementById('res-inradius').innerText = formatNum(tri.inradius);
+            document.getElementById('res-circumradius').innerText = formatNum(tri.circumradius);
+
+            // Classification Badges
+            document.getElementById('badgesContainer').innerHTML = `
+                <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-semibold">${tri.sideType} Triangle</span>
+                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold">${tri.angleType} Triangle</span>
+            `;
+
+            // Steps
+            document.getElementById('stepsContainer').innerHTML = tri.steps.map(s => `<p class="leading-relaxed">&bull; ${s}</p>`).join('');
+
+            // Render SVG
+            renderSVG();
+        }
+
+        function switchSolution(idx) {
+            activeSolutionIdx = idx;
+            calculate();
+        }
+
+        function toggleSteps() {
+            const container = document.getElementById('stepsContainer');
+            const chevron = document.getElementById('stepsChevron');
+            container.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-90');
+        }
+
+        function showError(msg) {
+            const alert = document.getElementById('errorAlert');
+            document.getElementById('errorMessage').innerText = msg;
+            alert.classList.remove('hidden');
+
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('classificationCard').classList.add('hidden');
+
+            const svg = document.getElementById('triangleSvg');
+            svg.innerHTML = `<text x="0" y="0" fill="#e11d48" text-anchor="middle" font-size="13" font-family="Inter">${msg}</text>`;
+        }
+
+        function hideError() {
+            document.getElementById('errorAlert').classList.add('hidden');
+        }
+
+        // Helper: Project point P onto line segment (A-B)
+        function projectPointToLine(P, A, B) {
+            const ABx = B.x - A.x;
+            const ABy = B.y - A.y;
+            const t = ((P.x - A.x) * ABx + (P.y - A.y) * ABy) / (ABx * ABx + ABy * ABy || 1);
+            return { x: A.x + t * ABx, y: A.y + t * ABy };
+        }
+
+        // Helper: Line-line intersection
+        function lineIntersection(p1, p2, p3, p4) {
+            const denom = (p1.x - p2.x)*(p3.y - p4.y) - (p1.y - p2.y)*(p3.x - p4.x);
+            if (Math.abs(denom) < 0.000001) return null;
+            const t = ((p1.x - p3.x)*(p3.y - p4.y) - (p1.y - p3.y)*(p3.x - p4.x)) / denom;
+            return { x: p1.x + t*(p2.x - p1.x), y: p1.y + t*(p2.y - p1.y) };
+        }
+
+        // SVG GRAPHIC ENGINE
+        function renderSVG() {
+            const tri = solutions[activeSolutionIdx];
+            if (!tri) return;
+
+            const svg = document.getElementById('triangleSvg');
+            svg.innerHTML = '';
+
+            const Ax = 0, Ay = 0;
+            const Bx = tri.c, By = 0;
+            const Cx = tri.b * Math.cos(tri.A);
+            const Cy = tri.b * Math.sin(tri.A);
+
+            const minX = Math.min(Ax, Bx, Cx);
+            const maxX = Math.max(Ax, Bx, Cx);
+            const minY = Math.min(Ay, By, Cy);
+            const maxY = Math.max(Ay, By, Cy);
+
+            const width = maxX - minX;
+            const height = maxY - minY;
+
+            const targetSize = 290;
+            const scale = Math.min(targetSize / (width || 1), targetSize / (height || 1));
+
+            const pA = { x: (Ax - (minX + width/2)) * scale, y: -(Ay - (minY + height/2)) * scale };
+            const pB = { x: (Bx - (minX + width/2)) * scale, y: -(By - (minY + height/2)) * scale };
+            const pC = { x: (Cx - (minX + width/2)) * scale, y: -(Cy - (minY + height/2)) * scale };
+
+            // Centroid for outward normal orientation
+            const pCentroid = { x: (pA.x + pB.x + pC.x)/3, y: (pA.y + pB.y + pC.y)/3 };
+
+            const showAltitudes = document.getElementById('toggleAltitudes').checked;
+            const showMedians = document.getElementById('toggleMedians').checked;
+            const showBisectors = document.getElementById('toggleBisectors').checked;
+            const showPerpBisectors = document.getElementById('togglePerpBisectors').checked;
+            const showIncircle = document.getElementById('toggleIncircle').checked;
+            const showCircumcircle = document.getElementById('toggleCircumcircle').checked;
+
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+            // Circumcircle (Violet)
+            if (showCircumcircle) {
+                const D = 2 * (Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By));
+                const Ux = ((Ax*Ax + Ay*Ay)*(By - Cy) + (Bx*Bx + By*By)*(Cy - Ay) + (Cx*Cx + Cy*Cy)*(Ay - By)) / D;
+                const Uy = ((Ax*Ax + Ay*Ay)*(Cx - Bx) + (Bx*Bx + By*By)*(Ax - Cx) + (Cx*Cx + Cy*Cy)*(Bx - Ax)) / D;
+                const pU = { x: (Ux - (minX + width/2)) * scale, y: -(Uy - (minY + height/2)) * scale };
+                const radiusScaled = tri.circumradius * scale;
+
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", pU.x); circle.setAttribute("cy", pU.y);
+                circle.setAttribute("r", radiusScaled);
+                circle.setAttribute("fill", "none");
+                circle.setAttribute("stroke", "#9333ea");
+                circle.setAttribute("stroke-width", "1.5");
+                circle.setAttribute("stroke-dasharray", "4,4");
+                circle.setAttribute("opacity", "0.6");
+                g.appendChild(circle);
+            }
+
+            // Incircle (Purple)
+            if (showIncircle) {
+                const Ix = (tri.a * Ax + tri.b * Bx + tri.c * Cx) / tri.perimeter;
+                const Iy = (tri.a * Ay + tri.b * By + tri.c * Cy) / tri.perimeter;
+                const pI = { x: (Ix - (minX + width/2)) * scale, y: -(Iy - (minY + height/2)) * scale };
+                const inRadiusScaled = tri.inradius * scale;
+
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", pI.x); circle.setAttribute("cy", pI.y);
+                circle.setAttribute("r", inRadiusScaled);
+                circle.setAttribute("fill", "rgba(168, 85, 247, 0.06)");
+                circle.setAttribute("stroke", "#a855f7");
+                circle.setAttribute("stroke-width", "1.5");
+                circle.setAttribute("stroke-dasharray", "3,3");
+                g.appendChild(circle);
+            }
+
+            // Altitudes (Cyan - #0891b2)
+            if (showAltitudes) {
+                const hA = projectPointToLine(pA, pB, pC);
+                const hB = projectPointToLine(pB, pA, pC);
+                const hC = projectPointToLine(pC, pA, pB);
+
+                [ [pA, hA], [pB, hB], [pC, hC] ].forEach(([v, h]) => {
+                    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    l.setAttribute("x1", v.x); l.setAttribute("y1", v.y);
+                    l.setAttribute("x2", h.x); l.setAttribute("y2", h.y);
+                    l.setAttribute("stroke", "#0891b2");
+                    l.setAttribute("stroke-width", "1.5");
+                    l.setAttribute("stroke-dasharray", "3,3");
+                    g.appendChild(l);
+                });
+            }
+
+            // Medians (Emerald - #059669)
+            if (showMedians) {
+                const mA = { x: (pB.x + pC.x)/2, y: (pB.y + pC.y)/2 };
+                const mB = { x: (pA.x + pC.x)/2, y: (pA.y + pC.y)/2 };
+                const mC = { x: (pA.x + pB.x)/2, y: (pA.y + pB.y)/2 };
+
+                [ [pA, mA], [pB, mB], [pC, mC] ].forEach(([v, m]) => {
+                    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    l.setAttribute("x1", v.x); l.setAttribute("y1", v.y);
+                    l.setAttribute("x2", m.x); l.setAttribute("y2", m.y);
+                    l.setAttribute("stroke", "#059669");
+                    l.setAttribute("stroke-width", "1.5");
+                    l.setAttribute("stroke-dasharray", "4,2");
+                    g.appendChild(l);
+                });
+            }
+
+            // Angle Bisectors (Amber - #d97706)
+            if (showBisectors) {
+                const Ix = (tri.a * Ax + tri.b * Bx + tri.c * Cx) / tri.perimeter;
+                const Iy = (tri.a * Ay + tri.b * By + tri.c * Cy) / tri.perimeter;
+                const pI = { x: (Ix - (minX + width/2)) * scale, y: -(Iy - (minY + height/2)) * scale };
+
+                const bA = lineIntersection(pA, pI, pB, pC);
+                const bB = lineIntersection(pB, pI, pA, pC);
+                const bC = lineIntersection(pC, pI, pA, pB);
+
+                [ [pA, bA], [pB, bB], [pC, bC] ].forEach(([v, b]) => {
+                    if (b) {
+                        const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        l.setAttribute("x1", v.x); l.setAttribute("y1", v.y);
+                        l.setAttribute("x2", b.x); l.setAttribute("y2", b.y);
+                        l.setAttribute("stroke", "#d97706");
+                        l.setAttribute("stroke-width", "1.5");
+                        l.setAttribute("stroke-dasharray", "3,2");
+                        g.appendChild(l);
+                    }
+                });
+            }
+
+            // Perpendicular Bisectors (Fuchsia - #c026d3)
+            if (showPerpBisectors) {
+                const D = 2 * (Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By));
+                const Ux = ((Ax*Ax + Ay*Ay)*(By - Cy) + (Bx*Bx + By*By)*(Cy - Ay) + (Cx*Cx + Cy*Cy)*(Ay - By)) / D;
+                const Uy = ((Ax*Ax + Ay*Ay)*(Cx - Bx) + (Bx*Bx + By*By)*(Ax - Cx) + (Cx*Cx + Cy*Cy)*(Bx - Ax)) / D;
+                const pU = { x: (Ux - (minX + width/2)) * scale, y: -(Uy - (minY + height/2)) * scale };
+
+                const mA = { x: (pB.x + pC.x)/2, y: (pB.y + pC.y)/2 };
+                const mB = { x: (pA.x + pC.x)/2, y: (pA.y + pC.y)/2 };
+                const mC = { x: (pA.x + pB.x)/2, y: (pA.y + pB.y)/2 };
+
+                [ mA, mB, mC ].forEach(m => {
+                    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    l.setAttribute("x1", m.x); l.setAttribute("y1", m.y);
+                    l.setAttribute("x2", pU.x); l.setAttribute("y2", pU.y);
+                    l.setAttribute("stroke", "#c026d3");
+                    l.setAttribute("stroke-width", "1.5");
+                    l.setAttribute("stroke-dasharray", "2,3");
+                    g.appendChild(l);
+                });
+            }
+
+            // Triangle Polygon
+            const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            polygon.setAttribute("points", `${pA.x},${pA.y} ${pB.x},${pB.y} ${pC.x},${pC.y}`);
+            polygon.setAttribute("fill", "rgba(79, 70, 229, 0.08)");
+            polygon.setAttribute("stroke", "#4f46e5");
+            polygon.setAttribute("stroke-width", "2.5");
+            polygon.setAttribute("stroke-linejoin", "round");
+            g.appendChild(polygon);
+
+            // Angle Arcs
+            drawAngleArc(g, pA, pB, pC);
+            drawAngleArc(g, pB, pC, pA);
+            drawAngleArc(g, pC, pA, pB);
+
+            // Edge Labels strictly outside
+            drawEdgeLabelOutside(g, pB, pC, `a = ${formatNum(tri.a)}`, pCentroid);
+            drawEdgeLabelOutside(g, pA, pC, `b = ${formatNum(tri.b)}`, pCentroid);
+            drawEdgeLabelOutside(g, pA, pB, `c = ${formatNum(tri.c)}`, pCentroid);
+
+            // Vertices
+            drawVertex(g, pA, `A (${formatAngle(tri.A)})`, -15, 18);
+            drawVertex(g, pB, `B (${formatAngle(tri.B)})`, 15, 18);
+            drawVertex(g, pC, `C (${formatAngle(tri.C)})`, 0, -20);
+
+            svg.appendChild(g);
+        }
+
+        function drawVertex(parent, p, label, offsetX, offsetY) {
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", p.x); circle.setAttribute("cy", p.y);
+            circle.setAttribute("r", "5");
+            circle.setAttribute("fill", "#4f46e5");
+            circle.setAttribute("stroke", "#ffffff");
+            circle.setAttribute("stroke-width", "2");
+            parent.appendChild(circle);
+
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", p.x + offsetX);
+            text.setAttribute("y", p.y + offsetY);
+            text.setAttribute("fill", "#1e293b");
+            text.setAttribute("font-size", "12");
+            text.setAttribute("font-weight", "600");
+            text.setAttribute("font-family", "Inter");
+            text.setAttribute("text-anchor", "middle");
+            text.textContent = label;
+            parent.appendChild(text);
+        }
+
+        // Draw side length label directed outward relative to triangle centroid
+        function drawEdgeLabelOutside(parent, p1, p2, label, centroid) {
+            const mx = (p1.x + p2.x) / 2;
+            const my = (p1.y + p2.y) / 2;
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+
+            // Calculate candidate perpendicular normals
+            let nx = -dy / (len || 1);
+            let ny = dx / (len || 1);
+
+            // Check dot product with vector from centroid to midpoint
+            const vCentroidX = mx - centroid.x;
+            const vCentroidY = my - centroid.y;
+            const dot = nx * vCentroidX + ny * vCentroidY;
+
+            // Flip normal if pointing inwards towards centroid
+            if (dot < 0) {
+                nx = -nx;
+                ny = -ny;
+            }
+
+            const offset = 18;
+            const lx = mx + nx * offset;
+            const ly = my + ny * offset;
+
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", lx);
+            text.setAttribute("y", ly);
+            text.setAttribute("fill", "#4338ca");
+            text.setAttribute("font-size", "11");
+            text.setAttribute("font-weight", "600");
+            text.setAttribute("font-family", "JetBrains Mono");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "central");
+            text.textContent = label;
+            parent.appendChild(text);
+        }
+
+        function drawAngleArc(parent, vertex, pNext, pPrev) {
+            const r = 24;
+            const a1 = Math.atan2(pNext.y - vertex.y, pNext.x - vertex.x);
+            const a2 = Math.atan2(pPrev.y - vertex.y, pPrev.x - vertex.x);
+
+            let diff = a2 - a1;
+            while (diff < -Math.PI) diff += 2 * Math.PI;
+            while (diff > Math.PI) diff -= 2 * Math.PI;
+
+            const sweepFlag = diff > 0 ? 1 : 0;
+
+            const x1 = vertex.x + r * Math.cos(a1);
+            const y1 = vertex.y + r * Math.sin(a1);
+            const x2 = vertex.x + r * Math.cos(a2);
+            const y2 = vertex.y + r * Math.sin(a2);
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", `M ${x1} ${y1} A ${r} ${r} 0 0 ${sweepFlag} ${x2} ${y2}`);
+            path.setAttribute("fill", "rgba(245, 158, 11, 0.18)");
+            path.setAttribute("stroke", "#d97706");
+            path.setAttribute("stroke-width", "1.5");
+            parent.appendChild(path);
+        }
+    </script>
+<!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+  
+</body>
+</html>

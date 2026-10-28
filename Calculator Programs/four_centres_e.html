@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centres of a Triangle - Matheater</title>
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/global.css">
+
+  <!-- Global Component Loader Script -->
+  <script src="../assets/js/global.js"></script>
+
+  <!-- MathJax for rendering math equations -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- Dynamic Navbar Placeholder -->
+  <header id="global-navbar-e"></header>
+
+  <main class="container">
+
+    <!-- Page Title -->
+    <h1 class="page-title">Centres of a Triangle</h1>
+
+    <!-- SECTION 1: Basic Information -->
+    <section class="card">
+      <h2>Basic Information</h2>
+      <div class="solution-section">
+        <div class="info-grid">
+      
+          <!-- Mode -->
+          <div class="info-item">
+            <span class="info-label">Mode:</span>
+            <div class="mode-display">
+              <span class="mode-number-box" data-mode="2">2</span>
+              <span><strong>CMPLX</strong></span>
+            </div>
+          </div>
+      
+          <!-- Memory Usage -->
+          <div class="info-item">
+            <span class="info-label">Memory:</span>
+            <span class="info-value">
+              <div class="memory-display">
+                <span class="memory-number">161</span> Bytes
+              </div>
+            </span>
+          </div>
+      
+          <!-- usage List -->
+          <div class="info-item">
+            <span class="info-label">Usage:</span>
+            <div class="info-value">
+              <ul class="usage-list">
+                <li>Find the coordinates of the incentre, circumcentre, centroid and orthocentre of a triangle given its 3 vertices</li>
+                <li>Find the radii of the circumcircle and the inscribed circle of a triangle given its 3 vertices</li>
+                <li>Find the coordinates of the remaining vertex of a triangle given 2 of its vertices and a centre (except circumcentre)</li>
+              </ul>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Complete Code -->
+    <section class="card">
+      <h2>Program Code</h2>
+      <div class="solution-section">
+        <div class="code-container">
+          <pre><code>? &rarr; A : ? &rarr; B : ? &rarr; C :
+A + B + C &rarr; M :
+A &#8722; C &rarr; D :
+B &#8722; C &rarr; X :
+A &#8722; B &rarr; Y :
+M<span class="frac-key">&lrcorner;</span>3&#9698;
+C + iYtan(arg(iD<span class="frac-key">&lrcorner;</span>X<span class="m-plus">M-</span>&#9698;
+M<span class="frac-key">&lrcorner;</span>2&#9698;
+Abs(A &#8722; Ans&#9698;
+Abs(D) + Abs(X) + Abs(Y &rarr; M :
+A Conjg(B) + B Conjg(C) + C Conjg(A) :
+Abs(Ans &#8722; Conjg(Ans))<span class="frac-key">&lrcorner;</span>(2M&#9698;
+D Abs(X) + X Abs(D :
+C + Ans<span class="frac-key">&lrcorner;</span>M&#9698;
+Abs(Dsin(arg(X<span class="frac-key">&lrcorner;</span>D&#9698;
+Abs(D)cos(arg(X<span class="frac-key">&lrcorner;</span>D)) + Abs(Ans tan(arg(Y<span class="frac-key">&lrcorner;</span>D :
+C + Ans&ang;arg(D&#178;<span class="frac-key">&lrcorner;</span>X&#9698;
+3A &#8722; B &#8722; C</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Explanation of Logic -->
+    <section class="card">
+      <h2>Program Logic</h2>
+      <div class="solution-section">
+        Write $A = (a_1, a_2)$, $B = (b_1, b_2)$, $C = (c_1, c_2)$.<br>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Centroid</h3>
+        Centroid $G = \left( \dfrac{a_1 + b_1 + c_1}{3}, \dfrac{a_2 + b_2 + c_2}{3} \right)$<br>
+        <div style="margin-top: 2mm;"> </div>
+        Since $G = \dfrac{A + B + C}{3}$,  $A = 3G - B - C$.
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Orthocentre</h3>
+        <img src="../Calculator Programs/centre1.svg" style="max-width: 400px; margin: 0 auto;">
+        For the orthocentre $H$, $\arg(D)$ and $\arg(X)$ are the inclinations of $AC$ and $BC$ respectively.<br>
+        Since the arguments sum when complex numbers multiply,
+        \begin{align*}
+        \arg(i D \div X) = \arg(i) + \arg(D) - \arg(X) = 90^\circ - \angle ACB
+        \end{align*}
+        <div style="margin-top: 2mm;"> </div>
+        \begin{align*}
+        \tan[\arg(i D \div X)] = \tan(90^\circ - \angle ACB) = \frac{1}{\tan \angle ACB}
+        \end{align*}
+        Since $iY$ is perpendicular to $AB$, it is a direction vector for $\overrightarrow{CH}$.<br>
+        So we need to add a certain multiple $k$ of $iY$ to $C$ to get $CH$.<br>
+        To see why $k = \tan[\arg(i D \div X)]$, first note that $\angle ECH = 90^\circ - \angle BAC = \angle ABE$.
+        Then,
+        \begin{align*}
+        \tan \angle ACB = \frac{BE}{CE} = \frac{AB \cos \angle ABE}{CH \cos \angle ECH} = \frac{AB}{CH} \Rightarrow CH =
+        \frac{AB}{\tan \angle ACB} = AB \tan[\arg(i D \div X)]
+        \end{align*}
+        Since the length of $iY$ is $AB$, multiplying it by $\tan[\arg(i D \div X)]$ gives the vector $\overrightarrow{CH}$.<br>
+        In the backwards case, if $H$ is the orthocentre of $\Delta ABC$, then $A$ is the orthocentre of $\Delta BCH$, so the
+        same code can be used.
+
+        <!-- Circumcentre Proof -->
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Circumcentre and the radius of the circumcircle</h3>
+        <img src="../Calculator Programs/centre2.svg" style="max-width: 400px; margin: 0 auto;">
+        For the circumcentre $K$, we need the following fact:
+        \begin{align*}
+        \overrightarrow{KA} + \overrightarrow{KB} + \overrightarrow{KC} = \overrightarrow{KH} \quad ......(*)
+        \end{align*}
+        Since $\overrightarrow{CH} + \overrightarrow{KC} = \overrightarrow{KH}$, it suffices to show that $\overrightarrow{CH} =
+        \overrightarrow{KA} + \overrightarrow{KB}$.<br>
+        First observe that $\overrightarrow{KA} + \overrightarrow{KB} = 2\overrightarrow{KM}$ is a vector perpendicular to $AB$,
+        i.e. parallel to $CH$.
+        \begin{align*}
+        (x + z) + (x + y) + (y + z) &= 180^\circ \\
+        2(x + y + z) &= 180^\circ \\
+        x + y + z &= 90^\circ
+        \end{align*}
+        \begin{align*}
+        2KM = 2BM \tan x = AB \tan x = AB \times \frac{1}{\tan(90^\circ - x)} = AB \times \frac{1}{\tan(y + z)} = AB \times
+        \frac{CE}{BE}
+        \end{align*}
+        Recall $\dfrac{BE}{CE} = \dfrac{AB}{CH} \Rightarrow \dfrac{AB}{BE} \times CE = CH$, so $CH = 2KM$ as expected.<br>
+        Now from ($*$),
+        \begin{align*}
+        (\overrightarrow{OA} - \overrightarrow{OK}) + (\overrightarrow{OB} - \overrightarrow{OK}) + (\overrightarrow{OC} -
+        \overrightarrow{OK}) &= \overrightarrow{OH} - \overrightarrow{OK} \\[1mm]
+        \overrightarrow{OA} + \overrightarrow{OB} + \overrightarrow{OC} &= \overrightarrow{OH} + 2\overrightarrow{OK} \\[1mm]
+        \overrightarrow{OK} &= \frac{1}{2}(\overrightarrow{OA} + \overrightarrow{OB} + \overrightarrow{OC} -
+        \overrightarrow{OH})
+        \end{align*}
+        The radius of the circumcircle is the distance between the circumcentre and any one of the vertices, e.g. $AK$.<br>
+        
+        <!-- Inradius & Incentre Proof -->
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);">Incentre and the radius of the inscribed circle</h3>
+        For the radius of the inscribed circle, we use the formula:
+        \begin{align*}
+        r = \frac{2A}{P}
+        \end{align*}
+        where $P = \text{perimeter of the triangle} = |D| + |X| + |Y|$ and $A = \text{area of the triangle}$, which is found by
+        the shoelace formula.<br>
+        For the incentre $I = (x, y)$, we use the formula:
+        \begin{align*}
+        x = \frac{a x_A + b x_B + c x_C}{a + b + c}, \quad y = \frac{a y_A + b y_B + c y_C}{a + b + c}
+        \end{align*}
+        where $A = (x_A, y_A)$, $B = (x_B, y_B)$, $C = (x_C, y_C)$, $a = BC$, $b = AC$ and $c = AB$.<br>
+        So,
+        \begin{align*}
+        I &= \frac{aA + bB + cC}{a + b + c} \\[1mm]
+        &= \frac{(a + b + c)C + (A - C)a + (B - C)b}{a + b + c} \\[1mm]
+        &= C + \frac{D|X| + X|D|}{|D| + |X| + |Y|}
+        \end{align*}
+        <img src="../Calculator Programs/centre3.svg" style="max-width: 400px; margin: 0 auto;">
+        Now suppose $A$ is the incentre.
+        \begin{align*}
+        \text{Abs}((A - C)\sin(\arg(D)) = AC \sin \angle ACE = AE = \text{radius of the inscribed circle}
+        \end{align*}
+        Note that
+        \begin{align*}
+        2(\angle ACB + \angle ABC + \angle APE) &= 180^\circ \\
+        \angle ACB + \angle ABC + \angle APE &= 90^\circ
+        \end{align*}
+        So,
+        \begin{align*}
+        \text{Abs}(A - C)\cos(\arg(D)) + \text{Abs}(\text{Ans} \tan(\arg(D \div X))) &= AC \cos \angle ACE + AE \tan(\angle ACB
+        + \angle ABC) \\
+        &= CE + AE \tan(90^\circ - \angle APE) \\
+        &= CE + AE \tan \angle PAE \\
+        &= CE + EP \\
+        &= CP
+        \end{align*}
+        The argument of $\overrightarrow{CP}$ is the argument of $AC - \angle ACB$.<br>
+        
+
+    </section>
+
+    <!-- SECTION 4: Examples -->
+    <section class="card">
+      <h2>Examples</h2>
+      <div class="solution-section">
+
+        <h3>Example 1</h3>
+        The coordinates of $A$, $B$ and $C$ are $(4, 3)$, $(0, 0)$ and $(4, 0)$ respectively. Find the coordinates of the centroid,
+        orthocentre, circumcentre and incentre of $\Delta ABC$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$4+3i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 1st vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 2nd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$4$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 3rd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\dfrac{8}{3}+i$</td>
+              <td class="text-left">centroid $=\left(\dfrac{8}{3},1\right)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$4$</td>
+              <td class="text-left">orthocentre $=(4,0)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$2+\dfrac{3}{2}i$</td>
+              <td class="text-left">circumcentre $=\left(2,\dfrac{3}{2}\right)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$2.5$</td>
+              <td class="text-left">radius of circumcircle $=2.5$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1$</td>
+              <td class="text-left">radius of inscribed circle $=1$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$3+i$</td>
+              <td class="text-left">incentre $=(3,1)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 2</h3>
+        The coordinates of $A$, $B$ and $C$ are $(0, 2)$, $(1, 1)$ and $(0, 0)$ respectively. Find the coordinates of the centroid,
+        orthocentre, circumcentre and incentre of $\Delta ABC$.
+        <table class="program-table upright-vars">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 1st vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$1+i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 2nd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$0$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 3rd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$\dfrac{1}{3}+i$</td>
+              <td class="text-left">centroid $=\left(\dfrac{1}{3},1\right)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1+i$</td>
+              <td class="text-left">orthocentre $=(1,1)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$i$</td>
+              <td class="text-left">circumcentre $=(0,1)$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1$</td>
+              <td class="text-left">radius of circumcircle $=1$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0.414$</td>
+              <td class="text-left">radius of inscribed circle $=0.414$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$0.414+i$</td>
+              <td class="text-left">incentre $=(0.414,1)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 3</h3>
+        $A$, $B$ and $C$ are $3$ points on a rectangular coordinate plane. If the coordinates of $A$, $B$ and the orthocentre of $\Delta ABC$ are
+        $(2, -3)$, $(8, -2)$ and $(9.5, -3)$ respectively, find the coordinates of $C$.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$9.5-3i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the orthocentre in complex form</td>
+            </tr>
+            <tr>
+              <td>$2-3i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 1st vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$8-2i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 2nd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip centroid</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$8+6i$</td>
+              <td class="text-left">$C=(8,6)$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Example 4</h3>
+        $A$, $B$ and $C$ are $3$ points on a rectangular coordinate plane. If the coordinates of $A$, $B$ and the incentre of $\Delta ABC$ are 
+        $(1,0)$, $(-3, 0)$ and $(0,1)$ respectively, find the radius of the inscribed circle of $\Delta ABC$ and the coordinates of $C$.
+        <table class="program-table">
+          <thead>
+            <tr>
+              <th>Keying sequence</th>
+              <th>Display</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$i$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the incentre in complex form</td>
+            </tr>
+            <tr>
+              <td>$-3$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 1st vertex in complex form</td>
+            </tr>
+            <tr>
+              <td>$1$ &nbsp; <kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">input coordinates of the 2nd vertex in complex form</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip centroid</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip orthocentre</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip circumcentre</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip radius of circumcentre</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip radius of inscribed circle</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>/</td>
+              <td class="text-left">skip incircle</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>$1$</td>
+              <td class="text-left">radius of inscribed circle $=1$</td>
+            </tr>
+            <tr>
+              <td><kbd class="key">EXE</kbd></td>
+              <td>$1+3i$</td>
+              <td class="text-left">$C=(1,3)$</td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to Top">
+    &uarr;
+  </button>
+
+  <!-- Dynamic Footer Placeholder -->
+  <footer id="global-footer-e"></footer>
+
+</body>
+
+</html>
